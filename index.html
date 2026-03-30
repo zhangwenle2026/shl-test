@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-0523">
+<meta name="app-version" content="20260331-0544">
 <meta name="theme-color" content="#58cc02">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -575,58 +575,111 @@ window.showPage=function(id){
   window.scrollTo(0,0);
 };
 
-// ===== TTS =====
-function tts(text){
-  if(!window.speechSynthesis){alert('TTS not supported.');return;}
-  speechSynthesis.cancel();
-  var u=new SpeechSynthesisUtterance(text);
-  u.lang='en-US';u.rate=ttsRate;u.pitch=1.0;
-  var voices=speechSynthesis.getVoices();
-  var en=voices.find(function(v){return v.lang==='en-US'&&v.name.indexOf('Google')>=0;})
-    ||voices.find(function(v){return v.lang==='en-US';})
-    ||voices.find(function(v){return v.lang.indexOf('en')===0;});
-  if(en)u.voice=en;
-  // 逐句高亮（onboundary）
-  var boundarySupported=false;
-  u.onboundary=function(e){
-    if(e.name!=='word')return;
-    boundarySupported=true;
-    var spans=document.querySelectorAll('.hl-sent');
-    var charIdx=e.charIndex;
-    spans.forEach(function(s){s.classList.remove('hl-active');});
-    for(var i=spans.length-1;i>=0;i--){
-      if(parseInt(spans[i].getAttribute('data-start'))<=charIdx){
-        spans[i].classList.add('hl-active');
-        break;
-      }
-    }
-  };
-  u.onend=function(){
-    document.querySelectorAll('.hl-sent').forEach(function(s){s.classList.remove('hl-active');});
-    var hlPassEl=document.getElementById('hlPass');
-    if(hlPassEl)hlPassEl.classList.remove('hl-fallback');
-  };
-  // 降级：整段高亮（onboundary 不支持时）
-  var hlPass=document.getElementById('hlPass');
-  if(hlPass&&hlPass.querySelectorAll('.hl-sent').length>0){
-    setTimeout(function(){
-      if(!boundarySupported){
-        hlPass.classList.add('hl-fallback');
-      }
-    },300);
+// ===== TTS (iOS Safari 兼容版) =====
+// iOS 要求：必须在用户点击事件中同步创建并 speak，不能有 async 延迟
+// voices 在 iOS 上可能为空，需用 onvoiceschanged 等待
+var _ttsReady=false;
+// 预热：页面加载后静默 speak 一个空字符串，解锁 iOS AudioSession
+document.addEventListener('DOMContentLoaded',function(){
+  if(!window.speechSynthesis)return;
+  // iOS 需要先 getVoices() 触发加载
+  var v=speechSynthesis.getVoices();
+  if(!v||v.length===0){
+    speechSynthesis.onvoiceschanged=function(){_ttsReady=true;};
+  } else {
+    _ttsReady=true;
   }
-  speechSynthesis.speak(u);
+});
+
+function tts(text){
+  if(!window.speechSynthesis){alert('TTS not supported on this browser.');return;}
+  // iOS Safari: cancel 后立即 speak 有时会失败，先 cancel 再用 setTimeout 0
+  speechSynthesis.cancel();
+  function doSpeak(){
+    var u=new SpeechSynthesisUtterance(text);
+    u.lang='en-US';u.rate=ttsRate;u.pitch=1.0;u.volume=1.0;
+    // 找英语语音，iOS 上 getVoices() 返回系统内置语音
+    var voices=speechSynthesis.getVoices();
+    var en=voices.find(function(v){return v.lang==='en-US'&&v.name.indexOf('Samantha')>=0;})  // iOS 默认英语
+      ||voices.find(function(v){return v.lang==='en-US'&&v.name.indexOf('Google')>=0;})
+      ||voices.find(function(v){return v.lang==='en-US';})
+      ||voices.find(function(v){return v.lang.indexOf('en')>=0;});
+    if(en)u.voice=en;
+    // 逐句高亮（onboundary — Chrome/Edge 支持，iOS Safari 不支持，自动降级）
+    var boundarySupported=false;
+    u.onboundary=function(e){
+      if(e.name!=='word')return;
+      boundarySupported=true;
+      var spans=document.querySelectorAll('.hl-sent');
+      var charIdx=e.charIndex;
+      spans.forEach(function(s){s.classList.remove('hl-active');});
+      for(var i=spans.length-1;i>=0;i--){
+        if(parseInt(spans[i].getAttribute('data-start'))<=charIdx){
+          spans[i].classList.add('hl-active');
+          break;
+        }
+      }
+    };
+    u.onstart=function(){
+      // iOS 降级：500ms 后若 onboundary 未触发，整段高亮
+      setTimeout(function(){
+        if(!boundarySupported){
+          var hlPass=document.getElementById('hlPass');
+          if(hlPass)hlPass.classList.add('hl-fallback');
+        }
+      },500);
+    };
+    u.onend=function(){
+      document.querySelectorAll('.hl-sent').forEach(function(s){s.classList.remove('hl-active');});
+      var hlPassEl=document.getElementById('hlPass');
+      if(hlPassEl)hlPassEl.classList.remove('hl-fallback');
+    };
+    u.onerror=function(e){
+      console.warn('TTS error:',e.error);
+    };
+    speechSynthesis.speak(u);
+    // iOS Safari bug: 长文本播放中途会暂停，需要每 10s resume 一次
+    var resumeTimer=setInterval(function(){
+      if(speechSynthesis.speaking){speechSynthesis.resume();}
+      else{clearInterval(resumeTimer);}
+    },10000);
+  }
+  // 同步调用（必须在用户点击栈内）
+  setTimeout(doSpeak, 50);
 }
 
-// ===== STT =====
+// ===== STT (iOS Safari 兼容版) =====
 var SRC=window.SpeechRecognition||window.webkitSpeechRecognition;
+// iOS Safari 注意：
+// 1. interimResults=true 在 iOS 上经常导致结果为空，改为 false
+// 2. iOS 识别需要用户说话后有停顿才触发 onresult
+// 3. 超时保护：10秒无结果自动 stop
 function startSTT(onResult,onError){
   if(!SRC){if(onError)onError('not-supported');return null;}
   var sr=new SRC();
-  sr.lang='en-US';sr.continuous=false;sr.interimResults=false;sr.maxAlternatives=1;
-  sr.onresult=function(e){onResult(e.results[0][0].transcript,e.results[0][0].confidence);};
-  sr.onerror=function(e){if(onError)onError(e.error);};
-  sr.start();
+  sr.lang='en-US';
+  sr.continuous=false;
+  sr.interimResults=false;  // iOS 上 true 会导致识别失败
+  sr.maxAlternatives=3;     // 多候选提高准确率
+  var timeout=setTimeout(function(){
+    try{sr.stop();}catch(e){}
+    if(onError)onError('timeout');
+  },12000);
+  sr.onresult=function(e){
+    clearTimeout(timeout);
+    var best='';
+    // 取置信度最高的结果
+    for(var i=0;i<e.results.length;i++){
+      if(e.results[i][0].transcript)best=e.results[i][0].transcript;
+    }
+    onResult(best, e.results[0][0].confidence);
+  };
+  sr.onerror=function(e){
+    clearTimeout(timeout);
+    if(onError)onError(e.error);
+  };
+  sr.onend=function(){clearTimeout(timeout);};
+  try{sr.start();}catch(e){if(onError)onError('start-failed');}
   return sr;
 }
 function normWords(str){
@@ -867,22 +920,31 @@ function doRead(q,body){
     });
     function startRec(){
       var rec=new SRC();
-      rec.lang='en-US';rec.continuous=false;rec.interimResults=true;
+      rec.lang='en-US';rec.continuous=false;
+      rec.interimResults=false;  // iOS Safari: true 会导致识别结果为空
+      rec.maxAlternatives=3;
       lastT='';
       recBtn.textContent='⏹ Stop / 停止录音';
       recBtn.classList.add('recactive');
-      srStatus.textContent='🔴 Recording — read the sentence aloud...';
-      recBtn.onclick=function(){rec.stop();};
+      srStatus.textContent='🔴 Recording / 正在录音 — 请朗读上方句子...';
+      // 超时保护：12秒后自动停止
+      var recTimeout=setTimeout(function(){
+        try{rec.stop();}catch(e){}
+        srStatus.textContent='Timeout / 超时，请重试';
+      },12000);
+      recBtn.onclick=function(){clearTimeout(recTimeout);rec.stop();};
       rec.onresult=function(e){
-        var fin='',interim='';
-        for(var i=e.resultIndex;i<e.results.length;i++){
+        clearTimeout(recTimeout);
+        // 取最终结果（iOS 上只有 isFinal 才有内容）
+        var fin='';
+        for(var i=0;i<e.results.length;i++){
           if(e.results[i].isFinal)fin+=e.results[i][0].transcript+' ';
-          else interim+=e.results[i][0].transcript;
         }
-        lastT=(lastT+fin).trim();
-        srStatus.textContent='Recognizing: '+(lastT||interim).substring(0,80)+'...';
+        lastT=fin.trim();
+        if(lastT)srStatus.textContent='✅ Got it: '+lastT.substring(0,60)+'...';
       };
       rec.onend=function(){
+        clearTimeout(recTimeout);
         recBtn.classList.remove('recactive');
         recBtn.disabled=true;
         recBtn.textContent='✅ Recorded / 录音完成';
