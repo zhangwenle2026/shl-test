@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-0800-highlight-radar">
+<meta name="app-version" content="20260331-0900-bilingual">
 <meta name="theme-color" content="#2e6fba">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -205,9 +205,9 @@ body{font-size:15px}
     <div style="font-size:40px;margin-bottom:12px">🔐</div>
     <div style="font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:#1a4a8a;margin-bottom:6px">ERIC SHL TEST</div>
     <div style="font-size:13px;color:#6b7c93;margin-bottom:24px">Enter your invite code to access</div>
-    <input id="invite-input" type="text" placeholder="Invite Code" style="width:100%;padding:14px 16px;border:2px solid #d0dff0;border-radius:12px;font-size:16px;text-align:center;letter-spacing:2px;outline:none;margin-bottom:12px;font-family:inherit;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+    <input id="invite-input" type="text" placeholder="Invite Code / 邀请码" style="width:100%;padding:14px 16px;border:2px solid #d0dff0;border-radius:12px;font-size:16px;text-align:center;letter-spacing:2px;outline:none;margin-bottom:12px;font-family:inherit;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
     <div id="invite-error" style="color:#e74c3c;font-size:12px;margin-bottom:10px;display:none">Invalid code. Please try again.</div>
-    <button onclick="checkInvite()" style="width:100%;padding:14px;background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit">Enter →</button>
+    <button onclick="checkInvite()" style="width:100%;padding:14px;background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit">Enter / 进入 →</button>
     <div style="font-size:11px;color:#aab;margin-top:16px">Powered by ERIC · Meituan Keeta Brazil</div>
   </div>
 </div>
@@ -217,10 +217,10 @@ body{font-size:15px}
     <div class="header-top">
       <div>
         <div class="app-title">ERIC SHL TEST</div>
-        <div class="app-subtitle">CEFR B1 · Mock Exam · 20 min</div>
+        <div class="app-subtitle">CEFR B1 · Mock Exam 模拟考试 · 20 min</div>
       </div>
       <div style="display:flex;align-items:center;gap:6px">
-        <div class="score-badge" id="totalScore">Score: —</div>
+        <div class="score-badge" id="totalScore">Score 得分: —</div>
         <div class="global-timer" id="globalTimer">⏱ 30:00</div>
       </div>
     </div>
@@ -229,12 +229,12 @@ body{font-size:15px}
       <div class="progress-track"><div class="progress-fill" id="overallBar"></div></div>
     </div>
     <nav class="tab-bar">
-      <button class="tab-btn active" onclick="switchTab('a')"><span class="tab-icon">🗣️</span>A · Read</button>
-      <button class="tab-btn" onclick="switchTab('b')"><span class="tab-icon">🔁</span>B · Repeat</button>
-      <button class="tab-btn" onclick="switchTab('c')"><span class="tab-icon">💬</span>C · Q&A</button>
-      <button class="tab-btn" onclick="switchTab('d')"><span class="tab-icon">📝</span>D · Vocab</button>
-      <button class="tab-btn" onclick="switchTab('e')"><span class="tab-icon">🎧</span>E · Listen</button>
-      <button class="tab-btn" onclick="switchTab('f')"><span class="tab-icon">🎤</span>F · Talk</button>
+      <button class="tab-btn active" onclick="switchTab('a')"><span class="tab-icon">🗣️</span>A · Read 朗读</button>
+      <button class="tab-btn" onclick="switchTab('b')"><span class="tab-icon">🔁</span>B · Repeat 复述</button>
+      <button class="tab-btn" onclick="switchTab('c')"><span class="tab-icon">💬</span>C · Listen 听力</button>
+      <button class="tab-btn" onclick="switchTab('d')"><span class="tab-icon">📝</span>D · Vocab 词汇</button>
+      <button class="tab-btn" onclick="switchTab('e')"><span class="tab-icon">🎧</span>E · SLU 理解</button>
+      <button class="tab-btn" onclick="switchTab('f')"><span class="tab-icon">🎤</span>F · Talk 口语</button>
     </nav>
   </div>
 </header>
@@ -242,7 +242,7 @@ body{font-size:15px}
 <!-- ===== PANEL A: READ ALOUD ===== -->
 <div class="panel active" id="panel-a">
   <div class="instruction-box">
-    🗣️ <strong>Read Aloud</strong> — The system will ask you to read specific sentences. Read clearly and confidently. Avoid hesitation, fillers (um, uh), or stuttering.
+    🗣️ <strong>Read Aloud / 朗读</strong> — Read clearly and confidently. / 清晰自信地朗读，避免犹豫和填充词。
   </div>
   <div class="card">
     <div class="card-title">Today's Reading Set</div>
@@ -250,7 +250,7 @@ body{font-size:15px}
     <div id="a-sentences"></div>
   </div>
   <div class="card">
-    <div class="card-title">Section Score</div>
+    <div class="card-title">Section Score / 本节得分</div>
     <div id="a-score-display" style="font-size:13px;color:var(--muted)">Rate each highlighted sentence above to see your score.</div>
   </div>
 </div>
@@ -258,7 +258,7 @@ body{font-size:15px}
 <!-- ===== PANEL B: REPEAT SENTENCE ===== -->
 <div class="panel" id="panel-b">
   <div class="instruction-box">
-    🔁 <strong>Repeat Sentence</strong> — Listen to the sentence (played once), then repeat it out loud. Even if you don't fully understand, say something confidently.
+    🔁 <strong>Repeat Sentence / 复述句子</strong> — Listen once, then repeat aloud. / 听一遍，然后大声复述。
   </div>
   <div class="card" id="b-card">
     <div class="vocab-q-num" id="b-num">Sentence 1 / 8</div>
@@ -267,7 +267,7 @@ body{font-size:15px}
       <div class="hs-text" id="b-text-display">Press PLAY to hear the sentence</div>
     </div>
     <div style="text-align:center;margin-bottom:14px">
-      <button class="btn btn-tts" onclick="playB()">▶ Play Sentence</button>
+      <button class="btn btn-tts" onclick="playB()">▶ Play / 播放</button>
       <button class="btn btn-outline btn-small" style="margin-left:8px" onclick="revealB()">👁 Reveal</button>
     </div>
     <div id="b-revealed" style="display:none;background:var(--bg);border-radius:10px;padding:12px;margin-bottom:12px;font-size:14px;color:var(--text);line-height:1.6;border:1.5px solid var(--border)"></div>
@@ -276,17 +276,17 @@ body{font-size:15px}
     </div>
     <div id="b-stt-result"></div>
     <div class="assess-row">
-      <button class="assess-btn green" onclick="scoreB('got')">✅ Got it</button>
-      <button class="assess-btn red" onclick="scoreB('missed')">❌ Missed</button>
+      <button class="assess-btn green" onclick="scoreB('got')">✅ Got it / 复述成功</button>
+      <button class="assess-btn red" onclick="scoreB('missed')">❌ Missed / 未复述</button>
     </div>
     <div class="step-nav">
       <button class="btn btn-outline btn-small" onclick="prevB()">← Prev</button>
       <span class="step-counter" id="b-step">1/8</span>
-      <button class="btn btn-primary btn-small" onclick="nextB()">Next →</button>
+      <button class="btn btn-primary btn-small" onclick="nextB()">Next / 下一题 →</button>
     </div>
   </div>
   <div class="card">
-    <div class="card-title">Section Score</div>
+    <div class="card-title">Section Score / 本节得分</div>
     <div id="b-score-display" style="font-size:13px;color:var(--muted)">Complete all 8 sentences to see your score.</div>
   </div>
 </div>
@@ -294,31 +294,31 @@ body{font-size:15px}
 <!-- ===== PANEL C: Q&A ===== -->
 <div class="panel" id="panel-c">
   <div class="instruction-box">
-    💬 <strong>Quick Q&A</strong> — Listen to the scenario, then answer the question quickly and confidently. Right answers are better, but confidence matters too.
+    👂 <strong>Active Listening / 主动听力</strong> — Listen to the scenario and answer questions. / 听场景对话，回答问题。
   </div>
   <div class="card" id="c-card">
     <div class="vocab-q-num" id="c-num">Question 1 / 4</div>
     <div class="passage-box" id="c-scenario"></div>
     <div style="margin-bottom:10px">
-      <button class="btn btn-tts" onclick="playC()">▶ Play Scenario</button>
+      <button class="btn btn-tts" onclick="playC()">▶ Play / 播放场景</button>
     </div>
     <div class="mcq-question" id="c-question"></div>
     <div id="c-answer-reveal" style="display:none;margin-bottom:12px">
-      <div style="background:#eafaf1;border-radius:8px;padding:10px;font-size:13px;color:var(--green);font-weight:600">✅ Model Answer: <span id="c-model-ans"></span></div>
+      <div style="background:#eafaf1;border-radius:8px;padding:10px;font-size:13px;color:var(--green);font-weight:600">✅ Model Answer / 参考答案: <span id="c-model-ans"></span></div>
     </div>
     <div class="assess-row">
-      <button class="assess-btn green" onclick="scoreC('confident')">💪 Confident</button>
-      <button class="assess-btn yellow" onclick="scoreC('unsure')">🤔 Unsure</button>
+      <button class="assess-btn green" onclick="scoreC('confident')">💪 Confident / 确定</button>
+      <button class="assess-btn yellow" onclick="scoreC('unsure')">🤔 Unsure / 不确定</button>
       <button class="assess-btn red" onclick="scoreC('wrong')">❌ Wrong</button>
     </div>
     <div class="step-nav">
       <button class="btn btn-outline btn-small" onclick="prevC()">← Prev</button>
       <span class="step-counter" id="c-step">1/4</span>
-      <button class="btn btn-primary btn-small" onclick="nextC()">Next →</button>
+      <button class="btn btn-primary btn-small" onclick="nextC()">Next / 下一题 →</button>
     </div>
   </div>
   <div class="card">
-    <div class="card-title">Section Score</div>
+    <div class="card-title">Section Score / 本节得分</div>
     <div id="c-score-display" style="font-size:13px;color:var(--muted)">Complete all 4 questions to see your score.</div>
   </div>
 </div>
@@ -326,7 +326,7 @@ body{font-size:15px}
 <!-- ===== PANEL D: VOCABULARY ===== -->
 <div class="panel" id="panel-d">
   <div class="instruction-box">
-    📝 <strong>Vocabulary</strong> — Choose the best synonym for each word. You have 15 seconds per question.
+    📝 <strong>Vocabulary / 词汇</strong> — Choose the best synonym. / 选择最合适的同义词。15秒/题。
   </div>
   <div class="card" id="d-card">
     <div class="vocab-q-num" id="d-num">Question 1 / 10</div>
@@ -338,11 +338,11 @@ body{font-size:15px}
     <div class="step-nav" style="margin-top:14px">
       <button class="btn btn-outline btn-small" onclick="prevD()">← Prev</button>
       <span class="step-counter" id="d-step">1/10</span>
-      <button class="btn btn-primary btn-small" onclick="nextD()">Next →</button>
+      <button class="btn btn-primary btn-small" onclick="nextD()">Next / 下一题 →</button>
     </div>
   </div>
   <div class="card">
-    <div class="card-title">Section Score</div>
+    <div class="card-title">Section Score / 本节得分</div>
     <div id="d-score-display" style="font-size:13px;color:var(--muted)">Complete all 10 questions to see your score.</div>
   </div>
 </div>
@@ -354,21 +354,21 @@ body{font-size:15px}
   </div>
 
   <div class="card">
-    <div class="card-title">Passage 1 · Work Meeting</div>
+    <div class="card-title">Passage 1 · Work Meeting / 职场会议</div>
     <div class="passage-box" id="e-p1-text"></div>
-    <button class="btn btn-tts" onclick="tts(E_PASSAGES[0].text)" style="margin-bottom:14px">▶ Play Passage 1</button>
+    <button class="btn btn-tts" onclick="tts(E_PASSAGES[0].text)" style="margin-bottom:14px">▶ Play Passage 1 / 播放段落一</button>
     <div id="e-q1"></div>
   </div>
 
   <div class="card" style="margin-top:16px">
-    <div class="card-title">Passage 2 · Client Call</div>
+    <div class="card-title">Passage 2 · Client Call / 客户通话</div>
     <div class="passage-box" id="e-p2-text"></div>
-    <button class="btn btn-tts" onclick="tts(E_PASSAGES[1].text)" style="margin-bottom:14px">▶ Play Passage 2</button>
+    <button class="btn btn-tts" onclick="tts(E_PASSAGES[1].text)" style="margin-bottom:14px">▶ Play Passage 2 / 播放段落二</button>
     <div id="e-q2"></div>
   </div>
 
   <div class="card" style="margin-top:16px">
-    <div class="card-title">Section Score</div>
+    <div class="card-title">Section Score / 本节得分</div>
     <div id="e-score-display" style="font-size:13px;color:var(--muted)">Answer all 6 questions to see your score.</div>
   </div>
 </div>
@@ -376,14 +376,14 @@ body{font-size:15px}
 <!-- ===== PANEL F: FREE TALK ===== -->
 <div class="panel" id="panel-f">
   <div class="instruction-box">
-    🎤 <strong>Free Talk</strong> — Choose a topic, prepare for 30 seconds, then speak for 90 seconds. Show your fluency, vocabulary, and logical thinking.
+    🎤 <strong>Free Talk / 自由口语</strong> — Choose a topic, prepare 30s, speak 90s. / 选题、准备30秒、连续说90秒。
   </div>
   <div id="f-select-phase">
     <div class="card">
       <div class="card-title">Choose Your Topic</div>
       <div id="f-topics"></div>
       <div style="margin-top:14px">
-        <button class="btn btn-primary" onclick="startFPrep()">Start Preparation ⏱</button>
+        <button class="btn btn-primary" onclick="startFPrep()">Start Prep / 开始准备 ⏱</button>
       </div>
     </div>
   </div>
@@ -402,7 +402,7 @@ body{font-size:15px}
       <div class="timer-display" id="f-speak-timer">90</div>
       <div id="f-speak-topic" style="background:var(--bg);border-radius:10px;padding:12px;font-size:14px;font-weight:600;line-height:1.6;color:var(--text);border:1.5px solid var(--border);margin-bottom:16px"></div>
       <div style="text-align:center;margin-top:16px">
-        <button class="btn btn-primary btn-record-unified" id="f-rec-btn" onclick="recordF()">🎙 Start Speaking</button>
+        <button class="btn btn-primary btn-record-unified" id="f-rec-btn" onclick="recordF()">🎙 Start Speaking / 开始说话</button>
       </div>
       <div id="f-stt-result" style="margin-top:10px"></div>
     </div>
@@ -412,16 +412,16 @@ body{font-size:15px}
       <div class="card-title">Self Assessment</div>
       <p class="card-desc">Rate your performance honestly:</p>
       <div id="f-rubric">
-        <div class="rubric-row"><span class="rubric-label">Fluency</span><div class="rubric-stars" id="r-fluency"></div></div>
-        <div class="rubric-row"><span class="rubric-label">Vocabulary</span><div class="rubric-stars" id="r-vocab"></div></div>
-        <div class="rubric-row"><span class="rubric-label">Logic</span><div class="rubric-stars" id="r-logic"></div></div>
-        <div class="rubric-row"><span class="rubric-label">Grammar</span><div class="rubric-stars" id="r-grammar"></div></div>
+        <div class="rubric-row"><span class="rubric-label">Fluency 流利度</span><div class="rubric-stars" id="r-fluency"></div></div>
+        <div class="rubric-row"><span class="rubric-label">Vocabulary 词汇</span><div class="rubric-stars" id="r-vocab"></div></div>
+        <div class="rubric-row"><span class="rubric-label">Logic 逻辑</span><div class="rubric-stars" id="r-logic"></div></div>
+        <div class="rubric-row"><span class="rubric-label">Grammar 语法</span><div class="rubric-stars" id="r-grammar"></div></div>
       </div>
-      <button class="btn btn-primary" style="margin-top:14px" onclick="submitF()">Submit & See Score</button>
+      <button class="btn btn-primary" style="margin-top:14px" onclick="submitF()">Submit / 提交查看得分</button>
     </div>
   </div>
   <div class="card">
-    <div class="card-title">Section Score</div>
+    <div class="card-title">Section Score / 本节得分</div>
     <div id="f-score-display" style="font-size:13px;color:var(--muted)">Complete the speaking task to see your score.</div>
   </div>
 </div>
@@ -464,7 +464,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.get
 var SRClass=window.SpeechRecognition||window.webkitSpeechRecognition;
 function startSTT(onResult,onError){if(!SRClass){alert('Speech recognition not supported. Use Safari iOS or Chrome desktop.');if(onError)onError('not-supported');return null;}var sr=new SRClass();sr.lang='en-US';sr.continuous=false;sr.interimResults=false;sr.maxAlternatives=1;sr.onresult=function(e){onResult(e.results[0][0].transcript,e.results[0][0].confidence);};sr.onerror=function(e){if(onError)onError(e.error);};sr.start();return sr;}
 function compareTexts(spoken,ref){var s=spoken.toLowerCase().replace(/[^a-z0-9\s]/g,'').trim();var r=ref.toLowerCase().replace(/[^a-z0-9\s]/g,'').trim();var sw=s.split(/\s+/);var rw=r.split(/\s+/);var ok=0;var miss=[];rw.forEach(function(w){if(sw.indexOf(w)>=0)ok++;else miss.push(w);});var pct=Math.round(ok/rw.length*100);return{pct:pct,missing:miss};}
-function showSTTResult(el,transcript,ref){var c=compareTexts(transcript,ref);var col=c.pct>=80?'#27ae60':c.pct>=50?'#f39c12':'#e74c3c';el.innerHTML='<div style="background:#f8fbff;border-radius:12px;padding:14px;margin-top:10px;border:1.5px solid #d0dff0"><div style="font-size:11px;font-weight:700;color:#6b7c93;margin-bottom:4px">YOU SAID:</div><div style="font-size:14px;color:#1a2a3a;margin-bottom:8px;font-style:italic">"'+transcript+'"</div><div style="font-size:22px;font-weight:800;color:'+col+'">'+c.pct+'%</div>'+(c.missing.length?'<div style="font-size:12px;color:#e74c3c;margin-top:4px">Missed: <strong>'+c.missing.join(', ')+'</strong></div>':'<div style="font-size:12px;color:#27ae60;margin-top:4px">Perfect!</div>')+'<div style="font-size:11px;color:#2e6fba;margin-top:4px">Reference: <em>'+ref+'</em></div></div>';return c;}
+function showSTTResult(el,transcript,ref){var c=compareTexts(transcript,ref);var col=c.pct>=80?'#27ae60':c.pct>=50?'#f39c12':'#e74c3c';el.innerHTML='<div style="background:#f8fbff;border-radius:12px;padding:14px;margin-top:10px;border:1.5px solid #d0dff0"><div style="font-size:11px;font-weight:700;color:#6b7c93;margin-bottom:4px">YOU SAID / 你说了:</div><div style="font-size:14px;color:#1a2a3a;margin-bottom:8px;font-style:italic">"'+transcript+'"</div><div style="font-size:22px;font-weight:800;color:'+col+'">'+c.pct+'%</div>'+(c.missing.length?'<div style="font-size:12px;color:#e74c3c;margin-top:4px">Missed 漏词: <strong>'+c.missing.join(', ')+'</strong></div>':'<div style="font-size:12px;color:#27ae60;margin-top:4px">Perfect! 完美！</div>')+'<div style="font-size:11px;color:#2e6fba;margin-top:4px">Reference / 参考原文: <em>'+ref+'</em></div></div>';return c;}
 // ============ DATA ============
 var KEY = 'ERIC_SHL_TEST';
 
@@ -591,11 +591,11 @@ function calcCEFR(scores) {
   var b = scores['b'] != null ? scores['b'] : 0;
   var c = scores['c'] != null ? scores['c'] : 0;
   var coreMin = Math.min(a, b, c);
-  if (overall >= 75 && coreMin >= 70) return {level: 'C1', label: 'C1 — Advanced', pass: true, color: '#1565c0'};
-  if (overall >= 60 && coreMin >= 55) return {level: 'B2', label: 'B2 — Upper Intermediate', pass: true, color: '#2e7d32'};
-  if (overall >= 45 && coreMin >= 45) return {level: 'B1', label: 'B1 — Intermediate ✅ Pass', pass: true, color: '#388e3c'};
-  if (overall >= 30) return {level: 'A2', label: 'A2 — Elementary ❌ Below Pass', pass: false, color: '#f57c00'};
-  return {level: 'A1', label: 'A1 — Beginner ❌ Below Pass', pass: false, color: '#c62828'};
+  if (overall >= 75 && coreMin >= 70) return {level: 'C1', label: 'C1 — Advanced 高级', pass: true, color: '#1565c0'};
+  if (overall >= 60 && coreMin >= 55) return {level: 'B2', label: 'B2 — Upper Intermediate 中高级', pass: true, color: '#2e7d32'};
+  if (overall >= 45 && coreMin >= 45) return {level: 'B1', label: 'B1 — Intermediate 中级 ✅ Pass 合格', pass: true, color: '#388e3c'};
+  if (overall >= 30) return {level: 'A2', label: 'A2 — Elementary 初级 ❌ 未合格', pass: false, color: '#f57c00'};
+  return {level: 'A1', label: 'A1 — Beginner 入门 ❌ 未合格', pass: false, color: '#c62828'};
 }
 
 // ============ PROGRESS ============
@@ -612,7 +612,7 @@ function updateProgress(){
 
   var cnt = ['a','b','c','d','e','f'].filter(function(k){return scores[k]!=null;}).length;
   var overall = calcWeightedScore(scores);
-  document.getElementById('totalScore').textContent=cnt>0?'Score: '+overall:'Score: —';
+  document.getElementById('totalScore').textContent=cnt>0?'Score 得分: '+overall:'Score 得分: —';
 }
 
 // ============ SECTION A ============
@@ -635,7 +635,7 @@ function initA(){
     html+='<div class="sentence-actions">';
     html+='<button class="btn btn-tts" onclick="tts(A_SENTENCES['+i+'])">🔊 Listen</button>';
     if(isHi){
-      html+='<button class="btn btn-primary btn-record-unified" style="margin-top:10px;width:100%" onclick="recordA('+i+',this)">🎙 Tap to Read Aloud</button>';
+      html+='<button class="btn btn-primary btn-record-unified" style="margin-top:10px;width:100%" onclick="recordA('+i+',this)">🎙 Tap to Read / 点击朗读</button>';
       html+='<div class="stt-interim" id="a-interim-'+i+'"></div>';
       html+='<div id="a-stt-'+i+'" style="margin-top:0"></div>';
       html+='<div class="star-rating" id="star-'+i+'">';
@@ -693,7 +693,7 @@ function showWordHighlight(transcript,ref,el){
   var origWords=ref.split(/\s+/);
   var ok=0,miss=[];
   var html='<div class="stt-highlight-card">';
-  html+='<div class="stt-said-label">YOU SAID / 你说了：<em style="color:#1a2a3a">"'+transcript+'"</em></div>';
+  html+='<div class="stt-said-label">YOU SAID / 你说了: <em style="color:#1a2a3a">"'+transcript+'"</em></div>';
   html+='<div class="stt-ref-row">';
   refWords.forEach(function(w,i){
     if(spoken.indexOf(w)>=0){ok++;html+='<span class="word-ok">'+origWords[i]+'</span> ';}
@@ -708,12 +708,12 @@ function showWordHighlight(transcript,ref,el){
 }
 var aSTR={};
 function recordA(idx,btn){
-  btn.textContent='⏺ Recording...';btn.style.background='#e74c3c';btn.disabled=true;
+  btn.textContent='⏺ Recording... / 录音中...';btn.style.background='#e74c3c';btn.disabled=true;
   var interimEl=document.getElementById('a-interim-'+idx);
   startSTTWithInterim(
     function(interim){if(interimEl)interimEl.textContent=interim;},
     function(t){
-      btn.textContent='🎙 Tap to Read Aloud';btn.style.background='';btn.disabled=false;
+      btn.textContent='🎙 Tap to Read / 点击朗读';btn.style.background='';btn.disabled=false;
       if(interimEl)interimEl.textContent='';
       var c=compareTexts(t,A_SENTENCES[idx]);
       aSTR[idx]={transcript:t,pct:c.pct,missing:c.missing};
@@ -722,7 +722,7 @@ function recordA(idx,btn){
       if(el) showWordHighlight(t,A_SENTENCES[idx],el);
     },
     function(err){
-      btn.textContent='🎙 Tap to Read Aloud';btn.style.background='';btn.disabled=false;
+      btn.textContent='🎙 Tap to Read / 点击朗读';btn.style.background='';btn.disabled=false;
       if(interimEl)interimEl.textContent='';
       var el=document.getElementById('a-stt-'+idx);
       if(el)el.innerHTML='<div style="color:#e74c3c;font-size:12px;padding:8px">Mic error: '+err+'</div>';
@@ -742,7 +742,7 @@ function renderB(){
   renderBScore();
 }
 var bSTR={};
-function recordB(){var btn=document.getElementById('b-rec-btn');btn.textContent='⏺ Recording...';btn.style.background='#e74c3c';btn.disabled=true;startSTT(function(t){btn.textContent='🎙 Repeat Now';btn.style.background='';btn.disabled=false;var c=compareTexts(t,B_SENTENCES[bIdx]);bSTR[bIdx]={transcript:t,pct:c.pct,missing:c.missing};var el=document.getElementById('b-stt-result');if(el)el.innerHTML='<div style="font-size:11px;color:#27ae60;padding:6px 0">✅ Recorded — feedback after exam</div>';if(c.pct>=60)scoreB('got');else scoreB('missed');},function(err){btn.textContent='🎙 Repeat Now';btn.style.background='';btn.disabled=false;var el=document.getElementById('b-stt-result');if(el)el.innerHTML='<div style="color:#e74c3c;font-size:12px;padding:8px">Mic error: '+err+'</div>';});}
+function recordB(){var btn=document.getElementById('b-rec-btn');btn.textContent='⏺ Recording... / 录音中...';btn.style.background='#e74c3c';btn.disabled=true;startSTT(function(t){btn.textContent='🎙 Repeat Now';btn.style.background='';btn.disabled=false;var c=compareTexts(t,B_SENTENCES[bIdx]);bSTR[bIdx]={transcript:t,pct:c.pct,missing:c.missing};var el=document.getElementById('b-stt-result');if(el)el.innerHTML='<div style="font-size:11px;color:#27ae60;padding:6px 0">✅ Recorded — feedback after exam</div>';if(c.pct>=60)scoreB('got');else scoreB('missed');},function(err){btn.textContent='🎙 Repeat Now';btn.style.background='';btn.disabled=false;var el=document.getElementById('b-stt-result');if(el)el.innerHTML='<div style="color:#e74c3c;font-size:12px;padding:8px">Mic error: '+err+'</div>';});}
 function playB(){
   tts(B_SENTENCES[bIdx]);
   document.getElementById('b-text-display').textContent='🔊 Playing...';
@@ -1019,7 +1019,7 @@ function drawRadar(canvasId,scores_arr){
   var W=canvas.width,H=canvas.height;
   var cx=W/2,cy=H/2;
   var R=Math.min(W,H)*0.38;
-  var labels=['Pronunciation','Fluency','Active\nListening','Vocabulary','SLU','Grammar'];
+  var labels=['Pronunciation\n发音','Fluency\n流利度','Active\nListening\n听力','Vocabulary\n词汇','SLU\n理解','Grammar\n语法'];
   var N=6;
   var colors={fill:'rgba(46,111,186,0.18)',stroke:'#2e6fba',grid:'#dde4ee',label:'#4a5568'};
   ctx.clearRect(0,0,W,H);
@@ -1079,7 +1079,7 @@ function showResultModal(){
   });
   var modal='<div id="result-modal"><div class="result-card">';
   modal+='<div style="font-size:32px;text-align:center;margin-bottom:8px">🎓</div>';
-  modal+='<h2>EXAM COMPLETE</h2>';
+  modal+='<h2>Test Result / 测试结果</h2>';
   modal+='<div class="result-score-big">'+overall+'</div>';
   modal+='<canvas id="radarChart" width="280" height="280" style="display:block;margin:0 auto 10px"></canvas>';
   modal+='<div class="result-level" style="color:'+cefrResult.color+'">CEFR Level: '+level+'</div>';
@@ -1105,18 +1105,18 @@ function renderFScore(){
   }
 }
 var fSTRText='';
-function recordF(){var btn=document.getElementById('f-rec-btn');btn.textContent='⏺ Recording (5s)...';btn.style.background='#e74c3c';btn.disabled=true;var sr=startSTT(function(t){fSTRText=t;btn.textContent='🎙 Start Speaking';btn.style.background='';btn.disabled=false;var el=document.getElementById('f-stt-result');if(el)el.innerHTML='<div style="font-size:11px;color:#27ae60;padding:6px 0">✅ Recorded — feedback after exam</div>';},function(err){btn.textContent='🎙 Start Speaking';btn.style.background='';btn.disabled=false;});if(sr)setTimeout(function(){try{sr.stop();}catch(e){}},5000);}
+function recordF(){var btn=document.getElementById('f-rec-btn');btn.textContent='⏺ Recording... / 录音中...';btn.style.background='#e74c3c';btn.disabled=true;var sr=startSTT(function(t){fSTRText=t;btn.textContent='🎙 Start Speaking / 开始说话';btn.style.background='';btn.disabled=false;var el=document.getElementById('f-stt-result');if(el)el.innerHTML='<div style="font-size:11px;color:#27ae60;padding:6px 0">✅ Recorded — feedback after exam</div>';},function(err){btn.textContent='🎙 Start Speaking / 开始说话';btn.style.background='';btn.disabled=false;});if(sr)setTimeout(function(){try{sr.stop();}catch(e){}},5000);}
 function showReportAnalysis(){
   var old=document.getElementById('report-analysis');if(old)old.remove();
   var html='<div id="report-analysis" style="background:#fff;border-radius:16px;padding:20px;margin-top:16px;box-shadow:0 2px 12px rgba(46,111,186,0.12);border:1px solid #d0dff0">';
-  html+='<div style="font-family:Montserrat,sans-serif;font-size:14px;font-weight:800;color:#1a4a8a;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.8px">📊 Post-Test Analysis</div>';
+  html+='<div style="font-family:Montserrat,sans-serif;font-size:14px;font-weight:800;color:#1a4a8a;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.8px">📊 Post-Test Analysis / 考后分析</div>';
   var bMissed=bResults.filter(function(r){return r==='missed';}).length;
-  if(bMissed>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">B · Repeat Sentence — Missed:</div>';bResults.forEach(function(r,i){if(r==='missed'){html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c"><div style="font-size:11px;color:#e74c3c;font-weight:700;margin-bottom:4px">❌ Sentence '+(i+1)+'</div><div style="font-size:13px;color:#1a2a3a;margin-bottom:4px">"'+B_SENTENCES[i]+'"</div><div style="font-size:11px;color:#6b7c93">Tip: Practice this 3x. Break into chunks.</div>';if(bSTR[i]){var col=bSTR[i].pct>=80?'#27ae60':bSTR[i].pct>=50?'#f39c12':'#e74c3c';html+='<div style="margin-top:6px;padding:8px;background:#fff;border-radius:8px"><div style="font-size:11px;color:#6b7c93;font-weight:700">你说了什么:</div><div style="font-size:12px;color:#1a2a3a;font-style:italic;margin:2px 0">"'+bSTR[i].transcript+'"</div><div style="font-size:13px;font-weight:800;color:'+col+'">正确率: '+bSTR[i].pct+'%</div>'+(bSTR[i].missing.length?'<div style="font-size:11px;color:#e74c3c">漏词: <strong>'+bSTR[i].missing.join(', ')+'</strong></div>':'')+'</div>';}html+='</div>';}});html+='</div>';}
+  if(bMissed>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">B · Repeat / 复述 — Missed 漏词:</div>';bResults.forEach(function(r,i){if(r==='missed'){html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c"><div style="font-size:11px;color:#e74c3c;font-weight:700;margin-bottom:4px">❌ Sentence '+(i+1)+'</div><div style="font-size:13px;color:#1a2a3a;margin-bottom:4px">"'+B_SENTENCES[i]+'"</div><div style="font-size:11px;color:#6b7c93">Tip 建议: 反复练习3遍，分段记忆</div>';if(bSTR[i]){var col=bSTR[i].pct>=80?'#27ae60':bSTR[i].pct>=50?'#f39c12':'#e74c3c';html+='<div style="margin-top:6px;padding:8px;background:#fff;border-radius:8px"><div style="font-size:11px;color:#6b7c93;font-weight:700">你说了什么:</div><div style="font-size:12px;color:#1a2a3a;font-style:italic;margin:2px 0">"'+bSTR[i].transcript+'"</div><div style="font-size:13px;font-weight:800;color:'+col+'">正确率: '+bSTR[i].pct+'%</div>'+(bSTR[i].missing.length?'<div style="font-size:11px;color:#e74c3c">漏词: <strong>'+bSTR[i].missing.join(', ')+'</strong></div>':'')+'</div>';}html+='</div>';}});html+='</div>';}
   var dWrong=[];dResults.forEach(function(r,i){if(r!==D_WORDS[i].correct)dWrong.push(i);});
-  if(dWrong.length>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">D · Vocabulary — Incorrect:</div>';dWrong.forEach(function(i){var w=D_WORDS[i];var ya=dResults[i]!=null?w.opts[dResults[i]]:'(timeout)';html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c"><div style="font-size:13px;font-weight:700;color:#1a2a3a;margin-bottom:4px">'+w.word+'</div><div style="font-size:12px;color:#e74c3c;margin-bottom:2px">❌ Your answer: '+ya+'</div><div style="font-size:12px;color:#27ae60;margin-bottom:2px">✅ Correct: '+w.opts[w.correct]+'</div><div style="font-size:11px;color:#6b7c93;font-style:italic">'+(w.ex?'"'+w.ex+'"':'')+'</div></div>';});html+='</div>';}
+  if(dWrong.length>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">D · Vocabulary / 词汇 — Incorrect 答错:</div>';dWrong.forEach(function(i){var w=D_WORDS[i];var ya=dResults[i]!=null?w.opts[dResults[i]]:'(timeout)';html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c"><div style="font-size:13px;font-weight:700;color:#1a2a3a;margin-bottom:4px">'+w.word+'</div><div style="font-size:12px;color:#e74c3c;margin-bottom:2px">❌ Your answer / 你的答案: '+ya+'</div><div style="font-size:12px;color:#27ae60;margin-bottom:2px">✅ Correct / 正确答案: '+w.opts[w.correct]+'</div><div style="font-size:11px;color:#6b7c93;font-style:italic">'+(w.ex?'"'+w.ex+'"':'')+'</div></div>';});html+='</div>';}
   var eWrong=[];E_PASSAGES.forEach(function(p,pi){p.qs.forEach(function(q,qi){var idx=pi*3+qi;if(eResults[idx]!==q.correct)eWrong.push({pi:pi,qi:qi,q:q,ans:eResults[idx]});});});
-  if(eWrong.length>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">E · Listening — Incorrect:</div>';eWrong.forEach(function(item){var ya=item.ans!=null?item.q.opts[item.ans]:'(not answered)';html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c"><div style="font-size:12px;font-weight:600;color:#1a2a3a;margin-bottom:4px">P'+(item.pi+1)+' Q'+(item.qi+1)+': '+item.q.q+'</div><div style="font-size:12px;color:#e74c3c;margin-bottom:2px">❌ Your answer: '+ya+'</div><div style="font-size:12px;color:#27ae60">✅ Correct: '+item.q.opts[item.q.correct]+'</div></div>';});html+='</div>';}
-  var aKeys=Object.keys(aSTR||{});if(aKeys.length>0){var lowA=aKeys.filter(function(k){return aSTR[k]&&aSTR[k].pct<80;});if(lowA.length>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">A · Read Aloud — Low accuracy:</div>';lowA.forEach(function(k){var item=aSTR[k];var col=item.pct>=80?'#27ae60':item.pct>=50?'#f39c12':'#e74c3c';html+='<div style="background:#fff8e1;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #f39c12"><div style="font-size:11px;color:#f39c12;font-weight:700;margin-bottom:4px">⚠️ Sentence '+(parseInt(k)+1)+'</div><div style="font-size:11px;color:#6b7c93;font-weight:700">你说了什么:</div><div style="font-size:12px;color:#1a2a3a;font-style:italic;margin:2px 0">"'+item.transcript+'"</div><div style="font-size:13px;font-weight:800;color:'+col+'">正确率: '+item.pct+'%</div>'+(item.missing&&item.missing.length?'<div style="font-size:11px;color:#e74c3c">漏词: <strong>'+item.missing.join(', ')+'</strong></div>':'')+'<div style="font-size:12px;color:#2e6fba;margin-top:4px">Reference: "'+A_SENTENCES[k]+'"</div></div>';});html+='</div>';}}
+  if(eWrong.length>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">E · Listening — Incorrect:</div>';eWrong.forEach(function(item){var ya=item.ans!=null?item.q.opts[item.ans]:'(not answered)';html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c"><div style="font-size:12px;font-weight:600;color:#1a2a3a;margin-bottom:4px">P'+(item.pi+1)+' Q'+(item.qi+1)+': '+item.q.q+'</div><div style="font-size:12px;color:#e74c3c;margin-bottom:2px">❌ Your answer / 你的答案: '+ya+'</div><div style="font-size:12px;color:#27ae60">✅ Correct / 正确答案: '+item.q.opts[item.q.correct]+'</div></div>';});html+='</div>';}
+  var aKeys=Object.keys(aSTR||{});if(aKeys.length>0){var lowA=aKeys.filter(function(k){return aSTR[k]&&aSTR[k].pct<80;});if(lowA.length>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">A · Read Aloud — Low accuracy:</div>';lowA.forEach(function(k){var item=aSTR[k];var col=item.pct>=80?'#27ae60':item.pct>=50?'#f39c12':'#e74c3c';html+='<div style="background:#fff8e1;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #f39c12"><div style="font-size:11px;color:#f39c12;font-weight:700;margin-bottom:4px">⚠️ Sentence '+(parseInt(k)+1)+'</div><div style="font-size:11px;color:#6b7c93;font-weight:700">你说了什么:</div><div style="font-size:12px;color:#1a2a3a;font-style:italic;margin:2px 0">"'+item.transcript+'"</div><div style="font-size:13px;font-weight:800;color:'+col+'">正确率: '+item.pct+'%</div>'+(item.missing&&item.missing.length?'<div style="font-size:11px;color:#e74c3c">漏词: <strong>'+item.missing.join(', ')+'</strong></div>':'')+'<div style="font-size:12px;color:#2e6fba;margin-top:4px">Reference / 参考原文: "'+A_SENTENCES[k]+'"</div></div>';});html+='</div>';}}
   if(fSTRText){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">F · Free Talk — Recording:</div><div style="background:#f0f7ff;border-radius:10px;padding:10px 14px;border-left:3px solid #2e6fba"><div style="font-size:11px;color:#6b7c93;font-weight:700">你说了什么:</div><div style="font-size:13px;color:#1a2a3a;font-style:italic;margin:4px 0">"'+fSTRText+'"</div><div style="font-size:12px;color:#2e6fba">字数: <strong>'+fSTRText.split(/\s+/).length+'</strong> 词</div></div></div>';}
   if(bMissed===0&&dWrong.length===0&&eWrong.length===0){html+='<div style="text-align:center;padding:20px;color:#27ae60;font-size:14px;font-weight:600">🎉 Excellent! No major errors detected.</div>';}
   html+='</div>';
