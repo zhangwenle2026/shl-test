@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-0250">
+<meta name="app-version" content="20260331-0330">
 <meta name="theme-color" content="#2e6fba">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -68,7 +68,7 @@ body{font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--text);m
 .btn-primary{background:var(--primary);color:#fff;padding:9px 18px;font-size:13px}
 .btn-accent{background:var(--accent);color:#fff;padding:9px 18px;font-size:13px}
 .btn-small{padding:6px 12px;font-size:11px}
-.btn-tts{background:rgba(46,111,186,0.1);color:var(--primary);padding:6px 12px;font-size:12px;border-radius:20px;border:1px solid var(--border)}
+.btn-tts{background:rgba(46,111,186,0.1);color:var(--primary);padding:11px 20px;font-size:14px;border-radius:20px;border:1px solid var(--border);min-width:160px}
 .btn-tts:hover{background:var(--primary);color:#fff}
 .btn-outline{background:transparent;color:var(--primary);padding:8px 16px;font-size:12px;border:1.5px solid var(--primary);border-radius:20px}
 
@@ -160,6 +160,27 @@ body{font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--text);m
 .topic-card.selected{background:#e8f2ff}
 .topic-num{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:0.5px;margin-bottom:4px}
 .topic-text{font-size:13px;font-weight:600;color:var(--text);line-height:1.5}
+
+/* UNIFIED RECORD BUTTON */
+.btn-record-unified{padding:11px 20px;font-size:14px;border-radius:20px;min-width:160px}
+
+/* GLOBAL TIMER */
+.global-timer{background:rgba(255,255,255,0.2);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;letter-spacing:0.5px;margin-left:8px}
+.global-timer.warning{background:rgba(243,156,18,0.3);color:#ffe082}
+.global-timer.danger{background:rgba(231,76,60,0.35);color:#ffcdd2}
+
+/* RESULT MODAL */
+#result-modal{position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;padding:20px}
+.result-card{background:#fff;border-radius:20px;padding:28px 24px;width:100%;max-width:400px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,0.4)}
+.result-card h2{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:#1a4a8a;text-align:center;margin-bottom:4px}
+.result-score-big{font-family:'Montserrat',sans-serif;font-size:56px;font-weight:800;color:#2e6fba;text-align:center;line-height:1}
+.result-level{font-size:14px;font-weight:700;text-align:center;color:#6b7c93;letter-spacing:1px;margin-bottom:18px}
+.result-bar-row{margin-bottom:10px}
+.result-bar-label{display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:3px;color:#1a2a3a}
+.result-bar-track{height:8px;background:#eef5fc;border-radius:4px;overflow:hidden}
+.result-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#2e6fba,#4a90d9);transition:width 0.8s ease}
+.result-btns{display:flex;gap:10px;margin-top:20px}
+.result-btns .btn{flex:1;justify-content:center;font-size:13px;padding:12px 10px}
 body{font-size:15px}
 .card{padding:20px}
 .sentence-text{font-size:15px}
@@ -191,7 +212,10 @@ body{font-size:15px}
         <div class="app-title">ERIC SHL TEST</div>
         <div class="app-subtitle">CEFR B1 · Mock Exam · 20 min</div>
       </div>
-      <div class="score-badge" id="totalScore">Score: —</div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <div class="score-badge" id="totalScore">Score: —</div>
+        <div class="global-timer" id="globalTimer">⏱ 30:00</div>
+      </div>
     </div>
     <div class="overall-progress">
       <div class="progress-label">OVERALL PROGRESS</div>
@@ -241,7 +265,7 @@ body{font-size:15px}
     </div>
     <div id="b-revealed" style="display:none;background:var(--bg);border-radius:10px;padding:12px;margin-bottom:12px;font-size:14px;color:var(--text);line-height:1.6;border:1.5px solid var(--border)"></div>
     <div style="text-align:center;margin:10px 0">
-      <button class="btn btn-primary" id="b-rec-btn" style="padding:12px 24px;font-size:15px;min-width:200px" onclick="recordB()">🎙 Repeat Now</button>
+      <button class="btn btn-primary btn-record-unified" id="b-rec-btn" onclick="recordB()">🎙 Repeat Now</button>
     </div>
     <div id="b-stt-result"></div>
     <div class="assess-row">
@@ -371,7 +395,7 @@ body{font-size:15px}
       <div class="timer-display" id="f-speak-timer">90</div>
       <div id="f-speak-topic" style="background:var(--bg);border-radius:10px;padding:12px;font-size:14px;font-weight:600;line-height:1.6;color:var(--text);border:1.5px solid var(--border);margin-bottom:16px"></div>
       <div style="text-align:center;margin-top:16px">
-        <button class="btn btn-primary" id="f-rec-btn" style="padding:12px 24px;font-size:15px;min-width:200px" onclick="recordF()">🎙 Start Speaking</button>
+        <button class="btn btn-primary btn-record-unified" id="f-rec-btn" onclick="recordF()">🎙 Start Speaking</button>
       </div>
       <div id="f-stt-result" style="margin-top:10px"></div>
     </div>
@@ -397,8 +421,38 @@ body{font-size:15px}
 
 <script>
 var INVITE_CODE='SMB';
-(function(){if(localStorage.getItem('ERIC_INVITE_OK')==='1')document.getElementById('invite-overlay').style.display='none';})();
-function checkInvite(){var v=(document.getElementById('invite-input').value||'').trim().toUpperCase();if(v===INVITE_CODE.toUpperCase()){localStorage.setItem('ERIC_INVITE_OK','1');document.getElementById('invite-overlay').style.display='none';}else{document.getElementById('invite-error').style.display='block';document.getElementById('invite-input').style.borderColor='#e74c3c';setTimeout(function(){document.getElementById('invite-input').style.borderColor='#d0dff0';},1500);}}
+// ============ GLOBAL TIMER ============
+var globalTimerInterval=null;
+var globalSecondsLeft=30*60;
+function startGlobalTimer(){
+  if(globalTimerInterval) return;
+  updateGlobalTimerDisplay();
+  globalTimerInterval=setInterval(function(){
+    globalSecondsLeft--;
+    updateGlobalTimerDisplay();
+    if(globalSecondsLeft<=0){stopGlobalTimer();endExam();}
+  },1000);
+}
+function stopGlobalTimer(){
+  if(globalTimerInterval){clearInterval(globalTimerInterval);globalTimerInterval=null;}
+}
+function updateGlobalTimerDisplay(){
+  var el=document.getElementById('globalTimer');
+  if(!el) return;
+  var m=Math.floor(globalSecondsLeft/60);
+  var s=globalSecondsLeft%60;
+  var mm=m<10?'0'+m:String(m);
+  var ss=s<10?'0'+s:String(s);
+  el.textContent='⏱ '+mm+':'+ss;
+  el.className='global-timer'+(globalSecondsLeft<=300?' danger':globalSecondsLeft<=600?' warning':'');
+}
+(function(){
+  if(localStorage.getItem('ERIC_INVITE_OK')==='1'){
+    document.getElementById('invite-overlay').style.display='none';
+    startGlobalTimer();
+  }
+})();
+function checkInvite(){var v=(document.getElementById('invite-input').value||'').trim().toUpperCase();if(v===INVITE_CODE.toUpperCase()){localStorage.setItem('ERIC_INVITE_OK','1');document.getElementById('invite-overlay').style.display='none';startGlobalTimer();}else{document.getElementById('invite-error').style.display='block';document.getElementById('invite-input').style.borderColor='#e74c3c';setTimeout(function(){document.getElementById('invite-input').style.borderColor='#d0dff0';},1500);}}
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.getElementById('invite-overlay').style.display!=='none')checkInvite();});
 var SRClass=window.SpeechRecognition||window.webkitSpeechRecognition;
 function startSTT(onResult,onError){if(!SRClass){alert('Speech recognition not supported. Use Safari iOS or Chrome desktop.');if(onError)onError('not-supported');return null;}var sr=new SRClass();sr.lang='en-US';sr.continuous=false;sr.interimResults=false;sr.maxAlternatives=1;sr.onresult=function(e){onResult(e.results[0][0].transcript,e.results[0][0].confidence);};sr.onerror=function(e){if(onError)onError(e.error);};sr.start();return sr;}
@@ -550,7 +604,7 @@ function initA(){
     html+='<div class="sentence-actions">';
     html+='<button class="btn btn-tts" onclick="tts(A_SENTENCES['+i+'])">🔊 Listen</button>';
     if(isHi){
-      html+='<button class="btn btn-primary" style="padding:12px 20px;font-size:14px;margin-top:10px;width:100%" onclick="recordA('+i+',this)">🎙 Tap to Read Aloud</button>';
+      html+='<button class="btn btn-primary btn-record-unified" style="margin-top:10px;width:100%" onclick="recordA('+i+',this)">🎙 Tap to Read Aloud</button>';
       html+='<div id="a-stt-'+i+'" style="margin-top:0"></div>';
       html+='<div class="star-rating" id="star-'+i+'">';
       for(var j=1;j<=5;j++){
@@ -585,7 +639,7 @@ function renderAScore(){
 }
 
 var aSTR={};
-function recordA(idx,btn){btn.textContent='⏺ Recording...';btn.style.background='#e74c3c';btn.disabled=true;startSTT(function(t){btn.textContent='🎙 Tap to Read Aloud';btn.style.background='';btn.disabled=false;var c=showSTTResult(document.getElementById('a-stt-'+idx),t,A_SENTENCES[idx]);aSTR[idx]={transcript:t,pct:c.pct};rateA(idx,c.pct>=90?5:c.pct>=75?4:c.pct>=55?3:c.pct>=35?2:1);},function(err){btn.textContent='🎙 Tap to Read Aloud';btn.style.background='';btn.disabled=false;document.getElementById('a-stt-'+idx).innerHTML='<div style="color:#e74c3c;font-size:12px;padding:8px">Mic error: '+err+'</div>';});}
+function recordA(idx,btn){btn.textContent='⏺ Recording...';btn.style.background='#e74c3c';btn.disabled=true;startSTT(function(t){btn.textContent='🎙 Tap to Read Aloud';btn.style.background='';btn.disabled=false;var c=compareTexts(t,A_SENTENCES[idx]);aSTR[idx]={transcript:t,pct:c.pct,missing:c.missing};rateA(idx,c.pct>=90?5:c.pct>=75?4:c.pct>=55?3:c.pct>=35?2:1);var el=document.getElementById('a-stt-'+idx);if(el)el.innerHTML='<div style="font-size:11px;color:#27ae60;padding:6px 0">✅ Recorded — feedback after exam</div>';},function(err){btn.textContent='🎙 Tap to Read Aloud';btn.style.background='';btn.disabled=false;var el=document.getElementById('a-stt-'+idx);if(el)el.innerHTML='<div style="color:#e74c3c;font-size:12px;padding:8px">Mic error: '+err+'</div>';});}
 // ============ SECTION B ============
 function initB(){renderB();}
 function renderB(){
@@ -598,7 +652,8 @@ function renderB(){
   document.getElementById('b-stt-result').innerHTML='';
   renderBScore();
 }
-function recordB(){var btn=document.getElementById('b-rec-btn');btn.textContent='⏺ Recording...';btn.style.background='#e74c3c';btn.disabled=true;startSTT(function(t){btn.textContent='🎙 Repeat Now';btn.style.background='';btn.disabled=false;var c=showSTTResult(document.getElementById('b-stt-result'),t,B_SENTENCES[bIdx]);if(c.pct>=60)scoreB('got');else scoreB('missed');},function(err){btn.textContent='🎙 Repeat Now';btn.style.background='';btn.disabled=false;document.getElementById('b-stt-result').innerHTML='<div style="color:#e74c3c;font-size:12px;padding:8px">Mic error: '+err+'</div>';});}
+var bSTR={};
+function recordB(){var btn=document.getElementById('b-rec-btn');btn.textContent='⏺ Recording...';btn.style.background='#e74c3c';btn.disabled=true;startSTT(function(t){btn.textContent='🎙 Repeat Now';btn.style.background='';btn.disabled=false;var c=compareTexts(t,B_SENTENCES[bIdx]);bSTR[bIdx]={transcript:t,pct:c.pct,missing:c.missing};var el=document.getElementById('b-stt-result');if(el)el.innerHTML='<div style="font-size:11px;color:#27ae60;padding:6px 0">✅ Recorded — feedback after exam</div>';if(c.pct>=60)scoreB('got');else scoreB('missed');},function(err){btn.textContent='🎙 Repeat Now';btn.style.background='';btn.disabled=false;var el=document.getElementById('b-stt-result');if(el)el.innerHTML='<div style="color:#e74c3c;font-size:12px;padding:8px">Mic error: '+err+'</div>';});}
 function playB(){
   tts(B_SENTENCES[bIdx]);
   document.getElementById('b-text-display').textContent='🔊 Playing...';
@@ -846,7 +901,51 @@ function submitF(){
   document.getElementById('f-score-display').innerHTML='<strong style="color:var(--primary);font-size:18px">'+pct+'</strong>/100';
   updateProgress();
   renderFScore();
-  showReportAnalysis();
+  stopGlobalTimer();
+  showResultModal();
+}
+function endExam(){
+  stopGlobalTimer();
+  // compute F score from rubric if available
+  if(fRubric.fluency&&fRubric.vocab&&fRubric.logic&&fRubric.grammar&&!fRubric.submitted){
+    fRubric.submitted=true;
+    localStorage.setItem(KEY+'_fRubric',JSON.stringify(fRubric));
+    var avg=(fRubric.fluency+fRubric.vocab+fRubric.logic+fRubric.grammar)/4;
+    scores.f=Math.round(avg/5*100);
+    localStorage.setItem(KEY+'_scores',JSON.stringify(scores));
+  }
+  updateProgress();
+  showResultModal();
+}
+function restartExam(){
+  ['_scores','_aRatings','_bResults','_cResults','_dResults','_eResults','_fRubric'].forEach(function(k){
+    localStorage.removeItem('ERIC_SHL_TEST'+k);
+  });
+  location.reload();
+}
+function showResultModal(){
+  var old=document.getElementById('result-modal');if(old)old.remove();
+  var total=0,cnt=0;
+  ['a','b','c','d','e','f'].forEach(function(k){if(scores[k]!=null){total+=scores[k];cnt++;}});
+  var overall=cnt>0?Math.round(total/cnt):0;
+  var level=overall>=90?'B2':overall>=75?'B1+':overall>=60?'B1':overall>=45?'A2+':'A2';
+  var secNames={a:'A · Read Aloud',b:'B · Repeat',c:'C · Q&A',d:'D · Vocabulary',e:'E · Listening',f:'F · Free Talk'};
+  var barsHtml='';
+  ['a','b','c','d','e','f'].forEach(function(k){
+    var v=scores[k]!=null?scores[k]:0;
+    barsHtml+='<div class="result-bar-row"><div class="result-bar-label"><span>'+secNames[k]+'</span><span>'+v+'</span></div><div class="result-bar-track"><div class="result-bar-fill" style="width:'+v+'%"></div></div></div>';
+  });
+  var modal='<div id="result-modal"><div class="result-card">';
+  modal+='<div style="font-size:32px;text-align:center;margin-bottom:8px">🎓</div>';
+  modal+='<h2>EXAM COMPLETE</h2>';
+  modal+='<div class="result-score-big">'+overall+'</div>';
+  modal+='<div class="result-level">CEFR Level: '+level+'</div>';
+  modal+=barsHtml;
+  modal+='<div class="result-btns">';
+  modal+='<button class="btn btn-outline" onclick="document.getElementById(\'result-modal\').remove();showReportAnalysis();switchTab(\'f\')">📋 查看错题</button>';
+  modal+='<button class="btn btn-primary" onclick="restartExam()">🔄 重新考试</button>';
+  modal+='</div></div></div>';
+  document.body.insertAdjacentHTML('beforeend',modal);
 }
 function renderFScore(){
   if(scores.f!=null){
@@ -854,18 +953,19 @@ function renderFScore(){
   }
 }
 var fSTRText='';
-function recordF(){var btn=document.getElementById('f-rec-btn');btn.textContent='⏺ Recording (5s)...';btn.style.background='#e74c3c';btn.disabled=true;var sr=startSTT(function(t){fSTRText=t;btn.textContent='🎙 Start Speaking';btn.style.background='';btn.disabled=false;document.getElementById('f-stt-result').innerHTML='<div style="background:#f8fbff;border-radius:12px;padding:14px;border:1.5px solid #d0dff0"><div style="font-size:11px;font-weight:700;color:#6b7c93;margin-bottom:4px">YOU SAID:</div><div style="font-size:14px;color:#1a2a3a;font-style:italic">"'+t+'"</div><div style="font-size:12px;color:#2e6fba;margin-top:6px">Word count: <strong>'+t.split(' ').length+'</strong> words</div></div>';},function(err){btn.textContent='🎙 Start Speaking';btn.style.background='';btn.disabled=false;});if(sr)setTimeout(function(){try{sr.stop();}catch(e){}},5000);}
+function recordF(){var btn=document.getElementById('f-rec-btn');btn.textContent='⏺ Recording (5s)...';btn.style.background='#e74c3c';btn.disabled=true;var sr=startSTT(function(t){fSTRText=t;btn.textContent='🎙 Start Speaking';btn.style.background='';btn.disabled=false;var el=document.getElementById('f-stt-result');if(el)el.innerHTML='<div style="font-size:11px;color:#27ae60;padding:6px 0">✅ Recorded — feedback after exam</div>';},function(err){btn.textContent='🎙 Start Speaking';btn.style.background='';btn.disabled=false;});if(sr)setTimeout(function(){try{sr.stop();}catch(e){}},5000);}
 function showReportAnalysis(){
   var old=document.getElementById('report-analysis');if(old)old.remove();
   var html='<div id="report-analysis" style="background:#fff;border-radius:16px;padding:20px;margin-top:16px;box-shadow:0 2px 12px rgba(46,111,186,0.12);border:1px solid #d0dff0">';
   html+='<div style="font-family:Montserrat,sans-serif;font-size:14px;font-weight:800;color:#1a4a8a;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.8px">📊 Post-Test Analysis</div>';
   var bMissed=bResults.filter(function(r){return r==='missed';}).length;
-  if(bMissed>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">B · Repeat Sentence — Missed:</div>';bResults.forEach(function(r,i){if(r==='missed'){html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c"><div style="font-size:11px;color:#e74c3c;font-weight:700;margin-bottom:4px">❌ Sentence '+(i+1)+'</div><div style="font-size:13px;color:#1a2a3a;margin-bottom:4px">"'+B_SENTENCES[i]+'"</div><div style="font-size:11px;color:#6b7c93">Tip: Practice this 3x. Break into chunks.</div></div>';}});html+='</div>';}
+  if(bMissed>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">B · Repeat Sentence — Missed:</div>';bResults.forEach(function(r,i){if(r==='missed'){html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c"><div style="font-size:11px;color:#e74c3c;font-weight:700;margin-bottom:4px">❌ Sentence '+(i+1)+'</div><div style="font-size:13px;color:#1a2a3a;margin-bottom:4px">"'+B_SENTENCES[i]+'"</div><div style="font-size:11px;color:#6b7c93">Tip: Practice this 3x. Break into chunks.</div>';if(bSTR[i]){var col=bSTR[i].pct>=80?'#27ae60':bSTR[i].pct>=50?'#f39c12':'#e74c3c';html+='<div style="margin-top:6px;padding:8px;background:#fff;border-radius:8px"><div style="font-size:11px;color:#6b7c93;font-weight:700">你说了什么:</div><div style="font-size:12px;color:#1a2a3a;font-style:italic;margin:2px 0">"'+bSTR[i].transcript+'"</div><div style="font-size:13px;font-weight:800;color:'+col+'">正确率: '+bSTR[i].pct+'%</div>'+(bSTR[i].missing.length?'<div style="font-size:11px;color:#e74c3c">漏词: <strong>'+bSTR[i].missing.join(', ')+'</strong></div>':'')+'</div>';}html+='</div>';}});html+='</div>';}
   var dWrong=[];dResults.forEach(function(r,i){if(r!==D_WORDS[i].correct)dWrong.push(i);});
   if(dWrong.length>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">D · Vocabulary — Incorrect:</div>';dWrong.forEach(function(i){var w=D_WORDS[i];var ya=dResults[i]!=null?w.opts[dResults[i]]:'(timeout)';html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c"><div style="font-size:13px;font-weight:700;color:#1a2a3a;margin-bottom:4px">'+w.word+'</div><div style="font-size:12px;color:#e74c3c;margin-bottom:2px">❌ Your answer: '+ya+'</div><div style="font-size:12px;color:#27ae60;margin-bottom:2px">✅ Correct: '+w.opts[w.correct]+'</div><div style="font-size:11px;color:#6b7c93;font-style:italic">'+(w.ex?'"'+w.ex+'"':'')+'</div></div>';});html+='</div>';}
   var eWrong=[];E_PASSAGES.forEach(function(p,pi){p.qs.forEach(function(q,qi){var idx=pi*3+qi;if(eResults[idx]!==q.correct)eWrong.push({pi:pi,qi:qi,q:q,ans:eResults[idx]});});});
   if(eWrong.length>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">E · Listening — Incorrect:</div>';eWrong.forEach(function(item){var ya=item.ans!=null?item.q.opts[item.ans]:'(not answered)';html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c"><div style="font-size:12px;font-weight:600;color:#1a2a3a;margin-bottom:4px">P'+(item.pi+1)+' Q'+(item.qi+1)+': '+item.q.q+'</div><div style="font-size:12px;color:#e74c3c;margin-bottom:2px">❌ Your answer: '+ya+'</div><div style="font-size:12px;color:#27ae60">✅ Correct: '+item.q.opts[item.q.correct]+'</div></div>';});html+='</div>';}
-  var aKeys=Object.keys(aSTR||{});if(aKeys.length>0){var lowA=aKeys.filter(function(k){return aSTR[k]&&aSTR[k].pct<80;});if(lowA.length>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">A · Read Aloud — Low accuracy:</div>';lowA.forEach(function(k){var item=aSTR[k];html+='<div style="background:#fff8e1;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #f39c12"><div style="font-size:11px;color:#f39c12;font-weight:700;margin-bottom:4px">⚠️ Sentence '+(parseInt(k)+1)+' — '+item.pct+'% accuracy</div><div style="font-size:12px;color:#1a2a3a;margin-bottom:4px">You said: "'+item.transcript+'"</div><div style="font-size:12px;color:#2e6fba">Reference: "'+A_SENTENCES[k]+'"</div></div>';});html+='</div>';}}
+  var aKeys=Object.keys(aSTR||{});if(aKeys.length>0){var lowA=aKeys.filter(function(k){return aSTR[k]&&aSTR[k].pct<80;});if(lowA.length>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">A · Read Aloud — Low accuracy:</div>';lowA.forEach(function(k){var item=aSTR[k];var col=item.pct>=80?'#27ae60':item.pct>=50?'#f39c12':'#e74c3c';html+='<div style="background:#fff8e1;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #f39c12"><div style="font-size:11px;color:#f39c12;font-weight:700;margin-bottom:4px">⚠️ Sentence '+(parseInt(k)+1)+'</div><div style="font-size:11px;color:#6b7c93;font-weight:700">你说了什么:</div><div style="font-size:12px;color:#1a2a3a;font-style:italic;margin:2px 0">"'+item.transcript+'"</div><div style="font-size:13px;font-weight:800;color:'+col+'">正确率: '+item.pct+'%</div>'+(item.missing&&item.missing.length?'<div style="font-size:11px;color:#e74c3c">漏词: <strong>'+item.missing.join(', ')+'</strong></div>':'')+'<div style="font-size:12px;color:#2e6fba;margin-top:4px">Reference: "'+A_SENTENCES[k]+'"</div></div>';});html+='</div>';}}
+  if(fSTRText){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">F · Free Talk — Recording:</div><div style="background:#f0f7ff;border-radius:10px;padding:10px 14px;border-left:3px solid #2e6fba"><div style="font-size:11px;color:#6b7c93;font-weight:700">你说了什么:</div><div style="font-size:13px;color:#1a2a3a;font-style:italic;margin:4px 0">"'+fSTRText+'"</div><div style="font-size:12px;color:#2e6fba">字数: <strong>'+fSTRText.split(/\s+/).length+'</strong> 词</div></div></div>';}
   if(bMissed===0&&dWrong.length===0&&eWrong.length===0){html+='<div style="text-align:center;padding:20px;color:#27ae60;font-size:14px;font-weight:600">🎉 Excellent! No major errors detected.</div>';}
   html+='</div>';
   document.getElementById('f-score-display').insertAdjacentHTML('afterend',html);
