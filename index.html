@@ -673,17 +673,28 @@ function renderAScore(){
 function startSTTWithInterim(onInterim,onResult,onError){
   if(!SRClass){if(onError)onError('not-supported');return null;}
   var sr=new SRClass();
-  sr.lang='en-US';sr.continuous=false;sr.interimResults=true;sr.maxAlternatives=1;
+  sr.lang='en-US';sr.continuous=false;sr.interimResults=true;sr.maxAlternatives=3;
+  var accumulated='';
+  var resultFired=false;
+  var recTimeout=setTimeout(function(){sr.stop();},12000);
   sr.onresult=function(e){
     var fin='',interim='';
     for(var i=e.resultIndex;i<e.results.length;i++){
       if(e.results[i].isFinal) fin+=e.results[i][0].transcript+' ';
       else interim+=e.results[i][0].transcript;
     }
+    if(fin.trim()) accumulated=(accumulated+' '+fin).trim();
     if(interim&&onInterim) onInterim(interim);
-    if(fin.trim()&&onResult) onResult(fin.trim(),e.results[0][0].confidence);
   };
-  sr.onerror=function(e){if(onError)onError(e.error);};
+  sr.onend=function(){
+    clearTimeout(recTimeout);
+    if(accumulated.trim()){
+      if(!resultFired){resultFired=true;onResult(accumulated.trim(),1);}
+    } else {
+      if(onError) onError('no-speech');
+    }
+  };
+  sr.onerror=function(e){clearTimeout(recTimeout);if(onError)onError(e.error);};
   sr.start();
   return sr;
 }
