@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-0900-bilingual">
-<meta name="theme-color" content="#2e6fba">
+<meta name="app-version" content="20260331-1200-deepblue">
+<meta name="theme-color" content="#1a3a5c">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
 <title>ERIC SHL TEST</title>
@@ -14,11 +14,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --primary:#2e6fba;--primary-dark:#1a4a8a;--primary-light:#4a90d9;
-  --accent:#e8935a;--pink:#f2a7b3;--bg:#eef5fc;--card:#ffffff;
-  --text:#1a2a3a;--muted:#6b7c93;--border:#d0dff0;
-  --green:#27ae60;--red:#e74c3c;--orange:#f39c12;
-  --radius:16px;--shadow:0 2px 12px rgba(46,111,186,0.12);
+  --primary:#1a3a5c;
+  --primary-dark:#0d2540;
+  --primary-mid:#2e5f8a;
+  --accent:#c87941;
+  --accent-blue:#5b8db8;
+  --light-blue:#c8daea;
+  --bg:#f5f6f8;
+  --card:#ffffff;
+  --cream:#f9f7f4;
+  --border:#dde4ec;
+  --text:#1a2535;
+  --muted:#6b7c93;
+  --green:#2e7d5e;
+  --orange:#c87941;
+  --red:#b94040;
+  --radius:12px;
+  --shadow:0 2px 12px rgba(26,58,92,0.08);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Open Sans',sans-serif;background:#f0f2f5;color:var(--text);min-height:100vh;overflow-x:hidden}
@@ -26,7 +38,7 @@ body{font-family:'Open Sans',sans-serif;background:#f0f2f5;color:var(--text);min
 .app-wrapper{max-width:480px;margin:0 auto;background:#fff;min-height:100vh;box-shadow:0 0 40px rgba(0,0,0,0.12);position:relative}
 
 /* HEADER */
-.app-header{background:linear-gradient(135deg,#1a4a8a,#2e6fba,#4a90d9);color:#fff;padding:10px 16px 0;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(26,74,138,0.3)}
+.app-header{background:linear-gradient(135deg,#0d2540,#1a3a5c,#2e5f8a);color:#fff;padding:10px 16px 0;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(26,74,138,0.3)}
 .app-header::before{content:'';display:block;position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),#f2c47a,var(--accent))}
 .header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding-top:4px}
 .app-title{font-family:'Montserrat',sans-serif;font-size:18px;font-weight:800;letter-spacing:1px}
@@ -40,10 +52,11 @@ body{font-family:'Open Sans',sans-serif;background:#f0f2f5;color:var(--text);min
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),#f2c47a);border-radius:3px;transition:width 0.5s ease;width:0%}
 
 /* TAB BAR */
-.tab-bar{display:flex;overflow-x:auto;scrollbar-width:none;gap:0;border-top:1px solid rgba(255,255,255,0.15);position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:200;background:#fff;border-top:1px solid #e0e6ef}
+.tab-bar{display:flex;overflow-x:auto;scrollbar-width:none;gap:0;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:200;background:#ffffff;border-top:1px solid #dde4ec;box-shadow:0 -2px 12px rgba(26,58,92,0.06)}
 .tab-bar::-webkit-scrollbar{display:none}
-.tab-btn{flex:1;min-width:60px;padding:8px 4px 6px;background:none;border:none;color:#9aa5b4;font-size:10px;font-weight:600;cursor:pointer;transition:all 0.2s;white-space:nowrap;text-align:center;display:flex;flex-direction:column;align-items:center}
-.tab-btn.active{color:var(--primary);font-weight:700}
+.tab-btn{flex:1;min-width:60px;padding:8px 4px 6px;background:none;border:none;color:#6b7c93;font-size:10px;font-weight:600;cursor:pointer;transition:all 0.2s;white-space:nowrap;text-align:center;display:flex;flex-direction:column;align-items:center}
+.tab-btn.active{color:#1a3a5c;font-weight:700}
+.tab-btn.active .tab-icon{color:#1a3a5c}
 .tab-btn .tab-icon{display:block;font-size:18px;margin-bottom:3px}
 
 /* PANELS */
@@ -53,25 +66,27 @@ body{font-family:'Open Sans',sans-serif;background:#f0f2f5;color:var(--text);min
 /* CARDS */
 .card{background:var(--card);border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:var(--shadow);border:1px solid var(--border)}
 .card-title{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:var(--primary);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.8px}
-.card-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:12px}
-.instruction-box{background:linear-gradient(135deg,#eef5fc,#e0ecfb);border-left:3px solid var(--primary);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--primary-dark);line-height:1.6}
+.card-desc{font-size:12px;color:#334455;line-height:1.6;margin-bottom:12px}
+.instruction-box{background:linear-gradient(135deg,#eef4fb,#ddedf8);border-left:3px solid #1a3a5c;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#334455;line-height:1.6}
 
 /* SENTENCES */
 .sentence-item{background:var(--bg);border-radius:10px;padding:12px;margin-bottom:10px;border:1.5px solid var(--border);transition:all 0.2s;position:relative}
-.sentence-item.highlighted{border-color:var(--accent);background:#fff8f3}
-.sentence-item.highlighted::before{content:'▶ READ THIS';position:absolute;top:-8px;left:10px;background:var(--accent);color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:0.5px}
+.sentence-item.highlighted{border:2px solid #1a3a5c;background:#f0f5fb}
+.sentence-item.highlighted::before{content:'▶ READ THIS';position:absolute;top:-8px;left:10px;background:#1a3a5c;color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:0.5px}
 .sentence-num{font-size:10px;color:var(--muted);font-weight:600;margin-bottom:4px}
-.sentence-text{font-size:15px;line-height:1.7;color:var(--text)}
+.sentence-text{font-size:15px;line-height:1.7;color:#1a2535}
 .sentence-actions{display:flex;align-items:stretch;gap:8px;margin-top:10px}
 
 /* BUTTONS */
 .btn{border:none;border-radius:20px;cursor:pointer;font-family:'Open Sans',sans-serif;font-weight:600;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px}
 .btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
-.btn-primary{background:var(--primary);color:#fff;padding:11px 20px;font-size:13px;min-height:44px}
-.btn-accent{background:var(--accent);color:#fff;padding:11px 20px;font-size:13px;min-height:44px}
+.btn-primary{background:#1a3a5c;color:#fff;padding:11px 20px;font-size:13px;font-weight:700;min-height:44px}
+.btn-accent{background:#c87941;color:#fff;padding:11px 20px;font-size:13px;font-weight:700;min-height:44px}
 .btn-small{padding:6px 12px;font-size:11px}
-.btn-tts{background:rgba(46,111,186,0.1);color:var(--primary);padding:0 20px;font-size:14px;border-radius:20px;border:1px solid var(--border);height:44px;min-width:140px;flex:1}
-.btn-tts:hover{background:var(--primary);color:#fff}
+.btn-tts{background:#1a3a5c;color:#fff;padding:0 16px;height:44px;border-radius:22px;font-size:13px;display:inline-flex;align-items:center;gap:8px;flex:1;border:none;font-weight:700;cursor:pointer}
+.btn-tts::before{content:'▶';font-size:11px}
+.btn-tts:hover{background:#2e5f8a;transform:translateY(-1px)}
+.btn-tts.playing{background:#2e7d5e}
 .btn-outline{background:transparent;color:var(--primary);padding:8px 16px;font-size:12px;border:1.5px solid var(--primary);border-radius:20px}
 
 /* STARS */
@@ -91,8 +106,8 @@ body{font-family:'Open Sans',sans-serif;background:#f0f2f5;color:var(--text);min
 .mcq-options{display:flex;flex-direction:column;gap:8px}
 .mcq-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;cursor:pointer;font-size:14px;transition:all 0.25s;display:flex;align-items:center;gap:10px;min-height:48px}
 .mcq-opt:hover{border-color:var(--primary);background:#f0f7ff}
-.mcq-opt.selected{border-color:var(--primary);background:#daeeff;font-weight:600;transform:scale(1.01)}
-.mcq-opt.correct{border-color:var(--green);background:#eafaf1;color:var(--green)}
+.mcq-opt.selected{border-color:#1a3a5c;background:#eef4fb;font-weight:600;transform:scale(1.01)}
+.mcq-opt.correct{border-color:#1a3a5c;background:#eef4fb;color:#1a3a5c}
 .mcq-opt.wrong{border-color:var(--red);background:#fdf0ef;color:var(--red)}
 .opt-key{width:24px;height:24px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
 .mcq-opt.selected .opt-key{background:var(--primary);color:#fff}
@@ -127,7 +142,7 @@ body{font-family:'Open Sans',sans-serif;background:#f0f2f5;color:var(--text);min
 .rubric-star.active{color:#f39c12}
 
 /* REPORT CARD */
-.report-card{background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border-radius:var(--radius);padding:20px;margin-bottom:16px;text-align:center}
+.report-card{background:linear-gradient(135deg,#0d2540,#1a3a5c);color:#fff;border-radius:var(--radius);padding:20px;margin-bottom:16px;text-align:center}
 .report-title{font-family:'Montserrat',sans-serif;font-size:16px;font-weight:800;letter-spacing:1px;margin-bottom:4px}
 .report-total{font-family:'Montserrat',sans-serif;font-size:42px;font-weight:800;margin:10px 0 4px}
 .report-level{font-size:13px;opacity:0.85;letter-spacing:1px}
@@ -151,7 +166,7 @@ body{font-family:'Open Sans',sans-serif;background:#f0f2f5;color:var(--text);min
 .divider{height:1px;background:var(--border);margin:14px 0}
 
 /* HIDDEN SENTENCE overlay */
-.hidden-sentence{background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border-radius:12px;padding:16px;text-align:center;margin-bottom:12px}
+.hidden-sentence{background:linear-gradient(135deg,#0d2540,#1a3a5c);color:#fff;border-radius:12px;padding:16px;text-align:center;margin-bottom:12px}
 .hidden-sentence .hs-label{font-size:11px;opacity:0.8;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:8px}
 .hidden-sentence .hs-text{font-size:15px;font-weight:600;line-height:1.6}
 .hidden-sentence .hs-blur{filter:blur(6px);user-select:none}
@@ -198,6 +213,16 @@ body{font-size:15px}
 .btn-primary{font-size:14px}
 .card-title{font-size:14px}
 .instruction-box,.info-box,.tip-box{font-size:13px}
+/* TIP BUBBLE */
+.tip-bubble{display:flex;align-items:center;gap:12px;background:#eef4fb;border-left:4px solid #2e5f8a;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:#1a3a5c;line-height:1.5}
+.tip-icon{font-size:20px;flex-shrink:0}
+/* STRESS MARK */
+.stress{background:none;color:inherit;border-bottom:2px dotted #2e5f8a;font-weight:700}
+/* SECTION INDICATOR */
+.section-indicator{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:8px 16px;background:rgba(255,255,255,0.08)}
+.section-indicator::-webkit-scrollbar{display:none}
+.sec-pill{flex-shrink:0;padding:4px 12px;border-radius:20px;font-size:10px;font-weight:700;color:rgba(255,255,255,0.6);background:transparent;border:1px solid rgba(255,255,255,0.2);white-space:nowrap;cursor:pointer;transition:all 0.2s}
+.sec-pill.active{background:#ffffff;color:#1a3a5c;border-color:#ffffff}
 </style>
 </head>
 <body>
@@ -220,16 +245,30 @@ body{font-size:15px}
     <div class="header-top">
       <div>
         <div class="app-title">ERIC SHL TEST</div>
-        <div class="app-subtitle">CEFR B1 · Mock Exam 模拟考试 · 20 min</div>
+        <!-- app-subtitle removed: deepblue redesign -->
       </div>
       <div style="display:flex;align-items:center;gap:6px">
-        <div class="score-badge" id="totalScore">Score 得分: —</div>
-        <div class="global-timer" id="globalTimer">⏱ 30:00</div>
+        <div style="background:#e8f5ef;border:1.5px solid #2e7d5e;border-radius:8px;padding:4px 10px;text-align:center">
+          <div style="font-size:9px;color:#2e7d5e;font-weight:700;letter-spacing:0.5px">SCORE 得分</div>
+          <div style="font-size:16px;font-weight:800;color:#1a2535" id="score-badge-val">—</div>
+        </div>
+        <div style="background:#fdf0e6;border:1.5px solid #c87941;border-radius:8px;padding:4px 10px;text-align:center">
+          <div style="font-size:9px;color:#c87941;font-weight:700;letter-spacing:0.5px">TIME 剩余</div>
+          <div style="font-size:16px;font-weight:800;color:#1a2535" id="timer-badge-val">30:00</div>
+        </div>
       </div>
     </div>
     <div class="overall-progress">
       <div class="progress-label">OVERALL PROGRESS</div>
       <div class="progress-track"><div class="progress-fill" id="overallBar"></div></div>
+    </div>
+    <div class="section-indicator" id="sectionIndicator">
+      <div class="sec-pill active" data-sec="a" onclick="switchTab('a')">A · Read</div>
+      <div class="sec-pill" data-sec="b" onclick="switchTab('b')">B · Repeat</div>
+      <div class="sec-pill" data-sec="c" onclick="switchTab('c')">C · Listen</div>
+      <div class="sec-pill" data-sec="d" onclick="switchTab('d')">D · Vocab</div>
+      <div class="sec-pill" data-sec="e" onclick="switchTab('e')">E · SLU</div>
+      <div class="sec-pill" data-sec="f" onclick="switchTab('f')">F · Talk</div>
     </div>
     <nav class="tab-bar">
       <button class="tab-btn active" onclick="switchTab('a')"><span class="tab-icon">🗣️</span>A · Read 朗读</button>
@@ -244,8 +283,12 @@ body{font-size:15px}
 
 <!-- ===== PANEL A: READ ALOUD ===== -->
 <div class="panel active" id="panel-a">
-  <div class="instruction-box">
-    🗣️ <strong>Read Aloud / 朗读</strong> — Read clearly and confidently. / 清晰自信地朗读，避免犹豫和填充词。
+  <div class="tip-bubble">
+    <span class="tip-icon">📖</span>
+    <div>
+      <strong>朗读句子 Read Aloud</strong><br>
+      <span>清晰自信，注意重音节奏</span>
+    </div>
   </div>
   <div class="card">
     <div class="card-title">Today's Reading Set</div>
@@ -448,13 +491,14 @@ function stopGlobalTimer(){
 }
 function updateGlobalTimerDisplay(){
   var el=document.getElementById('globalTimer');
-  if(!el) return;
   var m=Math.floor(globalSecondsLeft/60);
   var s=globalSecondsLeft%60;
   var mm=m<10?'0'+m:String(m);
   var ss=s<10?'0'+s:String(s);
-  el.textContent='⏱ '+mm+':'+ss;
-  el.className='global-timer'+(globalSecondsLeft<=300?' danger':globalSecondsLeft<=600?' warning':'');
+  if(el){el.textContent='⏱ '+mm+':'+ss;el.className='global-timer'+(globalSecondsLeft<=300?' danger':globalSecondsLeft<=600?' warning':'');}
+  // also update new badge UI
+  var badge=document.getElementById('timer-badge-val');
+  if(badge){badge.textContent=mm+':'+ss;badge.style.color=globalSecondsLeft<=300?'#b94040':globalSecondsLeft<=600?'#c87941':'#1a2535';}
 }
 (function(){
   if(localStorage.getItem('ERIC_INVITE_OK')==='1'){
@@ -575,6 +619,10 @@ function switchTab(id){
   var btns=document.querySelectorAll('.tab-btn');
   var idx={'a':0,'b':1,'c':2,'d':3,'e':4,'f':5}[id];
   btns[idx].classList.add('active');
+  // sync section indicator pills
+  document.querySelectorAll('.sec-pill').forEach(p=>p.classList.remove('active'));
+  var pill=document.querySelector('.sec-pill[data-sec="'+id+'"]');
+  if(pill) pill.classList.add('active');
 }
 
 // ============ SHL-SVAR SCORING ============
@@ -616,6 +664,9 @@ function updateProgress(){
   var cnt = ['a','b','c','d','e','f'].filter(function(k){return scores[k]!=null;}).length;
   var overall = calcWeightedScore(scores);
   document.getElementById('totalScore').textContent=cnt>0?'Score 得分: '+overall:'Score 得分: —';
+  // also update new score badge
+  var sbv=document.getElementById('score-badge-val');
+  if(sbv){sbv.textContent=cnt>0?overall:'—';}
 }
 
 // ============ SECTION A ============
@@ -634,7 +685,11 @@ function initA(){
     var isHi=hi.includes(i);
     html+='<div class="sentence-item'+(isHi?' highlighted':'')+'" id="a-item-'+i+'">';
     html+='<div class="sentence-num">Sentence '+(i+1)+'</div>';
-    html+='<div class="sentence-text">'+s+'</div>';
+    // add stress mark to first word >5 chars
+    var stressS=s;
+    var firstLong=s.split(' ').find(function(w){return w.replace(/[^a-zA-Z]/g,'').length>5;});
+    if(firstLong){stressS=s.replace(firstLong,'<mark class="stress">'+firstLong+'</mark>');}
+    html+='<div class="sentence-text">'+stressS+'</div>';
     html+='<div class="sentence-actions">';
     html+='<button class="btn btn-tts" onclick="tts(A_SENTENCES['+i+'])">🔊 Listen</button>';
     if(isHi){
