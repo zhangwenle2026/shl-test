@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-0518">
+<meta name="app-version" content="20260331-0523">
 <meta name="theme-color" content="#58cc02">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -214,6 +214,21 @@ body{font-family:'Nunito',-apple-system,BlinkMacSystemFont,sans-serif;background
 .start-btn:active{box-shadow:none;transform:translateY(4px)}
 
 @media(max-width:480px){.dim-grid{grid-template-columns:1fr}.cal{grid-template-columns:repeat(4,1fr)}}
+
+/* ===== Highlight Sentences ===== */
+.hl-sent{transition:background 0.15s, border-radius 0.15s;}
+.hl-sent.hl-active{background:#fff3cd;border-radius:4px;padding:1px 2px;}
+.hl-pass.hl-fallback{background:#fff3cd;transition:background 0.3s;}
+
+/* ===== Speed buttons ===== */
+.speed-btns{display:flex;gap:4px;}
+.spd-btn{padding:5px 10px;border-radius:20px;border:2px solid var(--duo-blue);background:#fff;color:var(--duo-blue);font-size:12px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.15s;}
+.spd-btn.active{background:var(--duo-blue);color:#fff;}
+.spd-btn:hover:not(.active){background:var(--duo-blue-light);}
+
+/* ===== Blind mode button ===== */
+.btn-blind{padding:5px 12px;border-radius:20px;border:2px solid var(--duo-orange);background:#fff;color:var(--duo-orange);font-size:12px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.15s;}
+.btn-blind:hover{background:var(--duo-orange);color:#fff;}
 </style>
 </head>
 <body>
@@ -541,6 +556,7 @@ var answered=false;
 var rtimer=null;
 var dTimer=null;
 var dSecondsLeft=15;
+var ttsRate=1.0; // 播放速度全局变量
 var dimScores={Pronunciation:null,Fluency:null,ActiveListening:null,Vocabulary:null,SLU:null,Grammar:null};
 var qScores=new Array(QS.length).fill(null);
 
@@ -564,12 +580,41 @@ function tts(text){
   if(!window.speechSynthesis){alert('TTS not supported.');return;}
   speechSynthesis.cancel();
   var u=new SpeechSynthesisUtterance(text);
-  u.lang='en-US';u.rate=0.9;u.pitch=1.0;
+  u.lang='en-US';u.rate=ttsRate;u.pitch=1.0;
   var voices=speechSynthesis.getVoices();
   var en=voices.find(function(v){return v.lang==='en-US'&&v.name.indexOf('Google')>=0;})
     ||voices.find(function(v){return v.lang==='en-US';})
     ||voices.find(function(v){return v.lang.indexOf('en')===0;});
   if(en)u.voice=en;
+  // 逐句高亮（onboundary）
+  var boundarySupported=false;
+  u.onboundary=function(e){
+    if(e.name!=='word')return;
+    boundarySupported=true;
+    var spans=document.querySelectorAll('.hl-sent');
+    var charIdx=e.charIndex;
+    spans.forEach(function(s){s.classList.remove('hl-active');});
+    for(var i=spans.length-1;i>=0;i--){
+      if(parseInt(spans[i].getAttribute('data-start'))<=charIdx){
+        spans[i].classList.add('hl-active');
+        break;
+      }
+    }
+  };
+  u.onend=function(){
+    document.querySelectorAll('.hl-sent').forEach(function(s){s.classList.remove('hl-active');});
+    var hlPassEl=document.getElementById('hlPass');
+    if(hlPassEl)hlPassEl.classList.remove('hl-fallback');
+  };
+  // 降级：整段高亮（onboundary 不支持时）
+  var hlPass=document.getElementById('hlPass');
+  if(hlPass&&hlPass.querySelectorAll('.hl-sent').length>0){
+    setTimeout(function(){
+      if(!boundarySupported){
+        hlPass.classList.add('hl-fallback');
+      }
+    },300);
+  }
   speechSynthesis.speak(u);
 }
 
@@ -934,13 +979,68 @@ function doRepeat(q,body){
   });
 }
 
+// ===== LISTEN HELPERS =====
+function buildHighlightPass(text){
+  var sentences=[];
+  var cur='';
+  var start=0;
+  for(var i=0;i<text.length;i++){
+    cur+=text[i];
+    if((text[i]==='.'||text[i]==='?'||text[i]==='!'||text[i]==='\n')&&
+       (i===text.length-1||text[i+1]===' '||text[i+1]==='\n')){
+      sentences.push({text:cur.trim(),start:start});
+      start=i+1;cur='';
+      while(start<text.length&&text[start]===' ')start++;
+      i=start-1;
+    }
+  }
+  if(cur.trim())sentences.push({text:cur.trim(),start:start});
+  return sentences.map(function(s,i){
+    return '<span class="hl-sent" id="hs-'+i+'" data-start="'+s.start+'">'+escapeHtml(s.text)+'</span> ';
+  }).join('');
+}
+
+function toggleBlind(){
+  var wrap=document.getElementById('hlPass');
+  var btn=document.getElementById('blindBtn');
+  if(!wrap||!btn)return;
+  if(wrap.style.filter==='none'||wrap.style.filter===''){
+    wrap.style.filter='blur(6px)';
+    btn.textContent='🙈 精听模式';
+  } else {
+    wrap.style.filter='none';
+    btn.textContent='👁️ 显示原文';
+  }
+}
+
+function setRate(r,el){
+  ttsRate=r;
+  document.querySelectorAll('.spd-btn').forEach(function(b){b.classList.remove('active');});
+  if(el)el.classList.add('active');
+}
+
 // ===== MCQ (QnA / Vocab / Listen) =====
 function doMC(q,body){
   var div=document.createElement('div');
   var html='';
-  if(q.pass)html+='<div class="passage-box">'+escapeHtml(q.pass).replace(/\n/g,'<br>')+'</div>';
+  if(q.pass&&q.kind!=='listen')html+='<div class="passage-box">'+escapeHtml(q.pass).replace(/\n/g,'<br>')+'</div>';
   if(q.kind==='listen'){
-    html+='<button class="btn-tts" onclick="tts(\''+escapeJs(q.pass)+'\')">🔊 Play Audio</button>';
+    var passHl=buildHighlightPass(q.pass);
+    html+='<div id="listen-pass-wrap">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">'
+      +'<span style="font-size:12px;color:var(--text-secondary);font-weight:700">📄 原文 Passage</span>'
+      +'<button class="btn-blind" id="blindBtn" onclick="toggleBlind()">🙈 精听模式</button>'
+      +'</div>'
+      +'<div class="passage-box hl-pass" id="hlPass" style="filter:blur(6px);transition:filter 0.3s">'+passHl+'</div>'
+      +'</div>'
+      +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap">'
+      +'<button class="btn-tts" onclick="tts(\''+escapeJs(q.pass)+'\')">🔊 Play Audio / 播放</button>'
+      +'<div class="speed-btns">'
+      +'<button class="spd-btn" onclick="setRate(0.75,this)">0.75x</button>'
+      +'<button class="spd-btn'+(ttsRate===1?' active':'')+'" onclick="setRate(1,this)">1x</button>'
+      +'<button class="spd-btn'+(ttsRate===1.25?' active':'')+'" onclick="setRate(1.25,this)">1.25x</button>'
+      +'</div>'
+      +'</div>';
   }
   if(q.kind==='vocab'){
     html+='<div class="timer-label">TIME REMAINING</div>'
