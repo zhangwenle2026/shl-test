@@ -396,7 +396,7 @@ body{font-size:15px}
 </div>
 
 <script>
-var INVITE_CODE='SMB VAMOS';
+var INVITE_CODE='SMB';
 (function(){if(localStorage.getItem('ERIC_INVITE_OK')==='1')document.getElementById('invite-overlay').style.display='none';})();
 function checkInvite(){var v=(document.getElementById('invite-input').value||'').trim().toUpperCase();if(v===INVITE_CODE.toUpperCase()){localStorage.setItem('ERIC_INVITE_OK','1');document.getElementById('invite-overlay').style.display='none';}else{document.getElementById('invite-error').style.display='block';document.getElementById('invite-input').style.borderColor='#e74c3c';setTimeout(function(){document.getElementById('invite-input').style.borderColor='#d0dff0';},1500);}}
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.getElementById('invite-overlay').style.display!=='none')checkInvite();});
