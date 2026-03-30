@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-0502">
+<meta name="app-version" content="20260331-0505">
 <meta name="theme-color" content="#58cc02">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -731,7 +731,7 @@ function doRead(q,body){
   var srHtml='';
   if(hasSR){
     srHtml='<div style="text-align:center;margin-bottom:10px">'
-      +'<button class="btn-rec" id="srBtn">🎤 Start Recording</button>'
+      +'<button class="btn-rec" id="srBtn">🎤 Start Recording / 开始录音</button>'
       +'<div id="srStatus" style="font-size:11px;color:var(--text-secondary);text-align:center;margin-top:5px;min-height:16px;font-weight:600"></div>'
       +'<div id="srResult"></div>'
       +'</div>';
@@ -739,15 +739,23 @@ function doRead(q,body){
   div.innerHTML='<div class="read-box">'+escapeHtml(q.text)+'</div>'
     +'<div class="read-zh">📌 '+escapeHtml(q.zh)+'</div>'
     +'<div style="text-align:center;margin-bottom:12px">'
-    +'<button class="btn-tts" onclick="tts(\''+escapeJs(q.text)+'\')">🔊 Listen</button>'
+    +'<button class="btn-tts" onclick="tts(\''+escapeJs(q.text)+'\')">🔊 Listen / 试听</button>'
     +'</div>'
     +srHtml
-    +(hasSR?'<p style="font-size:11px;color:var(--text-secondary);margin-bottom:8px;text-align:center;font-weight:600">Or self-assess below:</p>':'')
+    +'<div id="self-assess-wrap" style="display:none">'
+    +'<p style="font-size:11px;color:var(--text-secondary);margin-bottom:8px;text-align:center;font-weight:600">Self-assess / 手动自评（录音失败时使用）：</p>'
     +'<div class="sopts" id="sopts-wrap">'
-    +'<div class="sopt" data-sc="90">✅ Fluent and clear — no major pauses, good stress</div>'
-    +'<div class="sopt" data-sc="65">⚠️ Mostly good — 1-2 hesitations or uncertain words</div>'
-    +'<div class="sopt" data-sc="35">❌ Multiple pauses or several words mispronounced</div>'
-    +'</div>';
+    +'<div class="sopt" data-sc="90">✅ Fluent and clear / 流利清晰，无明显停顿</div>'
+    +'<div class="sopt" data-sc="65">⚠️ Mostly good / 基本读完，有1-2处停顿</div>'
+    +'<div class="sopt" data-sc="35">❌ Multiple pauses / 停顿较多或词语不确定</div>'
+    +'</div>'
+    +'</div>'
+    +(hasSR?'':'<p style="font-size:11px;color:var(--text-secondary);margin-bottom:8px;text-align:center;font-weight:600">Self-assess / 手动自评：</p>'
+    +'<div class="sopts" id="sopts-wrap">'
+    +'<div class="sopt" data-sc="90">✅ Fluent and clear / 流利清晰，无明显停顿</div>'
+    +'<div class="sopt" data-sc="65">⚠️ Mostly good / 基本读完，有1-2处停顿</div>'
+    +'<div class="sopt" data-sc="35">❌ Multiple pauses / 停顿较多或词语不确定</div>'
+    +'</div>');
   body.appendChild(div);
 
   if(hasSR){
@@ -769,7 +777,7 @@ function doRead(q,body){
       var rec=new SRC();
       rec.lang='en-US';rec.continuous=false;rec.interimResults=true;
       lastT='';
-      recBtn.textContent='⏹ Stop Recording';
+      recBtn.textContent='⏹ Stop / 停止录音';
       recBtn.classList.add('recactive');
       srStatus.textContent='🔴 Recording — read the sentence aloud...';
       recBtn.onclick=function(){rec.stop();};
@@ -785,17 +793,20 @@ function doRead(q,body){
       rec.onend=function(){
         recBtn.classList.remove('recactive');
         recBtn.disabled=true;
-        recBtn.textContent='✅ Recorded';
+        recBtn.textContent='✅ Recorded / 录音完成';
         if(lastT){
           var c=compareTexts(lastT,q.text);
           var sc=c.pct>=85?90:c.pct>=60?65:35;
           srResult.innerHTML='<div class="stt-box">'
-            +'<div class="stt-said">YOU SAID:</div>'
+            +'<div class="stt-said">YOU SAID / 识别结果：</div>'
             +'<div class="stt-transcript">"'+escapeHtml(lastT)+'"</div>'
-            +'<div class="stt-score-num" style="color:'+(c.pct>=80?'#58cc02':c.pct>=50?'#ff9600':'#ff4b4b')+'">'+c.pct+'% accuracy</div>'
-            +(c.missing.length?'<div class="stt-missed">Missed: <strong>'+c.missing.slice(0,8).join(', ')+'</strong></div>':'<div style="font-size:12px;color:#58cc02;margin-top:3px;font-weight:700">✅ Great pronunciation!</div>')
+            +'<div class="stt-score-num" style="color:'+(c.pct>=80?'#58cc02':c.pct>=50?'#ff9600':'#ff4b4b')+'">'+c.pct+'% 准确率 accuracy</div>'
+            +(c.missing.length?'<div class="stt-missed">Missed / 漏读: <strong>'+c.missing.slice(0,8).join(', ')+'</strong></div>':'<div style="font-size:12px;color:#58cc02;margin-top:3px;font-weight:700">✅ Great pronunciation! 发音优秀！</div>')
             +'</div>';
           srStatus.textContent='';
+          // 录音成功：隐藏自评选项
+          var saw=document.getElementById('self-assess-wrap');
+          if(saw)saw.style.display='none';
           if(!answered){
             var aOff=QS.findIndex(function(q){return q.sec==='A';});
             var within=cur-aOff;
@@ -807,8 +818,11 @@ function doRead(q,body){
             updateScoreHeader();
           }
         } else {
-          srStatus.textContent='Not recognized. Use manual assessment below.';
-          recBtn.disabled=false;recBtn.textContent='🎤 Retry';recBtn.classList.remove('recactive');
+          // 录音失败：显示自评兜底
+          srStatus.textContent='未识别到内容 Not recognized — please self-assess below.';
+          var saw=document.getElementById('self-assess-wrap');
+          if(saw)saw.style.display='block';
+          recBtn.disabled=false;recBtn.textContent='🎤 Retry / 重试';recBtn.classList.remove('recactive');
           recBtn.onclick=function(){if(!answered)recBtn.click();};
         }
       };
