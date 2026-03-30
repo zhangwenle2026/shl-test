@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-0559-rollback">
+<meta name="app-version" content="20260331-0800-highlight-radar">
 <meta name="theme-color" content="#2e6fba">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -181,6 +181,13 @@ body{font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--text);m
 .result-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#2e6fba,#4a90d9);transition:width 0.8s ease}
 .result-btns{display:flex;gap:10px;margin-top:20px}
 .result-btns .btn{flex:1;justify-content:center;font-size:13px;padding:12px 10px}
+.stt-highlight-card{background:#f8fbff;border-radius:10px;padding:12px 14px;margin-top:8px;border:1.5px solid #d0dff0;font-size:13px}
+.stt-said-label{font-size:11px;font-weight:700;color:#6b7c93;margin-bottom:6px}
+.stt-ref-row{line-height:2;margin-bottom:6px}
+.stt-score-row{font-size:12px;font-weight:700;margin-top:4px}
+.word-ok{background:#eafaf1;color:#27ae60;border-radius:3px;padding:1px 3px;margin:1px}
+.word-miss{color:#e74c3c;text-decoration:underline;text-decoration-style:wavy;border-bottom:2px solid #e74c3c;margin:1px}
+.stt-interim{font-size:12px;color:#6b7c93;font-style:italic;min-height:18px;margin-bottom:4px}
 body{font-size:15px}
 .card{padding:20px}
 .sentence-text{font-size:15px}
@@ -605,6 +612,7 @@ function initA(){
     html+='<button class="btn btn-tts" onclick="tts(A_SENTENCES['+i+'])">🔊 Listen</button>';
     if(isHi){
       html+='<button class="btn btn-primary btn-record-unified" style="margin-top:10px;width:100%" onclick="recordA('+i+',this)">🎙 Tap to Read Aloud</button>';
+      html+='<div class="stt-interim" id="a-interim-'+i+'"></div>';
       html+='<div id="a-stt-'+i+'" style="margin-top:0"></div>';
       html+='<div class="star-rating" id="star-'+i+'">';
       for(var j=1;j<=5;j++){
@@ -638,8 +646,65 @@ function renderAScore(){
   updateProgress();
 }
 
+function startSTTWithInterim(onInterim,onResult,onError){
+  if(!SRClass){if(onError)onError('not-supported');return null;}
+  var sr=new SRClass();
+  sr.lang='en-US';sr.continuous=false;sr.interimResults=true;sr.maxAlternatives=1;
+  sr.onresult=function(e){
+    var fin='',interim='';
+    for(var i=e.resultIndex;i<e.results.length;i++){
+      if(e.results[i].isFinal) fin+=e.results[i][0].transcript+' ';
+      else interim+=e.results[i][0].transcript;
+    }
+    if(interim&&onInterim) onInterim(interim);
+    if(fin.trim()&&onResult) onResult(fin.trim(),e.results[0][0].confidence);
+  };
+  sr.onerror=function(e){if(onError)onError(e.error);};
+  sr.start();
+  return sr;
+}
+function showWordHighlight(transcript,ref,el){
+  var spoken=transcript.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/);
+  var refWords=ref.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/);
+  var origWords=ref.split(/\s+/);
+  var ok=0,miss=[];
+  var html='<div class="stt-highlight-card">';
+  html+='<div class="stt-said-label">YOU SAID / 你说了：<em style="color:#1a2a3a">"'+transcript+'"</em></div>';
+  html+='<div class="stt-ref-row">';
+  refWords.forEach(function(w,i){
+    if(spoken.indexOf(w)>=0){ok++;html+='<span class="word-ok">'+origWords[i]+'</span> ';}
+    else{miss.push(w);html+='<span class="word-miss">'+origWords[i]+'</span> ';}
+  });
+  html+='</div>';
+  var pct=Math.round(ok/refWords.length*100);
+  var col=pct>=80?'#27ae60':pct>=50?'#f39c12':'#e74c3c';
+  html+='<div class="stt-score-row" style="color:'+col+'">准确率 '+pct+'%'+(miss.length?' · 漏: <span style="color:#e74c3c">'+miss.slice(0,6).join(', ')+'</span>':'')+'</div>';
+  html+='</div>';
+  el.innerHTML=html;
+}
 var aSTR={};
-function recordA(idx,btn){btn.textContent='⏺ Recording...';btn.style.background='#e74c3c';btn.disabled=true;startSTT(function(t){btn.textContent='🎙 Tap to Read Aloud';btn.style.background='';btn.disabled=false;var c=compareTexts(t,A_SENTENCES[idx]);aSTR[idx]={transcript:t,pct:c.pct,missing:c.missing};rateA(idx,c.pct>=90?5:c.pct>=75?4:c.pct>=55?3:c.pct>=35?2:1);var el=document.getElementById('a-stt-'+idx);if(el)el.innerHTML='<div style="font-size:11px;color:#27ae60;padding:6px 0">✅ Recorded — feedback after exam</div>';},function(err){btn.textContent='🎙 Tap to Read Aloud';btn.style.background='';btn.disabled=false;var el=document.getElementById('a-stt-'+idx);if(el)el.innerHTML='<div style="color:#e74c3c;font-size:12px;padding:8px">Mic error: '+err+'</div>';});}
+function recordA(idx,btn){
+  btn.textContent='⏺ Recording...';btn.style.background='#e74c3c';btn.disabled=true;
+  var interimEl=document.getElementById('a-interim-'+idx);
+  startSTTWithInterim(
+    function(interim){if(interimEl)interimEl.textContent=interim;},
+    function(t){
+      btn.textContent='🎙 Tap to Read Aloud';btn.style.background='';btn.disabled=false;
+      if(interimEl)interimEl.textContent='';
+      var c=compareTexts(t,A_SENTENCES[idx]);
+      aSTR[idx]={transcript:t,pct:c.pct,missing:c.missing};
+      rateA(idx,c.pct>=90?5:c.pct>=75?4:c.pct>=55?3:c.pct>=35?2:1);
+      var el=document.getElementById('a-stt-'+idx);
+      if(el) showWordHighlight(t,A_SENTENCES[idx],el);
+    },
+    function(err){
+      btn.textContent='🎙 Tap to Read Aloud';btn.style.background='';btn.disabled=false;
+      if(interimEl)interimEl.textContent='';
+      var el=document.getElementById('a-stt-'+idx);
+      if(el)el.innerHTML='<div style="color:#e74c3c;font-size:12px;padding:8px">Mic error: '+err+'</div>';
+    }
+  );
+}
 // ============ SECTION B ============
 function initB(){renderB();}
 function renderB(){
@@ -923,6 +988,59 @@ function restartExam(){
   });
   location.reload();
 }
+function drawRadar(canvasId,scores_arr){
+  var canvas=document.getElementById(canvasId);
+  if(!canvas) return;
+  var ctx=canvas.getContext('2d');
+  var W=canvas.width,H=canvas.height;
+  var cx=W/2,cy=H/2;
+  var R=Math.min(W,H)*0.38;
+  var labels=['Pronunciation','Fluency','Active\nListening','Vocabulary','SLU','Grammar'];
+  var N=6;
+  var colors={fill:'rgba(46,111,186,0.18)',stroke:'#2e6fba',grid:'#dde4ee',label:'#4a5568'};
+  ctx.clearRect(0,0,W,H);
+  for(var layer=1;layer<=3;layer++){
+    var r=R*layer/3;
+    ctx.beginPath();
+    for(var i=0;i<N;i++){
+      var angle=Math.PI*2*i/N-Math.PI/2;
+      var x=cx+r*Math.cos(angle),y=cy+r*Math.sin(angle);
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.closePath();ctx.strokeStyle=colors.grid;ctx.lineWidth=1;ctx.stroke();
+  }
+  for(var i=0;i<N;i++){
+    var angle=Math.PI*2*i/N-Math.PI/2;
+    ctx.beginPath();ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+R*Math.cos(angle),cy+R*Math.sin(angle));
+    ctx.strokeStyle=colors.grid;ctx.lineWidth=1;ctx.stroke();
+  }
+  ctx.beginPath();
+  for(var i=0;i<N;i++){
+    var angle=Math.PI*2*i/N-Math.PI/2;
+    var r=R*Math.max(0,Math.min(100,scores_arr[i]))/100;
+    var x=cx+r*Math.cos(angle),y=cy+r*Math.sin(angle);
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  ctx.closePath();ctx.fillStyle=colors.fill;ctx.fill();ctx.strokeStyle=colors.stroke;ctx.lineWidth=2;ctx.stroke();
+  for(var i=0;i<N;i++){
+    var angle=Math.PI*2*i/N-Math.PI/2;
+    var r=R*Math.max(0,Math.min(100,scores_arr[i]))/100;
+    ctx.beginPath();ctx.arc(cx+r*Math.cos(angle),cy+r*Math.sin(angle),4,0,Math.PI*2);
+    ctx.fillStyle=colors.stroke;ctx.fill();
+  }
+  ctx.font='bold 11px -apple-system,sans-serif';ctx.fillStyle=colors.label;ctx.textAlign='center';
+  for(var i=0;i<N;i++){
+    var angle=Math.PI*2*i/N-Math.PI/2;
+    var lx=cx+(R+28)*Math.cos(angle);
+    var ly=cy+(R+28)*Math.sin(angle);
+    var lines=labels[i].split('\n');
+    lines.forEach(function(line,j){ctx.fillText(line,lx,ly+j*13-(lines.length-1)*6);});
+    ctx.font='bold 10px -apple-system,sans-serif';ctx.fillStyle=colors.stroke;
+    ctx.fillText(Math.round(scores_arr[i]),cx+(R+48)*Math.cos(angle),cy+(R+48)*Math.sin(angle)+(lines.length-1)*6);
+    ctx.font='bold 11px -apple-system,sans-serif';ctx.fillStyle=colors.label;
+  }
+}
 function showResultModal(){
   var old=document.getElementById('result-modal');if(old)old.remove();
   var total=0,cnt=0;
@@ -939,6 +1057,7 @@ function showResultModal(){
   modal+='<div style="font-size:32px;text-align:center;margin-bottom:8px">🎓</div>';
   modal+='<h2>EXAM COMPLETE</h2>';
   modal+='<div class="result-score-big">'+overall+'</div>';
+  modal+='<canvas id="radarChart" width="280" height="280" style="display:block;margin:0 auto 10px"></canvas>';
   modal+='<div class="result-level">CEFR Level: '+level+'</div>';
   modal+=barsHtml;
   modal+='<div class="result-btns">';
@@ -946,6 +1065,15 @@ function showResultModal(){
   modal+='<button class="btn btn-primary" onclick="restartExam()">🔄 重新考试</button>';
   modal+='</div></div></div>';
   document.body.insertAdjacentHTML('beforeend',modal);
+  var radarScores=[
+    scores.a!=null?scores.a:0,
+    scores.b!=null?scores.b:0,
+    scores.c!=null?scores.c:0,
+    scores.d!=null?scores.d:0,
+    scores.e!=null?scores.e:0,
+    scores.f!=null?scores.f:0
+  ];
+  drawRadar('radarChart',radarScores);
 }
 function renderFScore(){
   if(scores.f!=null){
