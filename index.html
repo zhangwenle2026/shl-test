@@ -60,7 +60,7 @@ body{font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--text);m
 .sentence-item.highlighted::before{content:'▶ READ THIS';position:absolute;top:-8px;left:10px;background:var(--accent);color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:0.5px}
 .sentence-num{font-size:10px;color:var(--muted);font-weight:600;margin-bottom:4px}
 .sentence-text{font-size:14px;line-height:1.6;color:var(--text)}
-.sentence-actions{display:flex;align-items:center;gap:8px;margin-top:10px}
+.sentence-actions{display:flex;align-items:stretch;gap:8px;margin-top:10px}
 
 /* BUTTONS */
 .btn{border:none;border-radius:20px;cursor:pointer;font-family:'Open Sans',sans-serif;font-weight:600;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px}
@@ -68,7 +68,7 @@ body{font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--text);m
 .btn-primary{background:var(--primary);color:#fff;padding:9px 18px;font-size:13px}
 .btn-accent{background:var(--accent);color:#fff;padding:9px 18px;font-size:13px}
 .btn-small{padding:6px 12px;font-size:11px}
-.btn-tts{background:rgba(46,111,186,0.1);color:var(--primary);padding:11px 20px;font-size:14px;border-radius:20px;border:1px solid var(--border);min-width:160px}
+.btn-tts{background:rgba(46,111,186,0.1);color:var(--primary);padding:0 20px;font-size:14px;border-radius:20px;border:1px solid var(--border);height:44px;min-width:140px;flex:1}
 .btn-tts:hover{background:var(--primary);color:#fff}
 .btn-outline{background:transparent;color:var(--primary);padding:8px 16px;font-size:12px;border:1.5px solid var(--primary);border-radius:20px}
 
@@ -162,7 +162,7 @@ body{font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--text);m
 .topic-text{font-size:13px;font-weight:600;color:var(--text);line-height:1.5}
 
 /* UNIFIED RECORD BUTTON */
-.btn-record-unified{padding:11px 20px;font-size:14px;border-radius:20px;min-width:160px}
+.btn-record-unified{padding:0 20px;font-size:14px;border-radius:20px;height:44px;min-width:140px;flex:1}
 
 /* GLOBAL TIMER */
 .global-timer{background:rgba(255,255,255,0.2);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;letter-spacing:0.5px;margin-left:8px}
