@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="app-version" content="20260331-0150">
+<meta name="theme-color" content="#2e6fba">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
+<title>ERIC SHL TEST</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#2e6fba;--primary-dark:#1a4a8a;--primary-light:#4a90d9;
+  --accent:#e8935a;--pink:#f2a7b3;--bg:#eef5fc;--card:#ffffff;
+  --text:#1a2a3a;--muted:#6b7c93;--border:#d0dff0;
+  --green:#27ae60;--red:#e74c3c;--orange:#f39c12;
+  --radius:16px;--shadow:0 2px 12px rgba(46,111,186,0.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* HEADER */
+.app-header{background:linear-gradient(135deg,#1a4a8a,#2e6fba,#4a90d9);color:#fff;padding:14px 16px 0;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(26,74,138,0.3)}
+.app-header::before{content:'';display:block;position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),#f2c47a,var(--accent))}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding-top:4px}
+.app-title{font-family:'Montserrat',sans-serif;font-size:16px;font-weight:800;letter-spacing:1px}
+.app-subtitle{font-size:10px;opacity:0.75;letter-spacing:0.5px}
+.score-badge{background:rgba(255,255,255,0.2);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700}
+
+/* PROGRESS BAR */
+.overall-progress{padding:6px 0 10px}
+.progress-label{font-size:10px;opacity:0.8;margin-bottom:4px;letter-spacing:0.5px}
+.progress-track{height:6px;background:rgba(255,255,255,0.25);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),#f2c47a);border-radius:3px;transition:width 0.5s ease;width:0%}
+
+/* TAB BAR */
+.tab-bar{display:flex;overflow-x:auto;scrollbar-width:none;gap:0;border-top:1px solid rgba(255,255,255,0.15)}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-btn{flex:1;min-width:70px;padding:9px 6px;background:none;border:none;color:rgba(255,255,255,0.65);font-size:11px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;white-space:nowrap;text-align:center;letter-spacing:0.3px}
+.tab-btn.active{color:#fff;border-bottom-color:#fff;font-weight:700}
+.tab-btn .tab-icon{display:block;font-size:14px;margin-bottom:2px}
+
+/* PANELS */
+.panel{display:none;padding:16px;padding-bottom:80px}
+.panel.active{display:block}
+
+/* CARDS */
+.card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--shadow);border:1px solid var(--border)}
+.card-title{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:var(--primary);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.8px}
+.card-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:12px}
+.instruction-box{background:linear-gradient(135deg,#eef5fc,#e0ecfb);border-left:3px solid var(--primary);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--primary-dark);line-height:1.6}
+
+/* SENTENCES */
+.sentence-item{background:var(--bg);border-radius:10px;padding:12px;margin-bottom:10px;border:1.5px solid var(--border);transition:all 0.2s;position:relative}
+.sentence-item.highlighted{border-color:var(--accent);background:#fff8f3}
+.sentence-item.highlighted::before{content:'▶ READ THIS';position:absolute;top:-8px;left:10px;background:var(--accent);color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:0.5px}
+.sentence-num{font-size:10px;color:var(--muted);font-weight:600;margin-bottom:4px}
+.sentence-text{font-size:14px;line-height:1.6;color:var(--text)}
+.sentence-actions{display:flex;align-items:center;gap:8px;margin-top:10px}
+
+/* BUTTONS */
+.btn{border:none;border-radius:20px;cursor:pointer;font-family:'Open Sans',sans-serif;font-weight:600;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+.btn-primary{background:var(--primary);color:#fff;padding:9px 18px;font-size:13px}
+.btn-accent{background:var(--accent);color:#fff;padding:9px 18px;font-size:13px}
+.btn-small{padding:6px 12px;font-size:11px}
+.btn-tts{background:rgba(46,111,186,0.1);color:var(--primary);padding:6px 12px;font-size:12px;border-radius:20px;border:1px solid var(--border)}
+.btn-tts:hover{background:var(--primary);color:#fff}
+.btn-outline{background:transparent;color:var(--primary);padding:8px 16px;font-size:12px;border:1.5px solid var(--primary);border-radius:20px}
+
+/* STARS */
+.star-rating{display:flex;gap:4px;margin-top:8px}
+.star{font-size:22px;cursor:pointer;color:#ddd;transition:color 0.15s}
+.star.active{color:#f39c12}
+.star:hover{color:#f39c12}
+
+/* TIMER */
+.timer-display{text-align:center;font-family:'Montserrat',sans-serif;font-size:36px;font-weight:800;color:var(--primary);margin:10px 0}
+.timer-display.warning{color:var(--orange)}
+.timer-display.danger{color:var(--red)}
+.timer-label{text-align:center;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+
+/* MCQ */
+.mcq-question{font-size:14px;font-weight:600;color:var(--text);margin-bottom:14px;line-height:1.6}
+.mcq-options{display:flex;flex-direction:column;gap:8px}
+.mcq-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;cursor:pointer;font-size:13px;transition:all 0.2s;display:flex;align-items:center;gap:10px}
+.mcq-opt:hover{border-color:var(--primary);background:#f0f7ff}
+.mcq-opt.selected{border-color:var(--primary);background:#e8f2ff;font-weight:600}
+.mcq-opt.correct{border-color:var(--green);background:#eafaf1;color:var(--green)}
+.mcq-opt.wrong{border-color:var(--red);background:#fdf0ef;color:var(--red)}
+.opt-key{width:24px;height:24px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.mcq-opt.selected .opt-key{background:var(--primary);color:#fff}
+.mcq-opt.correct .opt-key{background:var(--green);color:#fff}
+.mcq-opt.wrong .opt-key{background:var(--red);color:#fff}
+
+/* PASSAGE */
+.passage-box{background:#f8fbff;border:1.5px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px;font-size:13px;line-height:1.8;color:var(--text)}
+
+/* SELF ASSESS */
+.assess-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.assess-btn{padding:7px 14px;border-radius:20px;border:none;cursor:pointer;font-size:12px;font-weight:600;transition:all 0.2s}
+.assess-btn.green{background:#eafaf1;color:var(--green);border:1.5px solid var(--green)}
+.assess-btn.yellow{background:#fef9e7;color:var(--orange);border:1.5px solid var(--orange)}
+.assess-btn.red{background:#fdf0ef;color:var(--red);border:1.5px solid var(--red)}
+.assess-btn.selected{transform:scale(1.05);box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+
+/* REPEAT SENTENCE */
+.repeat-hidden{filter:blur(8px);user-select:none;pointer-events:none;transition:filter 0.4s}
+.repeat-reveal{filter:none;transition:filter 0.4s}
+
+/* VOCABULARY */
+.vocab-q-num{font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:600;letter-spacing:0.5px}
+.vocab-word{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:var(--primary);margin-bottom:6px}
+.vocab-instruction{font-size:12px;color:var(--muted);margin-bottom:14px}
+
+/* RUBRIC */
+.rubric-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.rubric-label{font-size:13px;font-weight:600;color:var(--text);width:100px}
+.rubric-stars{display:flex;gap:4px}
+.rubric-star{font-size:20px;cursor:pointer;color:#ddd;transition:color 0.15s}
+.rubric-star.active{color:#f39c12}
+
+/* REPORT CARD */
+.report-card{background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border-radius:var(--radius);padding:20px;margin-bottom:16px;text-align:center}
+.report-title{font-family:'Montserrat',sans-serif;font-size:16px;font-weight:800;letter-spacing:1px;margin-bottom:4px}
+.report-total{font-family:'Montserrat',sans-serif;font-size:42px;font-weight:800;margin:10px 0 4px}
+.report-level{font-size:13px;opacity:0.85;letter-spacing:1px}
+.score-bars{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.score-bar-row{margin-bottom:12px}
+.score-bar-label{display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:4px}
+.score-bar-track{height:8px;background:var(--bg);border-radius:4px;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:4px;transition:width 0.8s ease;background:linear-gradient(90deg,var(--primary),var(--primary-light))}
+
+/* SECTION STATUS */
+.section-status{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+.status-done{background:#eafaf1;color:var(--green)}
+.status-inprog{background:#fef9e7;color:var(--orange)}
+.status-todo{background:var(--bg);color:var(--muted)}
+
+/* STEP NAV */
+.step-nav{display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:8px}
+.step-counter{font-size:12px;color:var(--muted);font-weight:600}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:14px 0}
+
+/* HIDDEN SENTENCE overlay */
+.hidden-sentence{background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border-radius:12px;padding:16px;text-align:center;margin-bottom:12px}
+.hidden-sentence .hs-label{font-size:11px;opacity:0.8;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:8px}
+.hidden-sentence .hs-text{font-size:15px;font-weight:600;line-height:1.6}
+.hidden-sentence .hs-blur{filter:blur(6px);user-select:none}
+
+/* TOPIC CARD */
+.topic-card{background:var(--bg);border-radius:12px;padding:14px;border:1.5px solid var(--border);cursor:pointer;transition:all 0.2s;margin-bottom:10px}
+.topic-card:hover,.topic-card.selected{border-color:var(--primary);background:#f0f7ff}
+.topic-card.selected{background:#e8f2ff}
+.topic-num{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:0.5px;margin-bottom:4px}
+.topic-text{font-size:13px;font-weight:600;color:var(--text);line-height:1.5}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="app-header-inner">
+    <div class="header-top">
+      <div>
+        <div class="app-title">ERIC SHL TEST</div>
+        <div class="app-subtitle">CEFR B1 · Mock Exam · 20 min</div>
+      </div>
+      <div class="score-badge" id="totalScore">Score: —</div>
+    </div>
+    <div class="overall-progress">
+      <div class="progress-label">OVERALL PROGRESS</div>
+      <div class="progress-track"><div class="progress-fill" id="overallBar"></div></div>
+    </div>
+    <nav class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('a')"><span class="tab-icon">🗣️</span>A · Read</button>
+      <button class="tab-btn" onclick="switchTab('b')"><span class="tab-icon">🔁</span>B · Repeat</button>
+      <button class="tab-btn" onclick="switchTab('c')"><span class="tab-icon">💬</span>C · Q&A</button>
+      <button class="tab-btn" onclick="switchTab('d')"><span class="tab-icon">📝</span>D · Vocab</button>
+      <button class="tab-btn" onclick="switchTab('e')"><span class="tab-icon">🎧</span>E · Listen</button>
+      <button class="tab-btn" onclick="switchTab('f')"><span class="tab-icon">🎤</span>F · Talk</button>
+    </nav>
+  </div>
+</header>
+
+<!-- ===== PANEL A: READ ALOUD ===== -->
+<div class="panel active" id="panel-a">
+  <div class="instruction-box">
+    🗣️ <strong>Read Aloud</strong> — The system will ask you to read specific sentences. Read clearly and confidently. Avoid hesitation, fillers (um, uh), or stuttering.
+  </div>
+  <div class="card">
+    <div class="card-title">Today's Reading Set</div>
+    <p class="card-desc" id="a-prompt">Loading your sentences...</p>
+    <div id="a-sentences"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Section Score</div>
+    <div id="a-score-display" style="font-size:13px;color:var(--muted)">Rate each highlighted sentence above to see your score.</div>
+  </div>
+</div>
+
+<!-- ===== PANEL B: REPEAT SENTENCE ===== -->
+<div class="panel" id="panel-b">
+  <div class="instruction-box">
+    🔁 <strong>Repeat Sentence</strong> — Listen to the sentence (played once), then repeat it out loud. Even if you don't fully understand, say something confidently.
+  </div>
+  <div class="card" id="b-card">
+    <div class="vocab-q-num" id="b-num">Sentence 1 / 8</div>
+    <div class="hidden-sentence">
+      <div class="hs-label">🔊 Listen — then repeat</div>
+      <div class="hs-text" id="b-text-display">Press PLAY to hear the sentence</div>
+    </div>
+    <div style="text-align:center;margin-bottom:14px">
+      <button class="btn btn-tts" onclick="playB()">▶ Play Sentence</button>
+      <button class="btn btn-outline btn-small" style="margin-left:8px" onclick="revealB()">👁 Reveal</button>
+    </div>
+    <div id="b-revealed" style="display:none;background:var(--bg);border-radius:10px;padding:12px;margin-bottom:12px;font-size:14px;color:var(--text);line-height:1.6;border:1.5px solid var(--border)"></div>
+    <div class="assess-row">
+      <button class="assess-btn green" onclick="scoreB('got')">✅ Got it</button>
+      <button class="assess-btn red" onclick="scoreB('missed')">❌ Missed</button>
+    </div>
+    <div class="step-nav">
+      <button class="btn btn-outline btn-small" onclick="prevB()">← Prev</button>
+      <span class="step-counter" id="b-step">1/8</span>
+      <button class="btn btn-primary btn-small" onclick="nextB()">Next →</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Section Score</div>
+    <div id="b-score-display" style="font-size:13px;color:var(--muted)">Complete all 8 sentences to see your score.</div>
+  </div>
+</div>
+
+<!-- ===== PANEL C: Q&A ===== -->
+<div class="panel" id="panel-c">
+  <div class="instruction-box">
+    💬 <strong>Quick Q&A</strong> — Listen to the scenario, then answer the question quickly and confidently. Right answers are better, but confidence matters too.
+  </div>
+  <div class="card" id="c-card">
+    <div class="vocab-q-num" id="c-num">Question 1 / 4</div>
+    <div class="passage-box" id="c-scenario"></div>
+    <div style="margin-bottom:10px">
+      <button class="btn btn-tts" onclick="playC()">▶ Play Scenario</button>
+    </div>
+    <div class="mcq-question" id="c-question"></div>
+    <div id="c-answer-reveal" style="display:none;margin-bottom:12px">
+      <div style="background:#eafaf1;border-radius:8px;padding:10px;font-size:13px;color:var(--green);font-weight:600">✅ Model Answer: <span id="c-model-ans"></span></div>
+    </div>
+    <div class="assess-row">
+      <button class="assess-btn green" onclick="scoreC('confident')">💪 Confident</button>
+      <button class="assess-btn yellow" onclick="scoreC('unsure')">🤔 Unsure</button>
+      <button class="assess-btn red" onclick="scoreC('wrong')">❌ Wrong</button>
+    </div>
+    <div class="step-nav">
+      <button class="btn btn-outline btn-small" onclick="prevC()">← Prev</button>
+      <span class="step-counter" id="c-step">1/4</span>
+      <button class="btn btn-primary btn-small" onclick="nextC()">Next →</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Section Score</div>
+    <div id="c-score-display" style="font-size:13px;color:var(--muted)">Complete all 4 questions to see your score.</div>
+  </div>
+</div>
+
+<!-- ===== PANEL D: VOCABULARY ===== -->
+<div class="panel" id="panel-d">
+  <div class="instruction-box">
+    📝 <strong>Vocabulary</strong> — Choose the best synonym for each word. You have 15 seconds per question.
+  </div>
+  <div class="card" id="d-card">
+    <div class="vocab-q-num" id="d-num">Question 1 / 10</div>
+    <div class="timer-label">TIME REMAINING</div>
+    <div class="timer-display" id="d-timer">15</div>
+    <div class="vocab-word" id="d-word"></div>
+    <div class="vocab-instruction">What is the best synonym for this word?</div>
+    <div class="mcq-options" id="d-options"></div>
+    <div class="step-nav" style="margin-top:14px">
+      <button class="btn btn-outline btn-small" onclick="prevD()">← Prev</button>
+      <span class="step-counter" id="d-step">1/10</span>
+      <button class="btn btn-primary btn-small" onclick="nextD()">Next →</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Section Score</div>
+    <div id="d-score-display" style="font-size:13px;color:var(--muted)">Complete all 10 questions to see your score.</div>
+  </div>
+</div>
+
+<!-- ===== PANEL E: LISTENING ===== -->
+<div class="panel" id="panel-e">
+  <div class="instruction-box">
+    🎧 <strong>Listening Comprehension</strong> — Listen to each passage, then answer the questions.
+  </div>
+
+  <div class="card">
+    <div class="card-title">Passage 1 · Work Meeting</div>
+    <div class="passage-box" id="e-p1-text"></div>
+    <button class="btn btn-tts" onclick="tts(E_PASSAGES[0].text)" style="margin-bottom:14px">▶ Play Passage 1</button>
+    <div id="e-q1"></div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">Passage 2 · Client Call</div>
+    <div class="passage-box" id="e-p2-text"></div>
+    <button class="btn btn-tts" onclick="tts(E_PASSAGES[1].text)" style="margin-bottom:14px">▶ Play Passage 2</button>
+    <div id="e-q2"></div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">Section Score</div>
+    <div id="e-score-display" style="font-size:13px;color:var(--muted)">Answer all 6 questions to see your score.</div>
+  </div>
+</div>
+
+<!-- ===== PANEL F: FREE TALK ===== -->
+<div class="panel" id="panel-f">
+  <div class="instruction-box">
+    🎤 <strong>Free Talk</strong> — Choose a topic, prepare for 30 seconds, then speak for 90 seconds. Show your fluency, vocabulary, and logical thinking.
+  </div>
+  <div id="f-select-phase">
+    <div class="card">
+      <div class="card-title">Choose Your Topic</div>
+      <div id="f-topics"></div>
+      <div style="margin-top:14px">
+        <button class="btn btn-primary" onclick="startFPrep()">Start Preparation ⏱</button>
+      </div>
+    </div>
+  </div>
+  <div id="f-prep-phase" style="display:none">
+    <div class="card">
+      <div class="card-title">Preparation Time</div>
+      <div class="timer-label">GET READY</div>
+      <div class="timer-display" id="f-prep-timer">30</div>
+      <div id="f-selected-topic" style="background:var(--bg);border-radius:10px;padding:12px;font-size:14px;font-weight:600;line-height:1.6;color:var(--text);border:1.5px solid var(--border)"></div>
+    </div>
+  </div>
+  <div id="f-speak-phase" style="display:none">
+    <div class="card">
+      <div class="card-title">Speaking Time</div>
+      <div class="timer-label">SPEAK NOW</div>
+      <div class="timer-display" id="f-speak-timer">90</div>
+      <div id="f-speak-topic" style="background:var(--bg);border-radius:10px;padding:12px;font-size:14px;font-weight:600;line-height:1.6;color:var(--text);border:1.5px solid var(--border);margin-bottom:16px"></div>
+    </div>
+  </div>
+  <div id="f-rate-phase" style="display:none">
+    <div class="card">
+      <div class="card-title">Self Assessment</div>
+      <p class="card-desc">Rate your performance honestly:</p>
+      <div id="f-rubric">
+        <div class="rubric-row"><span class="rubric-label">Fluency</span><div class="rubric-stars" id="r-fluency"></div></div>
+        <div class="rubric-row"><span class="rubric-label">Vocabulary</span><div class="rubric-stars" id="r-vocab"></div></div>
+        <div class="rubric-row"><span class="rubric-label">Logic</span><div class="rubric-stars" id="r-logic"></div></div>
+        <div class="rubric-row"><span class="rubric-label">Grammar</span><div class="rubric-stars" id="r-grammar"></div></div>
+      </div>
+      <button class="btn btn-primary" style="margin-top:14px" onclick="submitF()">Submit & See Score</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Section Score</div>
+    <div id="f-score-display" style="font-size:13px;color:var(--muted)">Complete the speaking task to see your score.</div>
+  </div>
+</div>
+
+<script>
+// ============ DATA ============
+var KEY = 'ERIC_SHL_TEST';
+
+var A_SENTENCES = [
+  "The meeting has been rescheduled to Thursday at two o'clock.",
+  "Could you please send me the report by end of day?",
+  "We need to review the budget before approving the project.",
+  "The delivery was delayed due to bad weather conditions.",
+  "Our team exceeded the sales target by fifteen percent this quarter.",
+  "Please make sure to confirm your attendance before Friday.",
+  "The new policy will take effect from the first of next month.",
+  "I would like to follow up on the email I sent last week.",
+  "Can you clarify what you mean by the third point?",
+  "We appreciate your patience and understanding in this matter."
+];
+
+var B_SENTENCES = [
+  "The client confirmed the order will arrive on Monday.",
+  "Please submit your expense report before the deadline.",
+  "We have decided to postpone the product launch until further notice.",
+  "Could you forward the presentation to all team members?",
+  "The quarterly review meeting is scheduled for next Wednesday.",
+  "I need you to double-check the figures in the third column.",
+  "The supplier has agreed to extend the contract for six months.",
+  "Make sure the warehouse team is informed about the change."
+];
+
+var C_SCENARIOS = [
+  {text:"Joe is smiling and laughing. He looks very happy.", q:"Is Joe happy or sad?", ans:"Happy"},
+  {text:"The office temperature is 28 degrees and everyone is sweating.", q:"Is it hot or cold in the office?", ans:"Hot"},
+  {text:"Sarah called to say the delivery truck broke down on the highway.", q:"Will the delivery arrive on time?", ans:"No, it will be delayed."},
+  {text:"The manager said: Great job on the presentation! I was really impressed.", q:"How does the manager feel about the presentation?", ans:"Positive — the manager is impressed."}
+];
+
+var D_WORDS = [
+  {word:"HUGE", opts:["large","heavy","tiny","little"], correct:0},
+  {word:"POSTPONE", opts:["delay","cancel","start","finish"], correct:0},
+  {word:"CONFIRM", opts:["verify","deny","question","forget"], correct:0},
+  {word:"URGENT", opts:["immediate","slow","optional","relaxed"], correct:0},
+  {word:"CLARIFY", opts:["explain","confuse","hide","rush"], correct:0},
+  {word:"EXCEED", opts:["surpass","fail","reach","miss"], correct:0},
+  {word:"SUBMIT", opts:["hand in","receive","reject","review"], correct:0},
+  {word:"NEGOTIATE", opts:["discuss terms","agree instantly","refuse","ignore"], correct:0},
+  {word:"EFFICIENT", opts:["productive","lazy","slow","wasteful"], correct:0},
+  {word:"APPROXIMATELY", opts:["roughly","exactly","never","always"], correct:0}
+];
+
+var E_PASSAGES = [
+  {
+    text:"Good morning everyone. I'd like to start today's meeting by reviewing last week's performance. Our delivery success rate was 94%, which is up 3% from the previous week. However, we had some complaints about customer service response time. Going forward, we need to ensure all customer inquiries are answered within two hours. Additionally, the new pricing structure will be implemented starting next Monday. Please make sure your teams are informed.",
+    qs:[
+      {q:"What was the delivery success rate last week?",opts:["91%","94%","97%","90%"],correct:1},
+      {q:"What was the main complaint from customers?",opts:["Delivery speed","Product quality","Response time","Price"],correct:2},
+      {q:"When will the new pricing structure start?",opts:["This Friday","Next Monday","Next Wednesday","Immediately"],correct:1}
+    ]
+  },
+  {
+    text:"Hello, this is David from the operations team. I am calling regarding the order you placed on March 15th. Unfortunately, two of the items you ordered are currently out of stock. We expect them to be available within five to seven business days. We can either send the available items now and ship the rest later, or wait and send everything together. Please let us know your preference by end of day so we can proceed.",
+    qs:[
+      {q:"Why is David calling?",opts:["To confirm delivery","To report a delay","To cancel the order","To request payment"],correct:1},
+      {q:"How long before the out-of-stock items are available?",opts:["2–3 days","3–5 days","5–7 days","10 days"],correct:2},
+      {q:"What does David ask the customer to do?",opts:["Call back tomorrow","Visit the store","Reply by end of day","Place a new order"],correct:2}
+    ]
+  }
+];
+
+var F_TOPICS = [
+  "Describe a challenging situation at work and how you handled it.",
+  "What are the most important qualities of a good team member?",
+  "How has technology changed the way you work?"
+];
+
+// ============ STATE ============
+var scores = JSON.parse(localStorage.getItem(KEY+'_scores') || '{}');
+var aRatings = JSON.parse(localStorage.getItem(KEY+'_aRatings') || '[]');
+var bResults = JSON.parse(localStorage.getItem(KEY+'_bResults') || '[]');
+var cResults = JSON.parse(localStorage.getItem(KEY+'_cResults') || '[]');
+var dResults = JSON.parse(localStorage.getItem(KEY+'_dResults') || '[]');
+var eResults = JSON.parse(localStorage.getItem(KEY+'_eResults') || '[]');
+var fRubric  = JSON.parse(localStorage.getItem(KEY+'_fRubric')  || '{}');
+
+var bIdx=0, cIdx=0, dIdx=0;
+var dTimer=null;
+var fPrepTimer=null, fSpeakTimer=null;
+var fSelected=-1;
+var aHighlighted=[];
+
+// ============ TTS ============
+function tts(text){
+  if(!window.speechSynthesis) return alert('TTS not supported in this browser.');
+  speechSynthesis.cancel();
+  var u=new SpeechSynthesisUtterance(text);
+  u.lang='en-US'; u.rate=0.9; u.pitch=1.0;
+  var voices=speechSynthesis.getVoices();
+  var en=voices.find(v=>v.lang==='en-US'&&v.name.includes('Google')) || voices.find(v=>v.lang==='en-US') || voices.find(v=>v.lang.startsWith('en'));
+  if(en) u.voice=en;
+  speechSynthesis.speak(u);
+}
+
+// ============ TAB SWITCH ============
+function switchTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  var btns=document.querySelectorAll('.tab-btn');
+  var idx={'a':0,'b':1,'c':2,'d':3,'e':4,'f':5}[id];
+  btns[idx].classList.add('active');
+}
+
+// ============ PROGRESS ============
+function updateProgress(){
+  var done=0;
+  if(aRatings.length>0) done++;
+  if(bResults.length>=8) done++;
+  if(cResults.length>=4) done++;
+  if(dResults.length>=10) done++;
+  if(eResults.length>=6) done++;
+  if(fRubric.submitted) done++;
+  var pct=Math.round(done/6*100);
+  document.getElementById('overallBar').style.width=pct+'%';
+
+  var total=0,cnt=0;
+  ['a','b','c','d','e','f'].forEach(function(k){if(scores[k]!=null){total+=scores[k];cnt++;}});
+  document.getElementById('totalScore').textContent=cnt>0?'Score: '+Math.round(total/cnt):'Score: —';
+}
+
+// ============ SECTION A ============
+function initA(){
+  // pick 3-4 random sentences to highlight
+  var all=[0,1,2,3,4,5,6,7,8,9];
+  var n=3+Math.floor(Math.random()*2);
+  var hi=[];
+  while(hi.length<n){var r=Math.floor(Math.random()*10);if(!hi.includes(r))hi.push(r);}
+  hi.sort(function(a,b){return a-b;});
+  aHighlighted=hi;
+  var nums=hi.map(function(i){return i+1;}).join(', ');
+  document.getElementById('a-prompt').innerHTML='<strong>Please read sentences: '+nums+'</strong><br><span style="color:var(--muted);font-size:11px">Tap 🔊 to hear the correct pronunciation first.</span>';
+  var html='';
+  A_SENTENCES.forEach(function(s,i){
+    var isHi=hi.includes(i);
+    html+='<div class="sentence-item'+(isHi?' highlighted':'')+'" id="a-item-'+i+'">';
+    html+='<div class="sentence-num">Sentence '+(i+1)+'</div>';
+    html+='<div class="sentence-text">'+s+'</div>';
+    html+='<div class="sentence-actions">';
+    html+='<button class="btn btn-tts" onclick="tts(A_SENTENCES['+i+'])">🔊 Listen</button>';
+    if(isHi){
+      html+='<div class="star-rating" id="star-'+i+'">';
+      for(var j=1;j<=5;j++){
+        html+='<span class="star" onclick="rateA('+i+','+j+')">★</span>';
+      }
+      html+='</div>';
+    }
+    html+='</div></div>';
+  });
+  document.getElementById('a-sentences').innerHTML=html;
+  renderAScore();
+}
+
+function rateA(idx,rating){
+  aRatings[idx]=rating;
+  localStorage.setItem(KEY+'_aRatings',JSON.stringify(aRatings));
+  var stars=document.querySelectorAll('#star-'+idx+' .star');
+  stars.forEach(function(s,i){s.classList.toggle('active',i<rating);});
+  renderAScore();
+}
+
+function renderAScore(){
+  var rated=aHighlighted.filter(function(i){return aRatings[i]!=null;});
+  if(rated.length===0){document.getElementById('a-score-display').textContent='Rate each highlighted sentence above to see your score.';return;}
+  var sum=rated.reduce(function(a,i){return a+(aRatings[i]||0);},0);
+  var avg=sum/aHighlighted.length;
+  var pct=Math.round(avg/5*100);
+  scores.a=pct;
+  localStorage.setItem(KEY+'_scores',JSON.stringify(scores));
+  document.getElementById('a-score-display').innerHTML='<strong style="color:var(--primary);font-size:18px">'+pct+'</strong>/100 ('+rated.length+'/'+aHighlighted.length+' rated)';
+  updateProgress();
+}
+
+// ============ SECTION B ============
+function initB(){renderB();}
+function renderB(){
+  var s=B_SENTENCES[bIdx];
+  document.getElementById('b-num').textContent='Sentence '+(bIdx+1)+' / 8';
+  document.getElementById('b-step').textContent=(bIdx+1)+'/8';
+  document.getElementById('b-text-display').textContent='Press PLAY to hear the sentence';
+  var rev=document.getElementById('b-revealed');
+  rev.style.display='none'; rev.textContent='';
+  renderBScore();
+}
+function playB(){
+  tts(B_SENTENCES[bIdx]);
+  document.getElementById('b-text-display').textContent='🔊 Playing...';
+  setTimeout(function(){document.getElementById('b-text-display').textContent='Now repeat out loud!';},2000);
+}
+function revealB(){
+  var rev=document.getElementById('b-revealed');
+  rev.style.display='block'; rev.textContent=B_SENTENCES[bIdx];
+}
+function scoreB(v){
+  bResults[bIdx]=v;
+  localStorage.setItem(KEY+'_bResults',JSON.stringify(bResults));
+  renderBScore();
+}
+function renderBScore(){
+  var got=bResults.filter(function(r){return r==='got';}).length;
+  var total=bResults.filter(function(r){return r!=null;}).length;
+  if(total===0){document.getElementById('b-score-display').textContent='Complete all 8 sentences to see your score.';return;}
+  var pct=Math.round(got/8*100);
+  scores.b=pct;
+  localStorage.setItem(KEY+'_scores',JSON.stringify(scores));
+  document.getElementById('b-score-display').innerHTML='<strong style="color:var(--primary);font-size:18px">'+pct+'</strong>/100 ('+got+'/8 correct)';
+  updateProgress();
+}
+function nextB(){if(bIdx<7){bIdx++;renderB();}}
+function prevB(){if(bIdx>0){bIdx--;renderB();}}
+
+// ============ SECTION C ============
+function initC(){renderC();}
+function renderC(){
+  var s=C_SCENARIOS[cIdx];
+  document.getElementById('c-num').textContent='Question '+(cIdx+1)+' / 4';
+  document.getElementById('c-step').textContent=(cIdx+1)+'/4';
+  document.getElementById('c-scenario').textContent=s.text;
+  document.getElementById('c-question').textContent='❓ '+s.q;
+  document.getElementById('c-answer-reveal').style.display='none';
+  document.getElementById('c-model-ans').textContent=s.ans;
+  renderCScore();
+}
+function playC(){tts(C_SCENARIOS[cIdx].text);}
+function scoreC(v){
+  document.getElementById('c-answer-reveal').style.display='block';
+  cResults[cIdx]=v;
+  localStorage.setItem(KEY+'_cResults',JSON.stringify(cResults));
+  renderCScore();
+}
+function renderCScore(){
+  var conf=cResults.filter(function(r){return r==='confident';}).length;
+  var total=cResults.filter(function(r){return r!=null;}).length;
+  if(total===0){document.getElementById('c-score-display').textContent='Complete all 4 questions to see your score.';return;}
+  var pct=Math.round(conf/4*100);
+  scores.c=pct;
+  localStorage.setItem(KEY+'_scores',JSON.stringify(scores));
+  document.getElementById('c-score-display').innerHTML='<strong style="color:var(--primary);font-size:18px">'+pct+'</strong>/100 ('+conf+'/4 confident)';
+  updateProgress();
+}
+function nextC(){if(cIdx<3){cIdx++;renderC();}}
+function prevC(){if(cIdx>0){cIdx--;renderC();}}
+
+// ============ SECTION D ============
+function initD(){renderD();startDTimer();}
+function renderD(){
+  var w=D_WORDS[dIdx];
+  document.getElementById('d-num').textContent='Question '+(dIdx+1)+' / 10';
+  document.getElementById('d-step').textContent=(dIdx+1)+'/10';
+  document.getElementById('d-word').textContent=w.word;
+  var html='';
+  var keys=['A','B','C','D'];
+  // shuffle options keeping correct index
+  var indices=[0,1,2,3];
+  var shuffled=indices.slice().sort(function(){return Math.random()-0.5;});
+  w._shuffled=shuffled;
+  shuffled.forEach(function(origIdx,pos){
+    var isCorrect=(origIdx===w.correct);
+    var stored=dResults[dIdx];
+    var cls='mcq-opt';
+    if(stored!=null){cls+=isCorrect?' correct':(stored===origIdx?' wrong':'');}
+    html+='<div class="'+cls+'" onclick="selectD('+origIdx+')">';
+    html+='<span class="opt-key">'+keys[pos]+'</span> '+w.opts[origIdx]+'</div>';
+  });
+  document.getElementById('d-options').innerHTML=html;
+  stopDTimer(); startDTimer();
+  renderDScore();
+}
+function selectD(optIdx){
+  if(dResults[dIdx]!=null) return; // already answered
+  dResults[dIdx]=optIdx;
+  localStorage.setItem(KEY+'_dResults',JSON.stringify(dResults));
+  stopDTimer();
+  renderD();
+  renderDScore();
+}
+var dSecondsLeft=15;
+function startDTimer(){
+  if(dResults[dIdx]!=null) return;
+  dSecondsLeft=15;
+  updateDTimer();
+  dTimer=setInterval(function(){
+    dSecondsLeft--;
+    updateDTimer();
+    if(dSecondsLeft<=0){stopDTimer();autoNextD();}
+  },1000);
+}
+function stopDTimer(){clearInterval(dTimer);dTimer=null;}
+function updateDTimer(){
+  var el=document.getElementById('d-timer');
+  el.textContent=dSecondsLeft;
+  el.className='timer-display'+(dSecondsLeft<=5?' danger':dSecondsLeft<=10?' warning':'');
+}
+function autoNextD(){if(dIdx<9){dIdx++;renderD();startDTimer();}}
+function renderDScore(){
+  var correct=dResults.filter(function(r,i){return r===D_WORDS[i].correct;}).length;
+  var total=dResults.filter(function(r){return r!=null;}).length;
+  if(total===0){document.getElementById('d-score-display').textContent='Complete all 10 questions to see your score.';return;}
+  var pct=Math.round(correct/10*100);
+  scores.d=pct;
+  localStorage.setItem(KEY+'_scores',JSON.stringify(scores));
+  document.getElementById('d-score-display').innerHTML='<strong style="color:var(--primary);font-size:18px">'+pct+'</strong>/100 ('+correct+'/10 correct)';
+  updateProgress();
+}
+function nextD(){stopDTimer();if(dIdx<9){dIdx++;renderD();if(dResults[dIdx]==null)startDTimer();}}
+function prevD(){stopDTimer();if(dIdx>0){dIdx--;renderD();if(dResults[dIdx]==null)startDTimer();}}
+
+// ============ SECTION E ============
+function initE(){
+  E_PASSAGES.forEach(function(p,pi){
+    document.getElementById('e-p'+(pi+1)+'-text').textContent=p.text;
+    var html='';
+    p.qs.forEach(function(q,qi){
+      var eIdx=pi*3+qi;
+      var keys=['A','B','C','D'];
+      html+='<div style="margin-bottom:16px">';
+      html+='<div class="mcq-question">Q'+(qi+1)+'. '+q.q+'</div>';
+      html+='<div class="mcq-options">';
+      q.opts.forEach(function(opt,oi){
+        var stored=eResults[eIdx];
+        var cls='mcq-opt';
+        if(stored!=null){cls+=(oi===q.correct)?' correct':(stored===oi?' wrong':'');}
+        html+='<div class="'+cls+'" onclick="selectE('+eIdx+','+oi+','+q.correct+')">';
+        html+='<span class="opt-key">'+keys[oi]+'</span> '+opt+'</div>';
+      });
+      html+='</div></div>';
+    });
+    document.getElementById('e-q'+(pi+1)).innerHTML=html;
+  });
+  renderEScore();
+}
+function selectE(eIdx,optIdx,correct){
+  if(eResults[eIdx]!=null) return;
+  eResults[eIdx]=optIdx;
+  localStorage.setItem(KEY+'_eResults',JSON.stringify(eResults));
+  initE();
+  renderEScore();
+}
+function renderEScore(){
+  var correct=0;
+  E_PASSAGES.forEach(function(p,pi){
+    p.qs.forEach(function(q,qi){
+      var eIdx=pi*3+qi;
+      if(eResults[eIdx]===q.correct) correct++;
+    });
+  });
+  var total=eResults.filter(function(r){return r!=null;}).length;
+  if(total===0){document.getElementById('e-score-display').textContent='Answer all 6 questions to see your score.';return;}
+  var pct=Math.round(correct/6*100);
+  scores.e=pct;
+  localStorage.setItem(KEY+'_scores',JSON.stringify(scores));
+  document.getElementById('e-score-display').innerHTML='<strong style="color:var(--primary);font-size:18px">'+pct+'</strong>/100 ('+correct+'/6 correct)';
+  updateProgress();
+}
+
+// ============ SECTION F ============
+function initF(){
+  var html='';
+  F_TOPICS.forEach(function(t,i){
+    html+='<div class="topic-card" id="f-topic-'+i+'" onclick="selectFTopic('+i+')">';
+    html+='<div class="topic-num">TOPIC '+(i+1)+'</div>';
+    html+='<div class="topic-text">'+t+'</div></div>';
+  });
+  document.getElementById('f-topics').innerHTML=html;
+  // init rubric stars
+  ['fluency','vocab','logic','grammar'].forEach(function(dim){
+    var html='';
+    for(var j=1;j<=5;j++){
+      html+='<span class="rubric-star" onclick="rateF(\''+dim+'\','+j+')">★</span>';
+    }
+    document.getElementById('r-'+dim).innerHTML=html;
+  });
+  renderFScore();
+}
+function selectFTopic(i){
+  fSelected=i;
+  document.querySelectorAll('.topic-card').forEach(function(c){c.classList.remove('selected');});
+  document.getElementById('f-topic-'+i).classList.add('selected');
+}
+function startFPrep(){
+  if(fSelected<0){alert('Please select a topic first.');return;}
+  document.getElementById('f-select-phase').style.display='none';
+  document.getElementById('f-prep-phase').style.display='block';
+  document.getElementById('f-selected-topic').textContent=F_TOPICS[fSelected];
+  var sec=30;
+  document.getElementById('f-prep-timer').textContent=sec;
+  fPrepTimer=setInterval(function(){
+    sec--;
+    var el=document.getElementById('f-prep-timer');
+    if(el){el.textContent=sec;el.className='timer-display'+(sec<=10?' warning':'');}
+    if(sec<=0){
+      clearInterval(fPrepTimer);
+      startFSpeak();
+    }
+  },1000);
+}
+function startFSpeak(){
+  document.getElementById('f-prep-phase').style.display='none';
+  document.getElementById('f-speak-phase').style.display='block';
+  document.getElementById('f-speak-topic').textContent=F_TOPICS[fSelected];
+  var sec=90;
+  document.getElementById('f-speak-timer').textContent=sec;
+  fSpeakTimer=setInterval(function(){
+    sec--;
+    var el=document.getElementById('f-speak-timer');
+    if(el){el.textContent=sec;el.className='timer-display'+(sec<=15?' danger':sec<=30?' warning':'');}
+    if(sec<=0){
+      clearInterval(fSpeakTimer);
+      document.getElementById('f-speak-phase').style.display='none';
+      document.getElementById('f-rate-phase').style.display='block';
+    }
+  },1000);
+}
+function rateF(dim,val){
+  fRubric[dim]=val;
+  var stars=document.querySelectorAll('#r-'+dim+' .rubric-star');
+  stars.forEach(function(s,i){s.classList.toggle('active',i<val);});
+}
+function submitF(){
+  if(!fRubric.fluency||!fRubric.vocab||!fRubric.logic||!fRubric.grammar){
+    alert('Please rate all 4 dimensions.');return;
+  }
+  fRubric.submitted=true;
+  localStorage.setItem(KEY+'_fRubric',JSON.stringify(fRubric));
+  var avg=(fRubric.fluency+fRubric.vocab+fRubric.logic+fRubric.grammar)/4;
+  var pct=Math.round(avg/5*100);
+  scores.f=pct;
+  localStorage.setItem(KEY+'_scores',JSON.stringify(scores));
+  document.getElementById('f-score-display').innerHTML='<strong style="color:var(--primary);font-size:18px">'+pct+'</strong>/100';
+  updateProgress();
+  renderFScore();
+}
+function renderFScore(){
+  if(scores.f!=null){
+    document.getElementById('f-score-display').innerHTML='<strong style="color:var(--primary);font-size:18px">'+scores.f+'</strong>/100';
+  }
+}
+
+// ============ INIT ============
+window.addEventListener('load',function(){
+  initA(); initB(); initC(); initD(); initE(); initF();
+  updateProgress();
+  speechSynthesis.getVoices(); // warm up
+});
+</script>
+</body>
+</html>
