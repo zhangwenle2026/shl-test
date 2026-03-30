@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-0330">
+<meta name="app-version" content="20260331-0417">
 <meta name="theme-color" content="#2e6fba">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -189,6 +189,28 @@ body{font-size:15px}
 .tab-btn{font-size:12px;padding:10px 8px}
 .card-title{font-size:14px}
 .instruction-box,.info-box,.tip-box{font-size:13px}
+
+/* SPEECH RECORDING BUTTONS */
+.btn-record{background:#00897b;color:#fff;padding:9px 18px;font-size:13px;border:none;border-radius:20px;cursor:pointer;font-family:'Open Sans',sans-serif;font-weight:600;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s}
+.btn-record:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,137,123,0.3)}
+.btn-record.recording{background:#c62828;animation:pulse-rec 1.2s ease-in-out infinite}
+.btn-record:disabled{opacity:0.7;cursor:not-allowed;transform:none}
+@keyframes pulse-rec{0%,100%{box-shadow:0 0 0 0 rgba(198,40,40,0.5)}50%{box-shadow:0 0 0 8px rgba(198,40,40,0)}}
+
+/* SPEECH SCORE DISPLAY */
+.stt-score-box{background:#f0f9f7;border:1.5px solid #b2dfdb;border-radius:12px;padding:12px 14px;margin-top:10px}
+.stt-score-box .stt-said{font-size:11px;font-weight:700;color:#6b7c93;margin-bottom:3px}
+.stt-score-box .stt-transcript{font-size:13px;color:#1a2a3a;font-style:italic;margin-bottom:8px}
+.stt-score-box .stt-num{font-family:'Montserrat',sans-serif;font-size:24px;font-weight:800;line-height:1}
+.stt-score-box .stt-detail{font-size:12px;margin-top:3px}
+.stt-score-box .stt-missed{font-size:11px;color:#c62828;margin-top:3px}
+
+/* TOPIC TALK CARD */
+.talk-topic-card{background:var(--bg);border-radius:12px;padding:14px;border:1.5px solid var(--border);margin-bottom:12px}
+.talk-topic-card .topic-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.talk-topic-card .topic-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.8px;text-transform:uppercase}
+.talk-topic-card .topic-body{font-size:13px;font-weight:600;color:var(--text);line-height:1.6;margin-bottom:10px}
+.talk-topic-card .topic-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px}
 </style>
 </head>
 <body>
@@ -369,53 +391,15 @@ body{font-size:15px}
 <!-- ===== PANEL F: FREE TALK ===== -->
 <div class="panel" id="panel-f">
   <div class="instruction-box">
-    🎤 <strong>Free Talk</strong> — Choose a topic, prepare for 30 seconds, then speak for 90 seconds. Show your fluency, vocabulary, and logical thinking.
+    🎤 <strong>Free Talk</strong> — For each topic, tap 🎤 Start Recording and speak for up to 60 seconds. Show your fluency, vocabulary, and logical thinking.
   </div>
-  <div id="f-select-phase">
-    <div class="card">
-      <div class="card-title">Choose Your Topic</div>
-      <div id="f-topics"></div>
-      <div style="margin-top:14px">
-        <button class="btn btn-primary" onclick="startFPrep()">Start Preparation ⏱</button>
-      </div>
-    </div>
-  </div>
-  <div id="f-prep-phase" style="display:none">
-    <div class="card">
-      <div class="card-title">Preparation Time</div>
-      <div class="timer-label">GET READY</div>
-      <div class="timer-display" id="f-prep-timer">30</div>
-      <div id="f-selected-topic" style="background:var(--bg);border-radius:10px;padding:12px;font-size:14px;font-weight:600;line-height:1.6;color:var(--text);border:1.5px solid var(--border)"></div>
-    </div>
-  </div>
-  <div id="f-speak-phase" style="display:none">
-    <div class="card">
-      <div class="card-title">Speaking Time</div>
-      <div class="timer-label">SPEAK NOW</div>
-      <div class="timer-display" id="f-speak-timer">90</div>
-      <div id="f-speak-topic" style="background:var(--bg);border-radius:10px;padding:12px;font-size:14px;font-weight:600;line-height:1.6;color:var(--text);border:1.5px solid var(--border);margin-bottom:16px"></div>
-      <div style="text-align:center;margin-top:16px">
-        <button class="btn btn-primary btn-record-unified" id="f-rec-btn" onclick="recordF()">🎙 Start Speaking</button>
-      </div>
-      <div id="f-stt-result" style="margin-top:10px"></div>
-    </div>
-  </div>
-  <div id="f-rate-phase" style="display:none">
-    <div class="card">
-      <div class="card-title">Self Assessment</div>
-      <p class="card-desc">Rate your performance honestly:</p>
-      <div id="f-rubric">
-        <div class="rubric-row"><span class="rubric-label">Fluency</span><div class="rubric-stars" id="r-fluency"></div></div>
-        <div class="rubric-row"><span class="rubric-label">Vocabulary</span><div class="rubric-stars" id="r-vocab"></div></div>
-        <div class="rubric-row"><span class="rubric-label">Logic</span><div class="rubric-stars" id="r-logic"></div></div>
-        <div class="rubric-row"><span class="rubric-label">Grammar</span><div class="rubric-stars" id="r-grammar"></div></div>
-      </div>
-      <button class="btn btn-primary" style="margin-top:14px" onclick="submitF()">Submit & See Score</button>
-    </div>
+  <div class="card">
+    <div class="card-title">Speaking Topics</div>
+    <div id="f-talk-topics"></div>
   </div>
   <div class="card">
     <div class="card-title">Section Score</div>
-    <div id="f-score-display" style="font-size:13px;color:var(--muted)">Complete the speaking task to see your score.</div>
+    <div id="f-score-display" style="font-size:13px;color:var(--muted)">Complete at least one topic to see your score.</div>
   </div>
 </div>
 
@@ -525,9 +509,21 @@ var E_PASSAGES = [
 ];
 
 var F_TOPICS = [
-  "Describe a challenging situation at work and how you handled it.",
-  "What are the most important qualities of a good team member?",
-  "How has technology changed the way you work?"
+  {
+    title: "Describe a challenging situation at work and how you handled it.",
+    desc: "Talk about a specific problem or difficulty you faced at work. Explain what happened, how you dealt with it, and what you learned.",
+    keywords: ["challenge","problem","situation","handled","solution","team","pressure","result","learned","difficult"]
+  },
+  {
+    title: "What are the most important qualities of a good team member?",
+    desc: "Discuss the key traits that make someone a valuable team player. Give examples if possible.",
+    keywords: ["communication","teamwork","reliable","flexible","support","collaborate","trust","responsible","proactive","listen"]
+  },
+  {
+    title: "How has technology changed the way you work?",
+    desc: "Describe how digital tools, apps, or systems have affected your daily work. Mention specific tools or changes you've noticed.",
+    keywords: ["technology","digital","app","system","efficient","remote","communication","automate","faster","data"]
+  }
 ];
 
 // ============ STATE ============
@@ -570,12 +566,12 @@ function switchTab(id){
 // ============ PROGRESS ============
 function updateProgress(){
   var done=0;
-  if(aRatings.length>0) done++;
+  if(aRatings.length>0||Object.keys(aSTR||{}).length>0) done++;
   if(bResults.length>=8) done++;
   if(cResults.length>=4) done++;
   if(dResults.length>=10) done++;
   if(eResults.length>=6) done++;
-  if(fRubric.submitted) done++;
+  if(Object.keys(fTopicResults).length>=F_TOPICS.length) done++;
   var pct=Math.round(done/6*100);
   document.getElementById('overallBar').style.width=pct+'%';
 
@@ -604,7 +600,7 @@ function initA(){
     html+='<div class="sentence-actions">';
     html+='<button class="btn btn-tts" onclick="tts(A_SENTENCES['+i+'])">🔊 Listen</button>';
     if(isHi){
-      html+='<button class="btn btn-primary btn-record-unified" style="margin-top:10px;width:100%" onclick="recordA('+i+',this)">🎙 Tap to Read Aloud</button>';
+      html+='<button class="btn-record" style="margin-top:10px;width:100%" onclick="recordA('+i+',this)">🎤 Start Recording</button>';
       html+='<div id="a-stt-'+i+'" style="margin-top:0"></div>';
       html+='<div class="star-rating" id="star-'+i+'">';
       for(var j=1;j<=5;j++){
@@ -627,19 +623,68 @@ function rateA(idx,rating){
 }
 
 function renderAScore(){
+  // Prefer STT-based scores; fall back to star ratings
+  var recorded=aHighlighted.filter(function(i){return aSTR[i]!=null;});
   var rated=aHighlighted.filter(function(i){return aRatings[i]!=null;});
-  if(rated.length===0){document.getElementById('a-score-display').textContent='Rate each highlighted sentence above to see your score.';return;}
-  var sum=rated.reduce(function(a,i){return a+(aRatings[i]||0);},0);
-  var avg=sum/aHighlighted.length;
-  var pct=Math.round(avg/5*100);
+  if(recorded.length===0&&rated.length===0){
+    document.getElementById('a-score-display').textContent='Tap 🎤 Start Recording on each highlighted sentence.';
+    return;
+  }
+  var sum=0;
+  aHighlighted.forEach(function(i){
+    if(aSTR[i]!=null) sum+=aSTR[i].pct;
+    else if(aRatings[i]!=null) sum+=Math.round(aRatings[i]/5*100);
+  });
+  var total=aHighlighted.length;
+  var done=Math.max(recorded.length,rated.length);
+  var pct=Math.round(sum/total);
   scores.a=pct;
   localStorage.setItem(KEY+'_scores',JSON.stringify(scores));
-  document.getElementById('a-score-display').innerHTML='<strong style="color:var(--primary);font-size:18px">'+pct+'</strong>/100 ('+rated.length+'/'+aHighlighted.length+' rated)';
+  var col=pct>=80?'#00897b':pct>=50?'#f39c12':'#c62828';
+  document.getElementById('a-score-display').innerHTML='<strong style="color:'+col+';font-size:22px">'+pct+'</strong><span style="font-size:13px;color:var(--muted)">/100</span> <span style="font-size:12px;color:var(--muted)">('+done+'/'+total+' recorded)</span>';
   updateProgress();
 }
 
 var aSTR={};
-function recordA(idx,btn){btn.textContent='⏺ Recording...';btn.style.background='#e74c3c';btn.disabled=true;startSTT(function(t){btn.textContent='🎙 Tap to Read Aloud';btn.style.background='';btn.disabled=false;var c=compareTexts(t,A_SENTENCES[idx]);aSTR[idx]={transcript:t,pct:c.pct,missing:c.missing};rateA(idx,c.pct>=90?5:c.pct>=75?4:c.pct>=55?3:c.pct>=35?2:1);var el=document.getElementById('a-stt-'+idx);if(el)el.innerHTML='<div style="font-size:11px;color:#27ae60;padding:6px 0">✅ Recorded — feedback after exam</div>';},function(err){btn.textContent='🎙 Tap to Read Aloud';btn.style.background='';btn.disabled=false;var el=document.getElementById('a-stt-'+idx);if(el)el.innerHTML='<div style="color:#e74c3c;font-size:12px;padding:8px">Mic error: '+err+'</div>';});}
+function recordA(idx,btn){
+  btn.textContent='⏺ Recording...';
+  btn.classList.add('recording');
+  btn.disabled=true;
+  startSTT(function(t){
+    btn.textContent='🎤 Re-record';
+    btn.classList.remove('recording');
+    btn.disabled=false;
+    var c=compareTexts(t,A_SENTENCES[idx]);
+    aSTR[idx]={transcript:t,pct:c.pct,missing:c.missing};
+    // Auto-rate stars based on accuracy
+    rateA(idx,c.pct>=90?5:c.pct>=75?4:c.pct>=55?3:c.pct>=35?2:1);
+    // Show live score immediately
+    var el=document.getElementById('a-stt-'+idx);
+    if(el){
+      var col=c.pct>=80?'#00897b':c.pct>=50?'#f39c12':'#c62828';
+      var scoreLabel=Math.round(c.pct)+'分 · 说对 '+(c.missing.length>0?(t.toLowerCase().replace(/[^a-z\s]/g,'').split(/\s+/).filter(Boolean).length-c.missing.length):A_SENTENCES[idx].toLowerCase().replace(/[^a-z\s]/g,'').split(/\s+/).filter(Boolean).length)+'/'+A_SENTENCES[idx].toLowerCase().replace(/[^a-z\s]/g,'').split(/\s+/).filter(Boolean).length+' 个词';
+      // More precise: count expected words hit
+      var normalize=function(s){return s.toLowerCase().replace(/[^a-z\s]/g,'').split(/\s+/).filter(Boolean);};
+      var expected=normalize(A_SENTENCES[idx]);
+      var said=new Set(normalize(t));
+      var hits=expected.filter(function(w){return said.has(w);}).length;
+      var total=expected.length;
+      scoreLabel=c.pct+'分 · 说对 '+hits+'/'+total+' 个词';
+      el.innerHTML='<div class="stt-score-box">'
+        +'<div class="stt-said">YOU SAID:</div>'
+        +'<div class="stt-transcript">"'+t+'"</div>'
+        +'<div class="stt-num" style="color:'+col+'">'+scoreLabel+'</div>'
+        +(c.missing.length?'<div class="stt-missed">Missed: <strong>'+c.missing.slice(0,8).join(', ')+(c.missing.length>8?'...':'')+'</strong></div>':'<div style="font-size:12px;color:#00897b;margin-top:3px">✅ Great job!</div>')
+        +'</div>';
+    }
+  },function(err){
+    btn.textContent='🎤 Start Recording';
+    btn.classList.remove('recording');
+    btn.disabled=false;
+    var el=document.getElementById('a-stt-'+idx);
+    if(el)el.innerHTML='<div style="color:#c62828;font-size:12px;padding:8px">⚠️ Mic error: '+err+'. Use Chrome or Safari.</div>';
+  });
+}
 // ============ SECTION B ============
 function initB(){renderB();}
 function renderB(){
@@ -826,99 +871,122 @@ function renderEScore(){
 }
 
 // ============ SECTION F ============
+var fTopicResults = JSON.parse(localStorage.getItem(KEY+'_fTopicResults') || '{}');
+var fRecSRs = {}; // active SpeechRecognition instances per topic
+
+function calcKeywordScore(transcript, keywords) {
+  var text = transcript.toLowerCase().replace(/[^a-z\s]/g,'');
+  var words = text.split(/\s+/);
+  var hit = [];
+  var miss = [];
+  keywords.forEach(function(kw){
+    var kwNorm = kw.toLowerCase();
+    // Check stem match (word starts with keyword or keyword starts with word, min 4 chars)
+    var found = words.some(function(w){
+      if(w === kwNorm) return true;
+      if(w.length>=4 && kwNorm.length>=4 && (w.startsWith(kwNorm.slice(0,4)) || kwNorm.startsWith(w.slice(0,4)))) return true;
+      return false;
+    });
+    if(found) hit.push(kw); else miss.push(kw);
+  });
+  var score = Math.round(hit.length / keywords.length * 100);
+  return {score:score, hit:hit, miss:miss, total:keywords.length};
+}
+
 function initF(){
   var html='';
   F_TOPICS.forEach(function(t,i){
-    html+='<div class="topic-card" id="f-topic-'+i+'" onclick="selectFTopic('+i+')">';
-    html+='<div class="topic-num">TOPIC '+(i+1)+'</div>';
-    html+='<div class="topic-text">'+t+'</div></div>';
+    var stored=fTopicResults[i];
+    html+='<div class="talk-topic-card" id="f-tc-'+i+'">';
+    html+='<div class="topic-header">';
+    html+='<div class="topic-label">TOPIC '+(i+1)+'</div>';
+    html+=(stored?'<div id="f-tscore-badge-'+i+'" style="font-size:12px;font-weight:700;color:#00897b">✅ '+stored.score+'分</div>':'<div id="f-tscore-badge-'+i+'"></div>');
+    html+='</div>';
+    html+='<div class="topic-body">'+t.title+'</div>';
+    html+='<div class="topic-desc">'+t.desc+'</div>';
+    html+='<div style="margin-bottom:8px"><span style="font-size:11px;color:var(--muted);font-weight:600">KEYWORDS: </span><span style="font-size:11px;color:var(--primary)">'+t.keywords.slice(0,6).join(', ')+'...</span></div>';
+    html+='<button class="btn-record" id="f-rbtn-'+i+'" onclick="recordFTopic('+i+',this)">🎤 Start Recording</button>';
+    html+='<div id="f-stt-'+i+'" style="margin-top:8px"></div>';
+    html+='</div>';
   });
-  document.getElementById('f-topics').innerHTML=html;
-  // init rubric stars
-  ['fluency','vocab','logic','grammar'].forEach(function(dim){
-    var html='';
-    for(var j=1;j<=5;j++){
-      html+='<span class="rubric-star" onclick="rateF(\''+dim+'\','+j+')">★</span>';
-    }
-    document.getElementById('r-'+dim).innerHTML=html;
-  });
+  document.getElementById('f-talk-topics').innerHTML=html;
   renderFScore();
 }
-function selectFTopic(i){
-  fSelected=i;
-  document.querySelectorAll('.topic-card').forEach(function(c){c.classList.remove('selected');});
-  document.getElementById('f-topic-'+i).classList.add('selected');
-}
-function startFPrep(){
-  if(fSelected<0){alert('Please select a topic first.');return;}
-  document.getElementById('f-select-phase').style.display='none';
-  document.getElementById('f-prep-phase').style.display='block';
-  document.getElementById('f-selected-topic').textContent=F_TOPICS[fSelected];
-  var sec=30;
-  document.getElementById('f-prep-timer').textContent=sec;
-  fPrepTimer=setInterval(function(){
-    sec--;
-    var el=document.getElementById('f-prep-timer');
-    if(el){el.textContent=sec;el.className='timer-display'+(sec<=10?' warning':'');}
-    if(sec<=0){
-      clearInterval(fPrepTimer);
-      startFSpeak();
+
+function recordFTopic(idx, btn){
+  // Stop any existing recognition for this topic
+  if(fRecSRs[idx]){try{fRecSRs[idx].stop();}catch(e){} fRecSRs[idx]=null;}
+
+  btn.textContent='⏺ Recording (60s)...';
+  btn.classList.add('recording');
+  btn.disabled=true;
+
+  var timeout60=setTimeout(function(){
+    if(fRecSRs[idx]){try{fRecSRs[idx].stop();}catch(e){}}
+  }, 60000);
+
+  var sr=startSTT(function(transcript){
+    clearTimeout(timeout60);
+    fRecSRs[idx]=null;
+    btn.textContent='🎤 Re-record';
+    btn.classList.remove('recording');
+    btn.disabled=false;
+
+    var topic=F_TOPICS[idx];
+    var result=calcKeywordScore(transcript, topic.keywords);
+    fTopicResults[idx]={score:result.score, transcript:transcript, hit:result.hit, miss:result.miss};
+    localStorage.setItem(KEY+'_fTopicResults', JSON.stringify(fTopicResults));
+
+    // Update score badge
+    var badge=document.getElementById('f-tscore-badge-'+idx);
+    if(badge) badge.innerHTML='<span style="font-size:12px;font-weight:700;color:#00897b">✅ '+result.score+'分</span>';
+
+    // Show detailed score
+    var el=document.getElementById('f-stt-'+idx);
+    if(el){
+      var col=result.score>=70?'#00897b':result.score>=40?'#f39c12':'#c62828';
+      var hitStr=result.hit.length?result.hit.join(', '):'—';
+      el.innerHTML='<div class="stt-score-box">'
+        +'<div class="stt-said">YOU SAID:</div>'
+        +'<div class="stt-transcript">"'+transcript+'"</div>'
+        +'<div class="stt-num" style="color:'+col+'">'+result.score+'分 · 命中 '+result.hit.length+'/'+result.total+' 个关键词</div>'
+        +'<div class="stt-detail" style="color:'+col+'">✅ Hit: <strong>'+hitStr+'</strong></div>'
+        +(result.miss.length?'<div class="stt-missed">Try to use: '+result.miss.join(', ')+'</div>':'')
+        +'</div>';
     }
-  },1000);
+    renderFScore();
+  }, function(err){
+    clearTimeout(timeout60);
+    fRecSRs[idx]=null;
+    btn.textContent='🎤 Start Recording';
+    btn.classList.remove('recording');
+    btn.disabled=false;
+    var el=document.getElementById('f-stt-'+idx);
+    if(el) el.innerHTML='<div style="color:#c62828;font-size:12px;padding:8px">⚠️ Mic error: '+err+'. Use Chrome or Safari.</div>';
+  });
+  if(sr) fRecSRs[idx]=sr;
 }
-function startFSpeak(){
-  document.getElementById('f-prep-phase').style.display='none';
-  document.getElementById('f-speak-phase').style.display='block';
-  document.getElementById('f-speak-topic').textContent=F_TOPICS[fSelected];
-  var sec=90;
-  document.getElementById('f-speak-timer').textContent=sec;
-  fSpeakTimer=setInterval(function(){
-    sec--;
-    var el=document.getElementById('f-speak-timer');
-    if(el){el.textContent=sec;el.className='timer-display'+(sec<=15?' danger':sec<=30?' warning':'');}
-    if(sec<=0){
-      clearInterval(fSpeakTimer);
-      document.getElementById('f-speak-phase').style.display='none';
-      document.getElementById('f-rate-phase').style.display='block';
-    }
-  },1000);
-}
-function rateF(dim,val){
-  fRubric[dim]=val;
-  var stars=document.querySelectorAll('#r-'+dim+' .rubric-star');
-  stars.forEach(function(s,i){s.classList.toggle('active',i<val);});
-}
+
 function submitF(){
-  if(!fRubric.fluency||!fRubric.vocab||!fRubric.logic||!fRubric.grammar){
-    alert('Please rate all 4 dimensions.');return;
-  }
-  fRubric.submitted=true;
-  localStorage.setItem(KEY+'_fRubric',JSON.stringify(fRubric));
-  var avg=(fRubric.fluency+fRubric.vocab+fRubric.logic+fRubric.grammar)/4;
-  var pct=Math.round(avg/5*100);
-  scores.f=pct;
-  localStorage.setItem(KEY+'_scores',JSON.stringify(scores));
-  document.getElementById('f-score-display').innerHTML='<strong style="color:var(--primary);font-size:18px">'+pct+'</strong>/100';
-  updateProgress();
+  // Keep for backwards-compat with any existing code references
   renderFScore();
   stopGlobalTimer();
   showResultModal();
 }
 function endExam(){
   stopGlobalTimer();
-  // compute F score from rubric if available
-  if(fRubric.fluency&&fRubric.vocab&&fRubric.logic&&fRubric.grammar&&!fRubric.submitted){
-    fRubric.submitted=true;
-    localStorage.setItem(KEY+'_fRubric',JSON.stringify(fRubric));
-    var avg=(fRubric.fluency+fRubric.vocab+fRubric.logic+fRubric.grammar)/4;
-    scores.f=Math.round(avg/5*100);
+  // compute F score from topic results if available
+  var fKeys=Object.keys(fTopicResults);
+  if(fKeys.length>0){
+    var sum=fKeys.reduce(function(acc,k){return acc+fTopicResults[k].score;},0);
+    scores.f=Math.round(sum/F_TOPICS.length);
     localStorage.setItem(KEY+'_scores',JSON.stringify(scores));
   }
   updateProgress();
   showResultModal();
 }
 function restartExam(){
-  ['_scores','_aRatings','_bResults','_cResults','_dResults','_eResults','_fRubric'].forEach(function(k){
+  ['_scores','_aRatings','_bResults','_cResults','_dResults','_eResults','_fRubric','_fTopicResults'].forEach(function(k){
     localStorage.removeItem('ERIC_SHL_TEST'+k);
   });
   location.reload();
@@ -948,12 +1016,21 @@ function showResultModal(){
   document.body.insertAdjacentHTML('beforeend',modal);
 }
 function renderFScore(){
-  if(scores.f!=null){
-    document.getElementById('f-score-display').innerHTML='<strong style="color:var(--primary);font-size:18px">'+scores.f+'</strong>/100';
+  var keys=Object.keys(fTopicResults);
+  if(keys.length===0){
+    document.getElementById('f-score-display').textContent='Complete at least one topic to see your score.';
+    return;
   }
+  var sum=keys.reduce(function(acc,k){return acc+fTopicResults[k].score;},0);
+  var avg=Math.round(sum/F_TOPICS.length); // divide by total topics for fair avg
+  scores.f=avg;
+  localStorage.setItem(KEY+'_scores',JSON.stringify(scores));
+  var col=avg>=70?'#00897b':avg>=40?'#f39c12':'#c62828';
+  document.getElementById('f-score-display').innerHTML='<strong style="color:'+col+';font-size:22px">'+avg+'</strong><span style="font-size:13px;color:var(--muted)">/100</span> <span style="font-size:12px;color:var(--muted)">('+keys.length+'/'+F_TOPICS.length+' recorded)</span>';
+  updateProgress();
 }
+// recordF legacy stub (replaced by recordFTopic)
 var fSTRText='';
-function recordF(){var btn=document.getElementById('f-rec-btn');btn.textContent='⏺ Recording (5s)...';btn.style.background='#e74c3c';btn.disabled=true;var sr=startSTT(function(t){fSTRText=t;btn.textContent='🎙 Start Speaking';btn.style.background='';btn.disabled=false;var el=document.getElementById('f-stt-result');if(el)el.innerHTML='<div style="font-size:11px;color:#27ae60;padding:6px 0">✅ Recorded — feedback after exam</div>';},function(err){btn.textContent='🎙 Start Speaking';btn.style.background='';btn.disabled=false;});if(sr)setTimeout(function(){try{sr.stop();}catch(e){}},5000);}
 function showReportAnalysis(){
   var old=document.getElementById('report-analysis');if(old)old.remove();
   var html='<div id="report-analysis" style="background:#fff;border-radius:16px;padding:20px;margin-top:16px;box-shadow:0 2px 12px rgba(46,111,186,0.12);border:1px solid #d0dff0">';
@@ -965,7 +1042,8 @@ function showReportAnalysis(){
   var eWrong=[];E_PASSAGES.forEach(function(p,pi){p.qs.forEach(function(q,qi){var idx=pi*3+qi;if(eResults[idx]!==q.correct)eWrong.push({pi:pi,qi:qi,q:q,ans:eResults[idx]});});});
   if(eWrong.length>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">E · Listening — Incorrect:</div>';eWrong.forEach(function(item){var ya=item.ans!=null?item.q.opts[item.ans]:'(not answered)';html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c"><div style="font-size:12px;font-weight:600;color:#1a2a3a;margin-bottom:4px">P'+(item.pi+1)+' Q'+(item.qi+1)+': '+item.q.q+'</div><div style="font-size:12px;color:#e74c3c;margin-bottom:2px">❌ Your answer: '+ya+'</div><div style="font-size:12px;color:#27ae60">✅ Correct: '+item.q.opts[item.q.correct]+'</div></div>';});html+='</div>';}
   var aKeys=Object.keys(aSTR||{});if(aKeys.length>0){var lowA=aKeys.filter(function(k){return aSTR[k]&&aSTR[k].pct<80;});if(lowA.length>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">A · Read Aloud — Low accuracy:</div>';lowA.forEach(function(k){var item=aSTR[k];var col=item.pct>=80?'#27ae60':item.pct>=50?'#f39c12':'#e74c3c';html+='<div style="background:#fff8e1;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #f39c12"><div style="font-size:11px;color:#f39c12;font-weight:700;margin-bottom:4px">⚠️ Sentence '+(parseInt(k)+1)+'</div><div style="font-size:11px;color:#6b7c93;font-weight:700">你说了什么:</div><div style="font-size:12px;color:#1a2a3a;font-style:italic;margin:2px 0">"'+item.transcript+'"</div><div style="font-size:13px;font-weight:800;color:'+col+'">正确率: '+item.pct+'%</div>'+(item.missing&&item.missing.length?'<div style="font-size:11px;color:#e74c3c">漏词: <strong>'+item.missing.join(', ')+'</strong></div>':'')+'<div style="font-size:12px;color:#2e6fba;margin-top:4px">Reference: "'+A_SENTENCES[k]+'"</div></div>';});html+='</div>';}}
-  if(fSTRText){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">F · Free Talk — Recording:</div><div style="background:#f0f7ff;border-radius:10px;padding:10px 14px;border-left:3px solid #2e6fba"><div style="font-size:11px;color:#6b7c93;font-weight:700">你说了什么:</div><div style="font-size:13px;color:#1a2a3a;font-style:italic;margin:4px 0">"'+fSTRText+'"</div><div style="font-size:12px;color:#2e6fba">字数: <strong>'+fSTRText.split(/\s+/).length+'</strong> 词</div></div></div>';}
+  var fKeys=Object.keys(fTopicResults);
+  if(fKeys.length>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">F · Free Talk — Results:</div>';fKeys.forEach(function(k){var r=fTopicResults[k];var col=r.score>=70?'#00897b':r.score>=40?'#f39c12':'#c62828';html+='<div style="background:#f0f7ff;border-radius:10px;padding:10px 14px;margin-bottom:8px;border-left:3px solid #2e6fba"><div style="font-size:11px;font-weight:700;color:#2e6fba;margin-bottom:4px">TOPIC '+(parseInt(k)+1)+': '+F_TOPICS[k].title+'</div><div style="font-size:11px;color:#6b7c93;font-weight:700">你说了什么:</div><div style="font-size:12px;color:#1a2a3a;font-style:italic;margin:2px 0">"'+r.transcript+'"</div><div style="font-size:13px;font-weight:800;color:'+col+'">'+r.score+'分 · 命中 '+r.hit.length+'/'+F_TOPICS[k].keywords.length+' 关键词</div>'+(r.hit.length?'<div style="font-size:11px;color:#00897b">✅ '+r.hit.join(', ')+'</div>':'')+'</div>';});html+='</div>';}
   if(bMissed===0&&dWrong.length===0&&eWrong.length===0){html+='<div style="text-align:center;padding:20px;color:#27ae60;font-size:14px;font-weight:600">🎉 Excellent! No major errors detected.</div>';}
   html+='</div>';
   document.getElementById('f-score-display').insertAdjacentHTML('afterend',html);
