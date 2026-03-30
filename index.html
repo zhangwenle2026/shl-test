@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-0505">
+<meta name="app-version" content="20260331-0518">
 <meta name="theme-color" content="#58cc02">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -129,6 +129,18 @@ body{font-family:'Nunito',-apple-system,BlinkMacSystemFont,sans-serif;background
 .fb.ok-fb{background:var(--duo-green-light);border-left:4px solid var(--duo-green);color:#1a5c00}
 .fb.bad-fb{background:#ffe0e0;border-left:4px solid var(--duo-pink);color:#b00000}
 .fb.neu-fb{background:var(--duo-blue-light);border-left:4px solid var(--duo-blue);color:#003d6b}
+
+/* ===== Feedback Animations ===== */
+@keyframes fb-pop{0%{opacity:0;transform:scale(0.85) translateY(8px)}60%{transform:scale(1.04) translateY(-2px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes fb-shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-7px)}30%{transform:translateX(7px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
+.fb.on.ok-fb{animation:fb-pop 0.35s cubic-bezier(0.34,1.56,0.64,1) both}
+.fb.on.bad-fb{animation:fb-shake 0.4s ease both}
+.fb.on.neu-fb{animation:fb-pop 0.3s ease both}
+
+/* ===== Result Overlay Badge ===== */
+.result-badge{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);z-index:999;font-size:80px;pointer-events:none;transition:none}
+.result-badge.show{animation:badge-burst 0.6s cubic-bezier(0.34,1.56,0.64,1) both}
+@keyframes badge-burst{0%{transform:translate(-50%,-50%) scale(0);opacity:1}60%{transform:translate(-50%,-50%) scale(1.2);opacity:1}100%{transform:translate(-50%,-50%) scale(0);opacity:0}}
 
 /* ===== Textarea ===== */
 .ta{width:100%;border:2px solid var(--border);border-radius:var(--radius);padding:12px 14px;font-size:14px;font-family:'Nunito',sans-serif;font-weight:600;resize:vertical;min-height:70px;outline:none;transition:border-color 0.2s;margin-bottom:14px;color:var(--text);background:#fff}
@@ -713,6 +725,41 @@ function showFb(cls,html){
   fb.className='fb '+cls+' on';
   fb.innerHTML=html;
   document.getElementById('nxtBtn').className='nxt-btn on';
+  // 即时反馈动画 + 音效
+  var badge=document.getElementById('resultBadge');
+  if(cls==='ok-fb'){
+    badge.textContent='✅';
+    badge.className='result-badge show';
+    playTone(880,0.12,'triangle');
+    setTimeout(function(){badge.className='result-badge';},650);
+  } else if(cls==='bad-fb'){
+    badge.textContent='❌';
+    badge.className='result-badge show';
+    playTone(220,0.15,'sawtooth');
+    setTimeout(function(){badge.className='result-badge';},650);
+    // 震动（移动端）
+    if(navigator.vibrate){navigator.vibrate([80,40,80]);}
+  } else {
+    badge.textContent='💡';
+    badge.className='result-badge show';
+    playTone(660,0.08,'sine');
+    setTimeout(function(){badge.className='result-badge';},650);
+  }
+}
+
+// 音效合成（Web Audio API）
+var _ac=null;
+function playTone(freq,vol,type){
+  try{
+    if(!_ac)_ac=new(window.AudioContext||window.webkitAudioContext)();
+    var o=_ac.createOscillator();
+    var g=_ac.createGain();
+    o.connect(g);g.connect(_ac.destination);
+    o.type=type||'sine';o.frequency.value=freq;
+    g.gain.setValueAtTime(vol,_ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,_ac.currentTime+0.25);
+    o.start();o.stop(_ac.currentTime+0.25);
+  }catch(e){}
 }
 
 function markAnswered(secArr,scores,qIdx,score){
@@ -1200,5 +1247,6 @@ window.addEventListener('load',function(){
 
 })();
 </script>
+<div class="result-badge" id="resultBadge"></div>
 </body>
 </html>
