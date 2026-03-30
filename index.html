@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-0150">
+<meta name="app-version" content="20260331-0250">
 <meta name="theme-color" content="#2e6fba">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -160,9 +160,29 @@ body{font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--text);m
 .topic-card.selected{background:#e8f2ff}
 .topic-num{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:0.5px;margin-bottom:4px}
 .topic-text{font-size:13px;font-weight:600;color:var(--text);line-height:1.5}
+body{font-size:15px}
+.card{padding:20px}
+.sentence-text{font-size:15px}
+.mcq-opt{font-size:14px;padding:13px 16px}
+.btn-primary{font-size:14px;padding:11px 22px}
+.tab-btn{font-size:12px;padding:10px 8px}
+.card-title{font-size:14px}
+.instruction-box,.info-box,.tip-box{font-size:13px}
 </style>
 </head>
 <body>
+
+<div id="invite-overlay" style="position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#1a4a8a,#2e6fba);display:flex;align-items:center;justify-content:center;padding:24px">
+  <div style="background:#fff;border-radius:20px;padding:32px 24px;width:100%;max-width:360px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,0.25)">
+    <div style="font-size:40px;margin-bottom:12px">🔐</div>
+    <div style="font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:#1a4a8a;margin-bottom:6px">ERIC SHL TEST</div>
+    <div style="font-size:13px;color:#6b7c93;margin-bottom:24px">Enter your invite code to access</div>
+    <input id="invite-input" type="text" placeholder="Invite Code" style="width:100%;padding:14px 16px;border:2px solid #d0dff0;border-radius:12px;font-size:16px;text-align:center;letter-spacing:2px;outline:none;margin-bottom:12px;font-family:inherit;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+    <div id="invite-error" style="color:#e74c3c;font-size:12px;margin-bottom:10px;display:none">Invalid code. Please try again.</div>
+    <button onclick="checkInvite()" style="width:100%;padding:14px;background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit">Enter →</button>
+    <div style="font-size:11px;color:#aab;margin-top:16px">Powered by ERIC · Meituan Keeta Brazil</div>
+  </div>
+</div>
 
 <header class="app-header">
   <div class="app-header-inner">
@@ -220,6 +240,10 @@ body{font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--text);m
       <button class="btn btn-outline btn-small" style="margin-left:8px" onclick="revealB()">👁 Reveal</button>
     </div>
     <div id="b-revealed" style="display:none;background:var(--bg);border-radius:10px;padding:12px;margin-bottom:12px;font-size:14px;color:var(--text);line-height:1.6;border:1.5px solid var(--border)"></div>
+    <div style="text-align:center;margin:10px 0">
+      <button class="btn btn-primary" id="b-rec-btn" style="padding:12px 24px;font-size:15px;min-width:200px" onclick="recordB()">🎙 Repeat Now</button>
+    </div>
+    <div id="b-stt-result"></div>
     <div class="assess-row">
       <button class="assess-btn green" onclick="scoreB('got')">✅ Got it</button>
       <button class="assess-btn red" onclick="scoreB('missed')">❌ Missed</button>
@@ -346,6 +370,10 @@ body{font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--text);m
       <div class="timer-label">SPEAK NOW</div>
       <div class="timer-display" id="f-speak-timer">90</div>
       <div id="f-speak-topic" style="background:var(--bg);border-radius:10px;padding:12px;font-size:14px;font-weight:600;line-height:1.6;color:var(--text);border:1.5px solid var(--border);margin-bottom:16px"></div>
+      <div style="text-align:center;margin-top:16px">
+        <button class="btn btn-primary" id="f-rec-btn" style="padding:12px 24px;font-size:15px;min-width:200px" onclick="recordF()">🎙 Start Speaking</button>
+      </div>
+      <div id="f-stt-result" style="margin-top:10px"></div>
     </div>
   </div>
   <div id="f-rate-phase" style="display:none">
@@ -368,6 +396,14 @@ body{font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--text);m
 </div>
 
 <script>
+var INVITE_CODE='SMB VAMOS';
+(function(){if(localStorage.getItem('ERIC_INVITE_OK')==='1')document.getElementById('invite-overlay').style.display='none';})();
+function checkInvite(){var v=(document.getElementById('invite-input').value||'').trim().toUpperCase();if(v===INVITE_CODE.toUpperCase()){localStorage.setItem('ERIC_INVITE_OK','1');document.getElementById('invite-overlay').style.display='none';}else{document.getElementById('invite-error').style.display='block';document.getElementById('invite-input').style.borderColor='#e74c3c';setTimeout(function(){document.getElementById('invite-input').style.borderColor='#d0dff0';},1500);}}
+document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.getElementById('invite-overlay').style.display!=='none')checkInvite();});
+var SRClass=window.SpeechRecognition||window.webkitSpeechRecognition;
+function startSTT(onResult,onError){if(!SRClass){alert('Speech recognition not supported. Use Safari iOS or Chrome desktop.');if(onError)onError('not-supported');return null;}var sr=new SRClass();sr.lang='en-US';sr.continuous=false;sr.interimResults=false;sr.maxAlternatives=1;sr.onresult=function(e){onResult(e.results[0][0].transcript,e.results[0][0].confidence);};sr.onerror=function(e){if(onError)onError(e.error);};sr.start();return sr;}
+function compareTexts(spoken,ref){var s=spoken.toLowerCase().replace(/[^a-z0-9\s]/g,'').trim();var r=ref.toLowerCase().replace(/[^a-z0-9\s]/g,'').trim();var sw=s.split(/\s+/);var rw=r.split(/\s+/);var ok=0;var miss=[];rw.forEach(function(w){if(sw.indexOf(w)>=0)ok++;else miss.push(w);});var pct=Math.round(ok/rw.length*100);return{pct:pct,missing:miss};}
+function showSTTResult(el,transcript,ref){var c=compareTexts(transcript,ref);var col=c.pct>=80?'#27ae60':c.pct>=50?'#f39c12':'#e74c3c';el.innerHTML='<div style="background:#f8fbff;border-radius:12px;padding:14px;margin-top:10px;border:1.5px solid #d0dff0"><div style="font-size:11px;font-weight:700;color:#6b7c93;margin-bottom:4px">YOU SAID:</div><div style="font-size:14px;color:#1a2a3a;margin-bottom:8px;font-style:italic">"'+transcript+'"</div><div style="font-size:22px;font-weight:800;color:'+col+'">'+c.pct+'%</div>'+(c.missing.length?'<div style="font-size:12px;color:#e74c3c;margin-top:4px">Missed: <strong>'+c.missing.join(', ')+'</strong></div>':'<div style="font-size:12px;color:#27ae60;margin-top:4px">Perfect!</div>')+'<div style="font-size:11px;color:#2e6fba;margin-top:4px">Reference: <em>'+ref+'</em></div></div>';return c;}
 // ============ DATA ============
 var KEY = 'ERIC_SHL_TEST';
 
@@ -514,6 +550,8 @@ function initA(){
     html+='<div class="sentence-actions">';
     html+='<button class="btn btn-tts" onclick="tts(A_SENTENCES['+i+'])">🔊 Listen</button>';
     if(isHi){
+      html+='<button class="btn btn-primary" style="padding:12px 20px;font-size:14px;margin-top:10px;width:100%" onclick="recordA('+i+',this)">🎙 Tap to Read Aloud</button>';
+      html+='<div id="a-stt-'+i+'" style="margin-top:0"></div>';
       html+='<div class="star-rating" id="star-'+i+'">';
       for(var j=1;j<=5;j++){
         html+='<span class="star" onclick="rateA('+i+','+j+')">★</span>';
@@ -546,6 +584,8 @@ function renderAScore(){
   updateProgress();
 }
 
+var aSTR={};
+function recordA(idx,btn){btn.textContent='⏺ Recording...';btn.style.background='#e74c3c';btn.disabled=true;startSTT(function(t){btn.textContent='🎙 Tap to Read Aloud';btn.style.background='';btn.disabled=false;var c=showSTTResult(document.getElementById('a-stt-'+idx),t,A_SENTENCES[idx]);aSTR[idx]={transcript:t,pct:c.pct};rateA(idx,c.pct>=90?5:c.pct>=75?4:c.pct>=55?3:c.pct>=35?2:1);},function(err){btn.textContent='🎙 Tap to Read Aloud';btn.style.background='';btn.disabled=false;document.getElementById('a-stt-'+idx).innerHTML='<div style="color:#e74c3c;font-size:12px;padding:8px">Mic error: '+err+'</div>';});}
 // ============ SECTION B ============
 function initB(){renderB();}
 function renderB(){
@@ -555,8 +595,10 @@ function renderB(){
   document.getElementById('b-text-display').textContent='Press PLAY to hear the sentence';
   var rev=document.getElementById('b-revealed');
   rev.style.display='none'; rev.textContent='';
+  document.getElementById('b-stt-result').innerHTML='';
   renderBScore();
 }
+function recordB(){var btn=document.getElementById('b-rec-btn');btn.textContent='⏺ Recording...';btn.style.background='#e74c3c';btn.disabled=true;startSTT(function(t){btn.textContent='🎙 Repeat Now';btn.style.background='';btn.disabled=false;var c=showSTTResult(document.getElementById('b-stt-result'),t,B_SENTENCES[bIdx]);if(c.pct>=60)scoreB('got');else scoreB('missed');},function(err){btn.textContent='🎙 Repeat Now';btn.style.background='';btn.disabled=false;document.getElementById('b-stt-result').innerHTML='<div style="color:#e74c3c;font-size:12px;padding:8px">Mic error: '+err+'</div>';});}
 function playB(){
   tts(B_SENTENCES[bIdx]);
   document.getElementById('b-text-display').textContent='🔊 Playing...';
@@ -804,11 +846,30 @@ function submitF(){
   document.getElementById('f-score-display').innerHTML='<strong style="color:var(--primary);font-size:18px">'+pct+'</strong>/100';
   updateProgress();
   renderFScore();
+  showReportAnalysis();
 }
 function renderFScore(){
   if(scores.f!=null){
     document.getElementById('f-score-display').innerHTML='<strong style="color:var(--primary);font-size:18px">'+scores.f+'</strong>/100';
   }
+}
+var fSTRText='';
+function recordF(){var btn=document.getElementById('f-rec-btn');btn.textContent='⏺ Recording (5s)...';btn.style.background='#e74c3c';btn.disabled=true;var sr=startSTT(function(t){fSTRText=t;btn.textContent='🎙 Start Speaking';btn.style.background='';btn.disabled=false;document.getElementById('f-stt-result').innerHTML='<div style="background:#f8fbff;border-radius:12px;padding:14px;border:1.5px solid #d0dff0"><div style="font-size:11px;font-weight:700;color:#6b7c93;margin-bottom:4px">YOU SAID:</div><div style="font-size:14px;color:#1a2a3a;font-style:italic">"'+t+'"</div><div style="font-size:12px;color:#2e6fba;margin-top:6px">Word count: <strong>'+t.split(' ').length+'</strong> words</div></div>';},function(err){btn.textContent='🎙 Start Speaking';btn.style.background='';btn.disabled=false;});if(sr)setTimeout(function(){try{sr.stop();}catch(e){}},5000);}
+function showReportAnalysis(){
+  var old=document.getElementById('report-analysis');if(old)old.remove();
+  var html='<div id="report-analysis" style="background:#fff;border-radius:16px;padding:20px;margin-top:16px;box-shadow:0 2px 12px rgba(46,111,186,0.12);border:1px solid #d0dff0">';
+  html+='<div style="font-family:Montserrat,sans-serif;font-size:14px;font-weight:800;color:#1a4a8a;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.8px">📊 Post-Test Analysis</div>';
+  var bMissed=bResults.filter(function(r){return r==='missed';}).length;
+  if(bMissed>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">B · Repeat Sentence — Missed:</div>';bResults.forEach(function(r,i){if(r==='missed'){html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c"><div style="font-size:11px;color:#e74c3c;font-weight:700;margin-bottom:4px">❌ Sentence '+(i+1)+'</div><div style="font-size:13px;color:#1a2a3a;margin-bottom:4px">"'+B_SENTENCES[i]+'"</div><div style="font-size:11px;color:#6b7c93">Tip: Practice this 3x. Break into chunks.</div></div>';}});html+='</div>';}
+  var dWrong=[];dResults.forEach(function(r,i){if(r!==D_WORDS[i].correct)dWrong.push(i);});
+  if(dWrong.length>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">D · Vocabulary — Incorrect:</div>';dWrong.forEach(function(i){var w=D_WORDS[i];var ya=dResults[i]!=null?w.opts[dResults[i]]:'(timeout)';html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c"><div style="font-size:13px;font-weight:700;color:#1a2a3a;margin-bottom:4px">'+w.word+'</div><div style="font-size:12px;color:#e74c3c;margin-bottom:2px">❌ Your answer: '+ya+'</div><div style="font-size:12px;color:#27ae60;margin-bottom:2px">✅ Correct: '+w.opts[w.correct]+'</div><div style="font-size:11px;color:#6b7c93;font-style:italic">'+(w.ex?'"'+w.ex+'"':'')+'</div></div>';});html+='</div>';}
+  var eWrong=[];E_PASSAGES.forEach(function(p,pi){p.qs.forEach(function(q,qi){var idx=pi*3+qi;if(eResults[idx]!==q.correct)eWrong.push({pi:pi,qi:qi,q:q,ans:eResults[idx]});});});
+  if(eWrong.length>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">E · Listening — Incorrect:</div>';eWrong.forEach(function(item){var ya=item.ans!=null?item.q.opts[item.ans]:'(not answered)';html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c"><div style="font-size:12px;font-weight:600;color:#1a2a3a;margin-bottom:4px">P'+(item.pi+1)+' Q'+(item.qi+1)+': '+item.q.q+'</div><div style="font-size:12px;color:#e74c3c;margin-bottom:2px">❌ Your answer: '+ya+'</div><div style="font-size:12px;color:#27ae60">✅ Correct: '+item.q.opts[item.q.correct]+'</div></div>';});html+='</div>';}
+  var aKeys=Object.keys(aSTR||{});if(aKeys.length>0){var lowA=aKeys.filter(function(k){return aSTR[k]&&aSTR[k].pct<80;});if(lowA.length>0){html+='<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:#2e6fba;margin-bottom:8px">A · Read Aloud — Low accuracy:</div>';lowA.forEach(function(k){var item=aSTR[k];html+='<div style="background:#fff8e1;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #f39c12"><div style="font-size:11px;color:#f39c12;font-weight:700;margin-bottom:4px">⚠️ Sentence '+(parseInt(k)+1)+' — '+item.pct+'% accuracy</div><div style="font-size:12px;color:#1a2a3a;margin-bottom:4px">You said: "'+item.transcript+'"</div><div style="font-size:12px;color:#2e6fba">Reference: "'+A_SENTENCES[k]+'"</div></div>';});html+='</div>';}}
+  if(bMissed===0&&dWrong.length===0&&eWrong.length===0){html+='<div style="text-align:center;padding:20px;color:#27ae60;font-size:14px;font-weight:600">🎉 Excellent! No major errors detected.</div>';}
+  html+='</div>';
+  document.getElementById('f-score-display').insertAdjacentHTML('afterend',html);
+  document.getElementById('report-analysis').scrollIntoView({behavior:'smooth'});
 }
 
 // ============ INIT ============
