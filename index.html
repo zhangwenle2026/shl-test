@@ -574,6 +574,30 @@ function switchTab(id){
   btns[idx].classList.add('active');
 }
 
+// ============ SHL-SVAR SCORING ============
+function calcWeightedScore(scores) {
+  var a = scores['a'] != null ? scores['a'] : 0;
+  var b = scores['b'] != null ? scores['b'] : 0;
+  var c = scores['c'] != null ? scores['c'] : 0;
+  var d = scores['d'] != null ? scores['d'] : 0;
+  var e = scores['e'] != null ? scores['e'] : 0;
+  var f = scores['f'] != null ? scores['f'] : 0;
+  return Math.round(2/9 * (a + b + c) + 1/9 * (d + e + f));
+}
+
+function calcCEFR(scores) {
+  var overall = calcWeightedScore(scores);
+  var a = scores['a'] != null ? scores['a'] : 0;
+  var b = scores['b'] != null ? scores['b'] : 0;
+  var c = scores['c'] != null ? scores['c'] : 0;
+  var coreMin = Math.min(a, b, c);
+  if (overall >= 75 && coreMin >= 70) return {level: 'C1', label: 'C1 — Advanced', pass: true, color: '#1565c0'};
+  if (overall >= 60 && coreMin >= 55) return {level: 'B2', label: 'B2 — Upper Intermediate', pass: true, color: '#2e7d32'};
+  if (overall >= 45 && coreMin >= 45) return {level: 'B1', label: 'B1 — Intermediate ✅ Pass', pass: true, color: '#388e3c'};
+  if (overall >= 30) return {level: 'A2', label: 'A2 — Elementary ❌ Below Pass', pass: false, color: '#f57c00'};
+  return {level: 'A1', label: 'A1 — Beginner ❌ Below Pass', pass: false, color: '#c62828'};
+}
+
 // ============ PROGRESS ============
 function updateProgress(){
   var done=0;
@@ -586,9 +610,9 @@ function updateProgress(){
   var pct=Math.round(done/6*100);
   document.getElementById('overallBar').style.width=pct+'%';
 
-  var total=0,cnt=0;
-  ['a','b','c','d','e','f'].forEach(function(k){if(scores[k]!=null){total+=scores[k];cnt++;}});
-  document.getElementById('totalScore').textContent=cnt>0?'Score: '+Math.round(total/cnt):'Score: —';
+  var cnt = ['a','b','c','d','e','f'].filter(function(k){return scores[k]!=null;}).length;
+  var overall = calcWeightedScore(scores);
+  document.getElementById('totalScore').textContent=cnt>0?'Score: '+overall:'Score: —';
 }
 
 // ============ SECTION A ============
@@ -1043,12 +1067,12 @@ function drawRadar(canvasId,scores_arr){
 }
 function showResultModal(){
   var old=document.getElementById('result-modal');if(old)old.remove();
-  var total=0,cnt=0;
-  ['a','b','c','d','e','f'].forEach(function(k){if(scores[k]!=null){total+=scores[k];cnt++;}});
-  var overall=cnt>0?Math.round(total/cnt):0;
-  var level=overall>=90?'B2':overall>=75?'B1+':overall>=60?'B1':overall>=45?'A2+':'A2';
-  var secNames={a:'A · Read Aloud',b:'B · Repeat',c:'C · Q&A',d:'D · Vocabulary',e:'E · Listening',f:'F · Free Talk'};
+  var overall = calcWeightedScore(scores);
+  var cefrResult = calcCEFR(scores);
+  var level = cefrResult.label;
+  var secNames={a:'A · Read (Pronunciation)',b:'B · Repeat (Fluency)',c:'C · Listen (Active Listening)',d:'D · Vocab (Vocabulary)',e:'E · SLU',f:'F · Talk (Grammar)'};
   var barsHtml='';
+  barsHtml+='<div style="font-size:11px;color:#6b7c93;text-align:center;margin-bottom:10px">加权公式 / Weighted Score: A×2 + B×2 + C×2 + D×1 + E×1 + F×1 ÷ 9</div>';
   ['a','b','c','d','e','f'].forEach(function(k){
     var v=scores[k]!=null?scores[k]:0;
     barsHtml+='<div class="result-bar-row"><div class="result-bar-label"><span>'+secNames[k]+'</span><span>'+v+'</span></div><div class="result-bar-track"><div class="result-bar-fill" style="width:'+v+'%"></div></div></div>';
@@ -1058,7 +1082,7 @@ function showResultModal(){
   modal+='<h2>EXAM COMPLETE</h2>';
   modal+='<div class="result-score-big">'+overall+'</div>';
   modal+='<canvas id="radarChart" width="280" height="280" style="display:block;margin:0 auto 10px"></canvas>';
-  modal+='<div class="result-level">CEFR Level: '+level+'</div>';
+  modal+='<div class="result-level" style="color:'+cefrResult.color+'">CEFR Level: '+level+'</div>';
   modal+=barsHtml;
   modal+='<div class="result-btns">';
   modal+='<button class="btn btn-outline" onclick="document.getElementById(\'result-modal\').remove();showReportAnalysis();switchTab(\'f\')">📋 查看错题</button>';
