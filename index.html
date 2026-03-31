@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-0903-bigfix">
+<meta name="app-version" content="20260331-1004-bigfix">
 <meta name="theme-color" content="#2e6fba">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -490,7 +490,7 @@ body{font-size:15px}
 </div>
 
 <script>
-// version: 20260331-0953-fix4
+// version: 20260331-1004-bigfix
 var userName = '';
 // ============ GLOBAL TIMER ============
 var globalTimerInterval=null;
@@ -525,6 +525,12 @@ function checkInvite(){
   if(!val){alert('请输入你的名字 Please enter your name');return;}
   userName=val;
   document.getElementById('invite-overlay').style.display='none';
+  // 按名字+日期重新生成今日题库
+  D_SHUFFLED = [];
+  dResults = [];
+  D_WORDS = seededShuffle(D_WORDS_BANK, getDailySeed(userName)).slice(0,10);
+  eResults = [];
+  E_PASSAGES = seededShuffle(E_PASSAGES_BANK, (getDailySeed(userName)*1664525+1013904223)>>>0).slice(0,2);
   startGlobalTimer();
 }
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.getElementById('invite-overlay').style.display!=='none')checkInvite();});
@@ -566,7 +572,7 @@ var C_SCENARIOS = [
   {text:"The manager said: Great job on the presentation! I was really impressed.", q:"How does the manager feel about the presentation?", ans:"Positive — the manager is impressed."}
 ];
 
-var D_WORDS = [
+var D_WORDS_BANK = [
   {word:"HUGE", opts:["large","heavy","tiny","little"], correct:0},
   {word:"POSTPONE", opts:["delay","cancel","start","finish"], correct:0},
   {word:"CONFIRM", opts:["verify","deny","question","forget"], correct:0},
@@ -576,10 +582,53 @@ var D_WORDS = [
   {word:"SUBMIT", opts:["hand in","receive","reject","review"], correct:0},
   {word:"NEGOTIATE", opts:["discuss terms","agree instantly","refuse","ignore"], correct:0},
   {word:"EFFICIENT", opts:["productive","lazy","slow","wasteful"], correct:0},
-  {word:"APPROXIMATELY", opts:["roughly","exactly","never","always"], correct:0}
+  {word:"APPROXIMATELY", opts:["roughly","exactly","never","always"], correct:0},
+  {word:"ALLOCATE", opts:["assign","remove","ignore","combine"], correct:0},
+  {word:"INITIATIVE", opts:["proactive effort","passive wait","final decision","quick reply"], correct:0},
+  {word:"BENCHMARK", opts:["standard reference","random guess","final result","team leader"], correct:0},
+  {word:"DELEGATE", opts:["assign tasks","do it yourself","refuse work","report upward"], correct:0},
+  {word:"FEASIBLE", opts:["possible","impossible","expensive","risky"], correct:0},
+  {word:"COMPREHENSIVE", opts:["thorough","brief","partial","unclear"], correct:0},
+  {word:"FACILITATE", opts:["make easier","make harder","block","ignore"], correct:0},
+  {word:"IMPLEMENT", opts:["carry out","plan only","cancel","discuss"], correct:0},
+  {word:"MONITOR", opts:["track progress","ignore","report","approve"], correct:0},
+  {word:"PRIORITIZE", opts:["rank by importance","delay all","ignore order","complete randomly"], correct:0},
+  {word:"STREAMLINE", opts:["simplify process","add steps","complicate","delay"], correct:0},
+  {word:"COLLABORATE", opts:["work together","work alone","compete","argue"], correct:0},
+  {word:"EVALUATE", opts:["assess","ignore","approve blindly","skip"], correct:0},
+  {word:"ESCALATE", opts:["raise to higher level","reduce","ignore","solve alone"], correct:0},
+  {word:"PROACTIVE", opts:["acting in advance","reactive","passive","slow"], correct:0},
+  {word:"CONSENSUS", opts:["general agreement","strong disagreement","one opinion","silence"], correct:0},
+  {word:"MITIGATE", opts:["reduce severity","increase risk","ignore problem","create issue"], correct:0},
+  {word:"STAKEHOLDER", opts:["interested party","random person","competitor","supplier only"], correct:0},
+  {word:"TRANSPARENT", opts:["open and clear","hidden","complicated","vague"], correct:0},
+  {word:"DEADLINE", opts:["due date","start date","optional date","estimated date"], correct:0}
 ];
+var D_SHUFFLED = []; // 每题的选项顺序，第一次渲染时固定
+function getDailySeed(name) {
+  var today = new Date();
+  var dateStr = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  var str = (name||'default') + '_' + dateStr;
+  var hash = 0;
+  for(var i=0;i<str.length;i++){hash=(hash*31+str.charCodeAt(i))>>>0;}
+  return hash;
+}
+function seededShuffle(arr, seed) {
+  var a = arr.slice();
+  var s = seed;
+  for(var i=a.length-1;i>0;i--){
+    s=(s*1664525+1013904223)>>>0;
+    var j=s%(i+1);
+    var tmp=a[i]; a[i]=a[j]; a[j]=tmp;
+  }
+  return a;
+}
+var D_WORDS = (function(){
+  var seed = getDailySeed(typeof userName!=='undefined'?userName:'');
+  return seededShuffle(D_WORDS_BANK, seed).slice(0,10);
+})();
 
-var E_PASSAGES = [
+var E_PASSAGES_BANK = [
   {
     text:"Good morning everyone. I'd like to start today's meeting by reviewing last week's performance. Our delivery success rate was 94%, which is up 3% from the previous week. However, we had some complaints about customer service response time. Going forward, we need to ensure all customer inquiries are answered within two hours. Additionally, the new pricing structure will be implemented starting next Monday. Please make sure your teams are informed.",
     qs:[
@@ -595,8 +644,45 @@ var E_PASSAGES = [
       {q:"How long before the out-of-stock items are available?",opts:["2–3 days","3–5 days","5–7 days","10 days"],correct:2},
       {q:"What does David ask the customer to do?",opts:["Call back tomorrow","Visit the store","Reply by end of day","Place a new order"],correct:2}
     ]
+  },
+  {
+    text:"This is a message from the HR department. We are pleased to announce that the annual performance review cycle will begin on April 1st. All employees are required to complete their self-assessment forms by April 10th. Managers should schedule one-on-one meetings with their team members before April 20th. The final ratings will be submitted to HR by April 30th. Please contact your HR business partner if you have any questions about the process.",
+    qs:[
+      {q:"When does the performance review cycle begin?",opts:["March 1st","April 1st","April 10th","April 20th"],correct:1},
+      {q:"By when must employees complete self-assessment forms?",opts:["April 1st","April 5th","April 10th","April 30th"],correct:2},
+      {q:"Who should employees contact for questions?",opts:["Their manager","The CEO","HR business partner","Team leader"],correct:2}
+    ]
+  },
+  {
+    text:"Attention all staff. Starting next week, the office will be operating under a new hybrid work policy. Employees may work from home up to three days per week, provided they attend all scheduled team meetings in person. Remote work requests must be submitted to your line manager by Friday each week. Equipment requests for home offices should be submitted to IT support. The policy will be reviewed after three months.",
+    qs:[
+      {q:"How many days per week can employees work from home?",opts:["One day","Two days","Three days","Five days"],correct:2},
+      {q:"When must remote work requests be submitted?",opts:["Monday","Wednesday","Thursday","Friday"],correct:3},
+      {q:"Who handles equipment requests for home offices?",opts:["HR department","Line manager","IT support","Finance team"],correct:2}
+    ]
+  },
+  {
+    text:"Good afternoon. This is a reminder about the upcoming client presentation scheduled for Thursday at 2 PM in Conference Room B. The sales team is asked to prepare a brief summary of Q1 results. Marketing should have the slide deck ready by Wednesday noon. All participants are expected to arrive 10 minutes early for setup. If you are unable to attend, please notify your team lead immediately and arrange for a colleague to cover.",
+    qs:[
+      {q:"When is the client presentation scheduled?",opts:["Wednesday at 2 PM","Thursday at 2 PM","Friday at 2 PM","Thursday at 10 AM"],correct:1},
+      {q:"By when should the slide deck be ready?",opts:["Tuesday noon","Wednesday noon","Thursday morning","Wednesday evening"],correct:1},
+      {q:"What should you do if you cannot attend?",opts:["Send an email to HR","Skip the meeting","Notify your team lead","Call the client directly"],correct:2}
+    ]
+  },
+  {
+    text:"This voicemail is for the purchasing department. We received your request for office supplies dated last Tuesday. However, we noticed that the total order value exceeds the monthly budget by approximately fifteen percent. Before we can process this order, we need written approval from your department head. Once we receive that approval, delivery can be arranged within three working days. Please call us back at extension 2204 to confirm.",
+    qs:[
+      {q:"What is the problem with the order?",opts:["Wrong items ordered","Order placed too late","Exceeds monthly budget","Missing delivery address"],correct:2},
+      {q:"What is required before the order can be processed?",opts:["Payment in advance","Written approval from department head","A revised order form","A new supplier contract"],correct:1},
+      {q:"How long will delivery take after approval?",opts:["One working day","Two working days","Three working days","One week"],correct:2}
+    ]
   }
 ];
+var E_PASSAGES = (function(){
+  var seed = getDailySeed(typeof userName!=='undefined'?userName:'');
+  var s2 = (seed * 1664525 + 1013904223) >>> 0;
+  return seededShuffle(E_PASSAGES_BANK, s2).slice(0,2);
+})();
 
 var F_TOPICS = [
   "Describe a challenging situation at work and how you handled it.",
@@ -895,13 +981,14 @@ function renderD(){
   var keys=['A','B','C','D'];
   // shuffle options keeping correct index
   var indices=[0,1,2,3];
-  var shuffled=indices.slice().sort(function(){return Math.random()-0.5;});
-  w._shuffled=shuffled;
+  if(!D_SHUFFLED[dIdx]){
+    D_SHUFFLED[dIdx]=indices.slice().sort(function(){return Math.random()-0.5;});
+  }
+  var shuffled=D_SHUFFLED[dIdx];
   shuffled.forEach(function(origIdx,pos){
-    var isCorrect=(origIdx===w.correct);
     var stored=dResults[dIdx];
     var cls='mcq-opt';
-    if(stored!=null){cls+=stored===origIdx?(isCorrect?' correct':' wrong'):'';}
+    if(stored!=null && stored===origIdx){cls+=' selected';}
     html+='<div class="'+cls+'" onclick="selectD('+origIdx+')">';
     html+='<span class="opt-key">'+keys[pos]+'</span> '+w.opts[origIdx]+'</div>';
   });
@@ -960,7 +1047,7 @@ function initE(){
       q.opts.forEach(function(opt,oi){
         var stored=eResults[eIdx];
         var cls='mcq-opt';
-        if(stored!=null){cls+=stored===oi?(oi===q.correct?' correct':' wrong'):'';}
+        if(stored!=null && stored===oi){cls+=' selected';}
         html+='<div class="'+cls+'" onclick="selectE('+eIdx+','+oi+','+q.correct+')">';
         html+='<span class="opt-key">'+keys[oi]+'</span> '+opt+'</div>';
       });
@@ -971,7 +1058,6 @@ function initE(){
   renderEScore();
 }
 function selectE(eIdx,optIdx,correct){
-  if(eResults[eIdx]!=null) return;
   eResults[eIdx]=optIdx;
   initE();
   renderEScore();
