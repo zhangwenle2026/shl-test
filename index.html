@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-2028-welcome-redesign">
+<meta name="app-version" content="20260331-2250-stt-fix">
 <meta name="theme-color" content="#4a90d9">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -1376,19 +1376,38 @@ function playBarTts(barEl,text){
 function startSTT(onResult,onError){
   if(!SRClass){alert('Speech recognition not supported. Use Safari iOS or Chrome desktop.');if(onError)onError('not-supported');return null;}
   var sr=new SRClass();sr.lang='en-US';sr.continuous=false;sr.interimResults=false;sr.maxAlternatives=3;
-  sr.onresult=function(e){onResult(e.results[0][0].transcript,e.results[0][0].confidence);};
-  sr.onerror=function(e){if(onError)onError(e.error);};
-  sr.start();return sr;
+  var fired=false;
+  sr.onresult=function(e){if(!fired){fired=true;onResult(e.results[0][0].transcript,e.results[0][0].confidence);}};
+  sr.onend=function(){if(!fired){fired=true;if(onError)onError('no-speech');}};
+  sr.onerror=function(e){if(!fired){fired=true;if(onError)onError(e.error);}};
+  try{sr.start();}catch(e){if(!fired){fired=true;if(onError)onError('start-failed');}}
+  return sr;
 }
 function startSTTWithInterim(onInterim,onResult,onError){
   if(!SRClass){if(onError)onError('not-supported');return null;}
-  var sr=new SRClass();sr.lang='en-US';sr.continuous=false;sr.interimResults=false;sr.maxAlternatives=3;
+  var sr=new SRClass();sr.lang='en-US';sr.continuous=false;sr.interimResults=true;sr.maxAlternatives=3;
   var accumulated='',resultFired=false;
-  var recTimeout=setTimeout(function(){sr.stop();},12000);
-  sr.onresult=function(e){var fin='',interim='';for(var i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal)fin+=e.results[i][0].transcript+' ';else interim+=e.results[i][0].transcript;}if(fin.trim())accumulated=(accumulated+' '+fin).trim();if(interim&&onInterim)onInterim(interim);};
-  sr.onend=function(){clearTimeout(recTimeout);if(accumulated.trim()){if(!resultFired){resultFired=true;onResult(accumulated.trim(),1);}}else{if(onError)onError('no-speech');}};
-  sr.onerror=function(e){clearTimeout(recTimeout);if(onError)onError(e.error);};
-  sr.start();return sr;
+  var recTimeout=setTimeout(function(){try{sr.stop();}catch(e){}},12000);
+  sr.onresult=function(e){
+    var fin='',interim='';
+    for(var i=e.resultIndex;i<e.results.length;i++){
+      if(e.results[i].isFinal)fin+=e.results[i][0].transcript+' ';
+      else interim+=e.results[i][0].transcript;
+    }
+    if(fin.trim())accumulated=(accumulated+' '+fin).trim();
+    if(interim&&onInterim)onInterim(interim);
+  };
+  sr.onend=function(){
+    clearTimeout(recTimeout);
+    if(!resultFired){
+      resultFired=true;
+      if(accumulated.trim())onResult(accumulated.trim(),1);
+      else if(onError)onError('no-speech');
+    }
+  };
+  sr.onerror=function(e){clearTimeout(recTimeout);if(!resultFired){resultFired=true;if(onError)onError(e.error);}};
+  try{sr.start();}catch(e){clearTimeout(recTimeout);if(!resultFired){resultFired=true;if(onError)onError('start-failed');}}
+  return sr;
 }
 
 // ============ TEXT COMPARE ============
