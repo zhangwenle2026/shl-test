@@ -446,53 +446,48 @@ body{font-size:15px}
 <!-- ===== PANEL F: FREE TALK ===== -->
 <div class="panel" id="panel-f">
   <div class="instruction-box">
-    🎤 <strong>Free Talk / 自由口语</strong> — Choose a topic, prepare 30s, speak 90s. / 选题、准备30秒、连续说90秒。
+    🎤 <strong>F · Free Talk 自由演讲</strong> — 选择题目，先听题，再演讲，最后自评打分。
   </div>
-  <div id="f-select-phase">
-    <div class="card">
-      <div class="card-title">Choose Your Topic</div>
-      <div id="f-topics"></div>
-      <div style="margin-top:14px">
-        <button class="btn btn-primary" onclick="startFPrep()">Start Prep / 开始准备 ⏱</button>
-      </div>
+
+  <!-- Step 1: 选题 + 朗读 -->
+  <div id="f-step1" class="card">
+    <div class="card-title" style="margin-bottom:12px">📋 Step 1 · 选择题目 Choose Topic</div>
+    <div id="f-topics"></div>
+    <button class="btn btn-tts" id="f-listen-btn" onclick="playFTopic(this)" style="width:100%;height:44px;margin-top:10px;font-size:14px;display:none">
+      🔊 朗读题目 Listen to Topic
+    </button>
+    <button class="btn btn-primary" onclick="goFStep2()" style="width:100%;height:48px;margin-top:10px;font-size:15px;font-weight:700">
+      ▶ 开始演讲 Start Speaking
+    </button>
+  </div>
+
+  <!-- Step 2: 录音 -->
+  <div id="f-step2" class="card" style="display:none">
+    <div class="card-title" style="margin-bottom:10px">🎙 Step 2 · 开始演讲 Speak Now</div>
+    <div id="f-speak-topic" style="background:#f0f7ff;border-radius:10px;padding:14px;font-size:15px;font-weight:600;line-height:1.7;color:#1a2a3a;border:1.5px solid #c5daf5;margin-bottom:16px"></div>
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      <button class="btn btn-tts" id="f-listen-btn2" onclick="playFTopic(this)" style="flex:1;height:48px;font-size:14px">🔊 朗读题目</button>
+      <button class="btn btn-primary btn-record-unified" id="f-rec-btn" onclick="recordF()" style="flex:2;height:48px">🎙 开始演讲</button>
     </div>
+    <div id="f-stt-result" style="margin-top:8px"></div>
   </div>
-  <div id="f-prep-phase" style="display:none">
-    <div class="card">
-      <div class="card-title">Preparation Time</div>
-      <div class="timer-label" style="display:none">GET READY</div>
-      <div class="timer-display" id="f-prep-timer" style="display:none">30</div>
-      <div id="f-selected-topic" style="background:var(--bg);border-radius:10px;padding:12px;font-size:14px;font-weight:600;line-height:1.6;color:var(--text);border:1.5px solid var(--border)"></div>
+
+  <!-- Step 3: 自评打分 -->
+  <div id="f-step3" class="card" style="display:none">
+    <div class="card-title" style="margin-bottom:4px">⭐ Step 3 · 自评打分 Self Assessment</div>
+    <p class="card-desc" style="font-size:12px;color:#6b7c93;margin-bottom:14px">根据刚才的表现诚实打分 Rate yourself honestly (1-5 ★)</p>
+    <div id="f-rubric">
+      <div class="rubric-row"><span class="rubric-label">Fluency 流利度</span><div class="rubric-stars" id="r-fluency"></div></div>
+      <div class="rubric-row"><span class="rubric-label">Vocabulary 词汇</span><div class="rubric-stars" id="r-vocab"></div></div>
+      <div class="rubric-row"><span class="rubric-label">Logic 逻辑性</span><div class="rubric-stars" id="r-logic"></div></div>
+      <div class="rubric-row"><span class="rubric-label">Grammar 语法</span><div class="rubric-stars" id="r-grammar"></div></div>
     </div>
+    <button class="btn btn-primary" style="width:100%;height:52px;margin-top:16px;font-size:16px;font-weight:800;background:#1e7e4e" onclick="submitF()">
+      ✅ 提交得分 Submit Score
+    </button>
   </div>
-  <div id="f-speak-phase" style="display:none">
-    <div class="card">
-      <div class="card-title">Speaking Time</div>
-      <div class="timer-label" style="display:none">SPEAK NOW</div>
-      <div class="timer-display" id="f-speak-timer" style="display:none">90</div>
-      <div id="f-speak-topic" style="background:var(--bg);border-radius:10px;padding:12px;font-size:14px;font-weight:600;line-height:1.6;color:var(--text);border:1.5px solid var(--border);margin-bottom:16px"></div>
-      <div style="text-align:center;margin-top:16px">
-        <div style="display:flex;gap:8px;margin-bottom:10px">
-          <button class="btn btn-tts" id="f-listen-btn" onclick="playFTopic(this)" style="flex:1;height:48px;font-size:14px">🔊 朗读题目</button>
-          <button class="btn btn-primary btn-record-unified" id="f-rec-btn" onclick="recordF()" style="flex:2;height:48px">🎙 开始演讲 / Start Speaking</button>
-        </div>
-      </div>
-      <div id="f-stt-result" style="margin-top:10px"></div>
-    </div>
-  </div>
-  <div id="f-rate-phase" style="display:none">
-    <div class="card">
-      <div class="card-title">Self Assessment</div>
-      <p class="card-desc">Rate your performance honestly:</p>
-      <div id="f-rubric">
-        <div class="rubric-row"><span class="rubric-label">Fluency 流利度</span><div class="rubric-stars" id="r-fluency"></div></div>
-        <div class="rubric-row"><span class="rubric-label">Vocabulary 词汇</span><div class="rubric-stars" id="r-vocab"></div></div>
-        <div class="rubric-row"><span class="rubric-label">Logic 逻辑</span><div class="rubric-stars" id="r-logic"></div></div>
-        <div class="rubric-row"><span class="rubric-label">Grammar 语法</span><div class="rubric-stars" id="r-grammar"></div></div>
-      </div>
-      <button class="btn btn-primary" style="margin-top:14px" onclick="submitF()">Submit / 提交查看得分</button>
-    </div>
-  </div>
+
+  <!-- 分数展示 -->
   <div class="card">
     <div class="card-title">Section Score / 本节得分</div>
     <div id="f-score-display" style="font-size:13px;color:var(--muted)">Complete the speaking task to see your score.</div>
@@ -500,6 +495,7 @@ body{font-size:15px}
 </div>
 
 <script>
+// version: 20260331-0935-ftalk
 var INVITE_CODE='ERIC';
 // ============ GLOBAL TIMER ============
 var globalTimerInterval=null;
@@ -1027,46 +1023,28 @@ function initF(){
     }
     document.getElementById('r-'+dim).innerHTML=html;
   });
+  // step visibility reset
+  document.getElementById('f-step1').style.display='block';
+  document.getElementById('f-step2').style.display='none';
+  document.getElementById('f-step3').style.display='none';
   renderFScore();
 }
 function selectFTopic(i){
   fSelected=i;
   document.querySelectorAll('.topic-card').forEach(function(c){c.classList.remove('selected');});
   document.getElementById('f-topic-'+i).classList.add('selected');
+  document.getElementById('f-listen-btn').style.display='block';
 }
-function startFPrep(){
-  if(fSelected<0){alert('Please select a topic first.');return;}
-  document.getElementById('f-select-phase').style.display='none';
-  document.getElementById('f-prep-phase').style.display='block';
-  document.getElementById('f-selected-topic').textContent=F_TOPICS[fSelected];
-  var sec=30;
-  document.getElementById('f-prep-timer').textContent=sec;
-  fPrepTimer=setInterval(function(){
-    sec--;
-    var el=document.getElementById('f-prep-timer');
-    if(el){el.textContent=sec;el.className='timer-display'+(sec<=10?' warning':'');}
-    if(sec<=0){
-      clearInterval(fPrepTimer);
-      startFSpeak();
-    }
-  },1000);
-}
-function startFSpeak(){
-  document.getElementById('f-prep-phase').style.display='none';
-  document.getElementById('f-speak-phase').style.display='block';
+function goFStep2(){
+  if(fSelected<0){alert('请先选择一个题目 Please select a topic first');return;}
+  document.getElementById('f-step1').style.display='none';
+  document.getElementById('f-step2').style.display='block';
   document.getElementById('f-speak-topic').textContent=F_TOPICS[fSelected];
-  var sec=90;
-  document.getElementById('f-speak-timer').textContent=sec;
-  fSpeakTimer=setInterval(function(){
-    sec--;
-    var el=document.getElementById('f-speak-timer');
-    if(el){el.textContent=sec;el.className='timer-display'+(sec<=15?' danger':sec<=30?' warning':'');}
-    if(sec<=0){
-      clearInterval(fSpeakTimer);
-      // Timer reached 0 but don't force transition - user can keep speaking
-      // Just show a hint in the timer (but it's hidden anyway)
-    }
-  },1000);
+  // 自动朗读题目
+  setTimeout(function(){
+    var btn=document.getElementById('f-listen-btn2');
+    if(btn) playFTopic(btn);
+  },300);
 }
 function rateF(dim,val){
   fRubric[dim]=val;
@@ -1201,8 +1179,8 @@ function renderFScore(){
   }
 }
 var fSTRText='';
-function recordF(){var btn=document.getElementById('f-rec-btn');btn.textContent='⏺ Recording... / 录音中...';btn.style.background='#e74c3c';btn.disabled=true;var sr=startSTT(function(t){fSTRText=t;btn.textContent='🎙 Start Speaking / 开始说话';btn.style.background='';btn.disabled=false;var el=document.getElementById('f-stt-result');if(el&&fSTRText){var keywords=fSelected>=0?F_TOPIC_KEYWORDS[fSelected]:[];var hit=keywords.filter(function(k){return fSTRText.toLowerCase().includes(k.toLowerCase());}).length;var pct=keywords.length?Math.round(hit/keywords.length*100):0;var col=pct>=70?'#27ae60':pct>=40?'#f39c12':'#e74c3c';el.innerHTML='<div style="background:#f0f7ff;border-radius:10px;padding:10px 14px;border-left:3px solid '+col+'"><div style="font-size:12px;font-weight:700;color:'+col+'">关键词覆盖: '+hit+'/'+keywords.length+' ('+pct+'%)</div><div style="font-size:11px;color:#555;margin-top:4px">你说了: <em>"'+fSTRText.substring(0,100)+(fSTRText.length>100?'...':'')+'"</em></div></div>';} else if(el) el.innerHTML='<div style="font-size:11px;color:#27ae60;padding:6px 0">✅ Recorded — rate yourself below</div>';// Show rate phase after recording
-document.getElementById('f-speak-phase').style.display='none';document.getElementById('f-rate-phase').style.display='block';},function(err){btn.textContent='🎙 Start Speaking / 开始说话';btn.style.background='';btn.disabled=false;});if(sr)setTimeout(function(){try{sr.stop();}catch(e){}},15000);}
+function recordF(){var btn=document.getElementById('f-rec-btn');btn.textContent='⏺ Recording... / 录音中...';btn.style.background='#e74c3c';btn.disabled=true;var sr=startSTT(function(t){fSTRText=t;btn.textContent='🎙 开始演讲';btn.style.background='';btn.disabled=false;var el=document.getElementById('f-stt-result');if(el&&fSTRText){var keywords=fSelected>=0?F_TOPIC_KEYWORDS[fSelected]:[];var hit=keywords.filter(function(k){return fSTRText.toLowerCase().includes(k.toLowerCase());}).length;var pct=keywords.length?Math.round(hit/keywords.length*100):0;var col=pct>=70?'#27ae60':pct>=40?'#f39c12':'#e74c3c';el.innerHTML='<div style="background:#f0f7ff;border-radius:10px;padding:10px 14px;border-left:3px solid '+col+'"><div style="font-size:12px;font-weight:700;color:'+col+'">关键词覆盖: '+hit+'/'+keywords.length+' ('+pct+'%)</div><div style="font-size:11px;color:#555;margin-top:4px">你说了: <em>"'+fSTRText.substring(0,100)+(fSTRText.length>100?'...':'')+'"</em></div></div>';} else if(el) el.innerHTML='<div style="font-size:11px;color:#27ae60;padding:6px 0">✅ Recorded — rate yourself below</div>';// 录音完 → 1.2s 后跳到 step3 自评
+setTimeout(function(){document.getElementById('f-step2').style.display='none';document.getElementById('f-step3').style.display='block';},1200);},function(err){btn.textContent='🎙 开始演讲';btn.style.background='';btn.disabled=false;});if(sr)setTimeout(function(){try{sr.stop();}catch(e){}},15000);}
 function showReportAnalysis(){
   var old=document.getElementById('report-analysis');if(old)old.remove();
   var html='<div id="report-analysis" style="background:#fff;border-radius:16px;padding:20px;margin-top:16px;box-shadow:0 2px 12px rgba(46,111,186,0.12);border:1px solid #d0dff0">';
