@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-1011-dtimer">
+<meta name="app-version" content="20260331-1013-smb">
 <meta name="theme-color" content="#2e6fba">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -248,9 +248,10 @@ body{font-size:15px}
   <div style="background:#fff;border-radius:20px;padding:32px 24px;width:100%;max-width:360px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,0.25)">
     <div style="font-size:40px;margin-bottom:12px">👤</div>
     <div style="font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:#1a4a8a;margin-bottom:6px">ERIC SHL TEST</div>
-    <div style="font-size:13px;color:#6b7c93;margin-bottom:24px">请输入你的名字 Enter Your Name</div>
-    <input id="invite-input" type="text" placeholder="你的名字 / Your name" style="width:100%;padding:14px 16px;border:2px solid #d0dff0;border-radius:12px;font-size:16px;text-align:center;outline:none;margin-bottom:12px;font-family:inherit;height:52px">
-    <div id="invite-error" style="color:#e74c3c;font-size:12px;margin-bottom:10px;display:none">请输入你的名字 Please enter your name</div>
+    <div style="font-size:13px;color:#6b7c93;margin-bottom:20px">请输入你的名字和邀请码 Enter your name & invite code</div>
+    <input id="invite-input" type="text" placeholder="你的名字 / Your name" style="width:100%;padding:14px 16px;border:2px solid #d0dff0;border-radius:12px;font-size:16px;text-align:center;outline:none;margin-bottom:10px;font-family:inherit;height:52px;box-sizing:border-box">
+    <input id="invite-code-input" type="text" placeholder="邀请码 / Invite code" style="width:100%;padding:14px 16px;border:2px solid #d0dff0;border-radius:12px;font-size:16px;text-align:center;outline:none;margin-bottom:12px;font-family:inherit;height:52px;box-sizing:border-box">
+    <div id="invite-error" style="color:#e74c3c;font-size:12px;margin-bottom:10px;display:none">名字或邀请码有误 Invalid name or invite code</div>
     <button onclick="checkInvite()" style="width:100%;padding:14px;background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;height:52px">开始测试 Start Test</button>
     <div style="font-size:11px;color:#aab;margin-top:16px">Powered by ERIC · Meituan Keeta Brazil</div>
   </div>
@@ -522,7 +523,10 @@ function updateGlobalTimerDisplay(){
 
 function checkInvite(){
   var val=document.getElementById('invite-input').value.trim();
-  if(!val){alert('请输入你的名字 Please enter your name');return;}
+  var code=document.getElementById('invite-code-input').value.trim().toUpperCase();
+  var errEl=document.getElementById('invite-error');
+  if(!val||code!=='SMB'){errEl.style.display='block';return;}
+  errEl.style.display='none';
   userName=val;
   document.getElementById('invite-overlay').style.display='none';
   // 按名字+日期重新生成今日题库
