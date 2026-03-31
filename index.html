@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-0900-bilingual">
+<meta name="app-version" content="20260331-0839-enhanced">
 <meta name="theme-color" content="#2e6fba">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -58,8 +58,8 @@ body{font-family:'Open Sans',sans-serif;background:#f0f2f5;color:var(--text);min
 
 /* SENTENCES */
 .sentence-item{background:var(--bg);border-radius:10px;padding:12px;margin-bottom:10px;border:1.5px solid var(--border);transition:all 0.2s;position:relative}
-.sentence-item.highlighted{border-color:var(--accent);background:#fff8f3}
-.sentence-item.highlighted::before{content:'▶ READ THIS';position:absolute;top:-8px;left:10px;background:var(--accent);color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:0.5px}
+.sentence-item.highlighted{border-color:#2e6fba;background:#f0f7ff}
+.sentence-item.highlighted::before{content:'▶ READ THIS';position:absolute;top:-8px;left:10px;background:#2e6fba;color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:0.5px}
 .sentence-num{font-size:10px;color:var(--muted);font-weight:600;margin-bottom:4px}
 .sentence-text{font-size:15px;line-height:1.7;color:var(--text)}
 .sentence-actions{display:flex;align-items:stretch;gap:8px;margin-top:10px}
@@ -198,6 +198,47 @@ body{font-size:15px}
 .btn-primary{font-size:14px}
 .card-title{font-size:14px}
 .instruction-box,.info-box,.tip-box{font-size:13px}
+
+/* === AUDIO BAR WAVE === */
+.audio-bar{display:flex;align-items:center;gap:10px;background:#f0f7ff;border:1.5px solid #c5daf5;border-radius:12px;padding:10px 14px;margin-bottom:10px;cursor:pointer;transition:background 0.2s}
+.audio-bar:hover{background:#daeeff}
+.audio-bar.playing{background:#daeeff;border-color:#2e6fba}
+.audio-bar .play-icon{width:36px;height:36px;border-radius:50%;background:#2e6fba;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:background 0.2s}
+.audio-bar.playing .play-icon{background:#1a4a8a}
+.audio-bar .wave{display:flex;align-items:center;gap:3px;height:28px;flex:1}
+.audio-bar .wave span{width:3px;border-radius:3px;background:#2e6fba;opacity:0.5;transition:height 0.1s}
+.audio-bar:not(.playing) .wave span{height:4px}
+.audio-bar.playing .wave span{animation:waveBounce 0.6s ease-in-out infinite alternate}
+.audio-bar.playing .wave span:nth-child(2){animation-delay:0.1s}
+.audio-bar.playing .wave span:nth-child(3){animation-delay:0.2s}
+.audio-bar.playing .wave span:nth-child(4){animation-delay:0.3s}
+.audio-bar.playing .wave span:nth-child(5){animation-delay:0.1s}
+.audio-bar.playing .wave span:nth-child(6){animation-delay:0.25s}
+.audio-bar.playing .wave span:nth-child(7){animation-delay:0.15s}
+.audio-bar.playing .wave span:nth-child(8){animation-delay:0.35s}
+@keyframes waveBounce{from{height:4px}to{height:20px}}
+.audio-bar .bar-label{font-size:13px;font-weight:600;color:#1a4a8a;white-space:nowrap}
+
+/* === NEED 2: Enhanced highlight === */
+.sentence-item.highlighted{border:2.5px solid #2e6fba !important;background:#f0f7ff !important;box-shadow:0 2px 12px rgba(46,111,186,0.15)}
+.mcq-card.current{border-left:4px solid #2e6fba;background:#f0f7ff}
+
+/* === NEED 3: Stress / pause marks === */
+.stress{border-bottom:2px dotted #2e6fba;font-weight:600}
+.pause-mark{color:#aaa;font-size:0.85em;margin:0 2px;user-select:none}
+
+/* === NEED 4: Text contrast === */
+.sentence-text{color:#111827 !important;font-size:16px;line-height:1.7}
+.card-desc{color:#374151 !important}
+.instruction-box{color:#1a3a6a !important}
+.btn-primary,.btn-record{color:#ffffff !important}
+
+/* === NEED 5: Brand color unification === */
+.btn-primary{background:#2e6fba}
+.btn-record{background:#2e6fba}
+.stt-highlight-card{background:#edf4ff;border:1.5px solid #c5daf5}
+.mcq-opt.selected{border-color:#2e6fba;background:#daeeff}
+
 </style>
 </head>
 <body>
@@ -270,7 +311,11 @@ body{font-size:15px}
       <div class="hs-text" id="b-text-display">Press PLAY to hear the sentence</div>
     </div>
     <div style="text-align:center;margin-bottom:14px">
-      <button class="btn btn-tts" onclick="playB()">▶ Play / 播放</button>
+      <div class="audio-bar" id="audio-bar-B" onclick="playBarAudioB(this)">
+      <div class="play-icon">▶</div>
+      <div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="bar-label">Play / 播放</div>
+    </div>
       <button class="btn btn-outline btn-small" style="margin-left:8px" onclick="revealB()">👁 Reveal</button>
     </div>
     <div id="b-revealed" style="display:none;background:var(--bg);border-radius:10px;padding:12px;margin-bottom:12px;font-size:14px;color:var(--text);line-height:1.6;border:1.5px solid var(--border)"></div>
@@ -303,7 +348,11 @@ body{font-size:15px}
     <div class="vocab-q-num" id="c-num">Question 1 / 4</div>
     <div class="passage-box" id="c-scenario"></div>
     <div style="margin-bottom:10px">
-      <button class="btn btn-tts" onclick="playC()">▶ Play / 播放场景</button>
+      <div class="audio-bar" id="audio-bar-C" onclick="playBarAudioC(this)">
+      <div class="play-icon">▶</div>
+      <div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="bar-label">Play / 播放场景</div>
+    </div>
     </div>
     <div class="mcq-question" id="c-question"></div>
     <div id="c-answer-reveal" style="display:none;margin-bottom:12px">
@@ -359,14 +408,22 @@ body{font-size:15px}
   <div class="card">
     <div class="card-title">Passage 1 · Work Meeting / 职场会议</div>
     <div class="passage-box" id="e-p1-text"></div>
-    <button class="btn btn-tts" onclick="tts(E_PASSAGES[0].text)" style="margin-bottom:14px">▶ Play Passage 1 / 播放段落一</button>
+    <div class="audio-bar" id="audio-bar-E1" onclick="playBarTts(this, E_PASSAGES[0].text)" style="margin-bottom:14px">
+      <div class="play-icon">▶</div>
+      <div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="bar-label">Play Passage 1 / 播放段落一</div>
+    </div>
     <div id="e-q1"></div>
   </div>
 
   <div class="card" style="margin-top:16px">
     <div class="card-title">Passage 2 · Client Call / 客户通话</div>
     <div class="passage-box" id="e-p2-text"></div>
-    <button class="btn btn-tts" onclick="tts(E_PASSAGES[1].text)" style="margin-bottom:14px">▶ Play Passage 2 / 播放段落二</button>
+    <div class="audio-bar" id="audio-bar-E2" onclick="playBarTts(this, E_PASSAGES[1].text)" style="margin-bottom:14px">
+      <div class="play-icon">▶</div>
+      <div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="bar-label">Play Passage 2 / 播放段落二</div>
+    </div>
     <div id="e-q2"></div>
   </div>
 
@@ -634,9 +691,9 @@ function initA(){
     var isHi=hi.includes(i);
     html+='<div class="sentence-item'+(isHi?' highlighted':'')+'" id="a-item-'+i+'">';
     html+='<div class="sentence-num">Sentence '+(i+1)+'</div>';
-    html+='<div class="sentence-text">'+s+'</div>';
+    html+='<div class="sentence-text">'+addStressMarks(s)+'</div>';
     html+='<div class="sentence-actions">';
-    html+='<button class="btn btn-tts" onclick="tts(A_SENTENCES['+i+'])">🔊 Listen</button>';
+    html+='<div class="audio-bar" onclick="playBarTts(this,A_SENTENCES['+i+'])" style="margin-bottom:6px"><div class="play-icon">▶</div><div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="bar-label">🔊 Listen</div></div>';
     if(isHi){
       html+='<button class="btn btn-primary btn-record-unified" onclick="recordA('+i+',this)">🎙 Tap to Read / 点击朗读</button>';
     }
@@ -1139,6 +1196,61 @@ function showReportAnalysis(){
   html+='</div>';
   document.getElementById('f-score-display').insertAdjacentHTML('afterend',html);
   document.getElementById('report-analysis').scrollIntoView({behavior:'smooth'});
+}
+
+
+// === NEED 1: Audio Bar TTS ===
+function playBarTts(barEl, text) {
+  document.querySelectorAll('.audio-bar.playing').forEach(function(b) {
+    b.classList.remove('playing');
+    b.querySelector('.play-icon').textContent = '▶';
+  });
+  if (window._currentBar === barEl && window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    window._currentBar = null;
+    return;
+  }
+  window._currentBar = barEl;
+  barEl.classList.add('playing');
+  barEl.querySelector('.play-icon').textContent = '⏹';
+  window.speechSynthesis.cancel();
+  var utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'en-GB';
+  utter.rate = 0.9;
+  utter.onend = function() {
+    barEl.classList.remove('playing');
+    barEl.querySelector('.play-icon').textContent = '▶';
+    window._currentBar = null;
+  };
+  utter.onerror = function() {
+    barEl.classList.remove('playing');
+    barEl.querySelector('.play-icon').textContent = '▶';
+    window._currentBar = null;
+  };
+  var voices = window.speechSynthesis.getVoices();
+  var en = voices.filter(function(v){return v.lang.startsWith('en');});
+  if (en.length > 0) utter.voice = en[0];
+  window.speechSynthesis.speak(utter);
+}
+
+
+function playBarAudioB(barEl) {
+  // delegate to playBarTts with current B sentence text
+  playBarTts(barEl, B_SENTENCES[bIdx]);
+  // also update the display text as original playB() does
+  document.getElementById('b-text-display').textContent = '🔊 Playing...';
+  setTimeout(function(){ document.getElementById('b-text-display').textContent = 'Now repeat out loud!'; }, 2000);
+}
+function playBarAudioC(barEl) {
+  playBarTts(barEl, C_SCENARIOS[cIdx].text);
+}
+
+
+// === NEED 3: Stress marks ===
+function addStressMarks(sentence) {
+  return sentence
+    .replace(/\b([A-Za-z]{6,})\b/g, '<span class="stress">$1</span>')
+    .replace(/([,;]) /g, '$1 <span class="pause-mark">|</span> ');
 }
 
 // ============ INIT ============
