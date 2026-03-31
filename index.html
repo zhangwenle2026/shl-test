@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-2012-welcome-fix">
+<meta name="app-version" content="20260331-2016-no-name-input">
 <meta name="theme-color" content="#4a90d9">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -471,14 +471,13 @@ textarea:focus{border-color:var(--primary);background:#fff}
 
 <!-- LOGIN OVERLAY -->
 <div id="invite-overlay">
-  <div style="background:#fff;border-radius:20px;padding:32px 24px;width:100%;max-width:360px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,0.25)">
-    <div style="font-size:40px;margin-bottom:12px">👤</div>
-    <div style="font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:#1a4a8a;margin-bottom:6px">ERIC SHL TEST</div>
-    <div style="font-size:13px;color:#6b7c93;margin-bottom:20px">请输入你的名字和邀请码 Enter your name &amp; invite code</div>
-    <input id="invite-input" type="text" placeholder="你的名字 / Your name" style="width:100%;padding:14px 16px;border:2px solid #d0dff0;border-radius:12px;font-size:16px;text-align:center;outline:none;margin-bottom:10px;font-family:inherit;height:52px;box-sizing:border-box">
-    <input id="invite-code-input" type="text" placeholder="邀请码 / Invite code" style="width:100%;padding:14px 16px;border:2px solid #d0dff0;border-radius:12px;font-size:16px;text-align:center;outline:none;margin-bottom:12px;font-family:inherit;height:52px;box-sizing:border-box">
-    <div id="invite-error" style="color:#e74c3c;font-size:12px;margin-bottom:10px;display:none">名字或邀请码有误 Invalid name or invite code</div>
-    <button onclick="checkInvite()" style="width:100%;padding:14px;background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;height:52px">开始测试 Start Test</button>
+  <div style="background:#fff;border-radius:20px;padding:36px 28px;width:100%;max-width:360px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,0.25)">
+    <div style="font-size:44px;margin-bottom:12px">🔑</div>
+    <div style="font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:#1a4a8a;margin-bottom:6px">ERIC SHL TEST</div>
+    <div style="font-size:13px;color:#6b7c93;margin-bottom:24px">请输入邀请码 Enter invite code</div>
+    <input id="invite-code-input" type="text" placeholder="邀请码 / Invite code" style="width:100%;padding:16px;border:2px solid #d0dff0;border-radius:12px;font-size:18px;text-align:center;outline:none;margin-bottom:14px;font-family:'Montserrat',sans-serif;font-weight:700;letter-spacing:3px;height:56px;box-sizing:border-box;text-transform:uppercase">
+    <div id="invite-error" style="color:#e74c3c;font-size:12px;margin-bottom:10px;display:none">邀请码有误 Invalid invite code</div>
+    <button onclick="checkInvite()" style="width:100%;padding:16px;background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;height:56px;-webkit-appearance:none">开始测试 Start Test</button>
     <div style="font-size:11px;color:#aab;margin-top:16px">Powered by ERIC · Meituan Keeta Brazil</div>
   </div>
 </div>
@@ -719,12 +718,11 @@ function startMainApp(){
   renderQuestion();
 }
 function checkInvite(){
-  var val=document.getElementById('invite-input').value.trim();
   var code=document.getElementById('invite-code-input').value.trim().toUpperCase();
   var errEl=document.getElementById('invite-error');
-  if(!val||code!=='SMB'){errEl.style.display='block';return;}
+  if(code!=='SMB'){errEl.style.display='block';return;}
   errEl.style.display='none';
-  userName=val;
+  userName='User';
   // init data early so startMainApp can use it
   D_SHUFFLED=[];
   D_WORDS=seededShuffle(D_WORDS_BANK,getDailySeed(userName)).slice(0,10);
