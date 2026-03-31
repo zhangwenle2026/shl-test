@@ -522,7 +522,7 @@ function updateGlobalTimerDisplay(){
 function checkInvite(){var v=(document.getElementById('invite-input').value||'').trim().toUpperCase();if(v===INVITE_CODE.toUpperCase()){localStorage.setItem('ERIC_INVITE_OK','1');document.getElementById('invite-overlay').style.display='none';startGlobalTimer();}else{document.getElementById('invite-error').style.display='block';document.getElementById('invite-input').style.borderColor='#e74c3c';setTimeout(function(){document.getElementById('invite-input').style.borderColor='#d0dff0';},1500);}}
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.getElementById('invite-overlay').style.display!=='none')checkInvite();});
 var SRClass=window.SpeechRecognition||window.webkitSpeechRecognition;
-function startSTT(onResult,onError){if(!SRClass){alert('Speech recognition not supported. Use Safari iOS or Chrome desktop.');if(onError)onError('not-supported');return null;}var sr=new SRClass();sr.lang='en-US';sr.continuous=false;sr.interimResults=false;sr.maxAlternatives=1;sr.onresult=function(e){onResult(e.results[0][0].transcript,e.results[0][0].confidence);};sr.onerror=function(e){if(onError)onError(e.error);};sr.start();return sr;}
+function startSTT(onResult,onError){if(!SRClass){alert('Speech recognition not supported. Use Safari iOS or Chrome desktop.');if(onError)onError('not-supported');return null;}var sr=new SRClass();sr.lang='en-US';sr.continuous=false;sr.interimResults=false;sr.maxAlternatives=3;sr.onresult=function(e){onResult(e.results[0][0].transcript,e.results[0][0].confidence);};sr.onerror=function(e){if(onError)onError(e.error);};sr.start();return sr;}
 function compareTexts(spoken,ref){var s=spoken.toLowerCase().replace(/[^a-z0-9\s]/g,'').trim();var r=ref.toLowerCase().replace(/[^a-z0-9\s]/g,'').trim();var sw=s.split(/\s+/);var rw=r.split(/\s+/);var ok=0;var miss=[];rw.forEach(function(w){if(sw.indexOf(w)>=0)ok++;else miss.push(w);});var pct=Math.round(ok/rw.length*100);return{pct:pct,missing:miss};}
 function showSTTResult(el,transcript,ref){var c=compareTexts(transcript,ref);var col=c.pct>=80?'#27ae60':c.pct>=50?'#f39c12':'#e74c3c';el.innerHTML='<div style="background:#f8fbff;border-radius:12px;padding:14px;margin-top:10px;border:1.5px solid #d0dff0"><div style="font-size:11px;font-weight:700;color:#6b7c93;margin-bottom:4px">YOU SAID / 你说了:</div><div style="font-size:14px;color:#1a2a3a;margin-bottom:8px;font-style:italic">"'+transcript+'"</div><div style="font-size:22px;font-weight:800;color:'+col+'">'+c.pct+'%</div>'+(c.missing.length?'<div style="font-size:12px;color:#e74c3c;margin-top:4px">Missed 漏词: <strong>'+c.missing.join(', ')+'</strong></div>':'<div style="font-size:12px;color:#27ae60;margin-top:4px">Perfect! 完美！</div>')+'<div style="font-size:11px;color:#2e6fba;margin-top:4px">Reference / 参考原文: <em>'+ref+'</em></div></div>';return c;}
 // ============ DATA ============
@@ -736,7 +736,7 @@ function renderAScore(){
 function startSTTWithInterim(onInterim,onResult,onError){
   if(!SRClass){if(onError)onError('not-supported');return null;}
   var sr=new SRClass();
-  sr.lang='en-US';sr.continuous=false;sr.interimResults=true;sr.maxAlternatives=3;
+  sr.lang='en-US';sr.continuous=false;sr.interimResults=false;sr.maxAlternatives=3;
   var accumulated='';
   var resultFired=false;
   var recTimeout=setTimeout(function(){sr.stop();},12000);
