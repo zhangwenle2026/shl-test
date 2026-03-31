@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-2300-audio-capture-fix">
+<meta name="app-version" content="20260331-2305-longer-review">
 <meta name="theme-color" content="#4a90d9">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -1118,7 +1118,7 @@ function doRecordF(topicIdx,qIdx){
         var col=pct>=70?'#27ae60':pct>=40?'#f39c12':'#e74c3c';
         el.innerHTML='<div style="background:#f0f7ff;border-radius:10px;padding:10px 14px;border-left:3px solid '+col+'"><div style="font-size:12px;font-weight:700;color:'+col+'">关键词覆盖: '+hit+'/'+kws.length+' ('+pct+'%)</div></div>';
       }
-      setTimeout(function(){fStep=3;renderQuestion();},1200);
+      setTimeout(function(){fStep=3;renderQuestion();},3000);
     },
     function(err){
       btn.textContent='🎙 开始录音 Start Recording';btn.style.background='linear-gradient(135deg,#1a4a8a,#2e6fba)';btn.disabled=false;
@@ -1158,7 +1158,7 @@ function onAnswered(qIdx,score,immediate){
     } else {
       showFinalResults();
     }
-  },800);
+  },3000);
 }
 
 // ============ NAVIGATION ============
