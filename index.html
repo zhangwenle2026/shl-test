@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-0839-enhanced">
+<meta name="app-version" content="20260331-0903-bigfix">
 <meta name="theme-color" content="#2e6fba">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -40,14 +40,14 @@ body{font-family:'Open Sans',sans-serif;background:#f0f2f5;color:var(--text);min
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),#f2c47a);border-radius:3px;transition:width 0.5s ease;width:0%}
 
 /* TAB BAR */
-.tab-bar{display:flex;overflow-x:auto;scrollbar-width:none;gap:0;border-top:1px solid rgba(255,255,255,0.15);position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:200;background:#fff;border-top:1px solid #e0e6ef}
+.tab-bar{display:flex;overflow-x:auto;scrollbar-width:none;gap:0;border-top:none;position:sticky;top:0;bottom:auto;width:100%;max-width:480px;z-index:99;background:#fff;border-bottom:2px solid #e0e6ef;box-shadow:0 2px 8px rgba(0,0,0,0.08);padding:0 8px}
 .tab-bar::-webkit-scrollbar{display:none}
-.tab-btn{flex:1;min-width:60px;padding:8px 4px 6px;background:none;border:none;color:#9aa5b4;font-size:10px;font-weight:600;cursor:pointer;transition:all 0.2s;white-space:nowrap;text-align:center;display:flex;flex-direction:column;align-items:center}
-.tab-btn.active{color:var(--primary);font-weight:700}
-.tab-btn .tab-icon{display:block;font-size:18px;margin-bottom:3px}
+.tab-btn{flex-shrink:0;padding:10px 14px;font-size:12px;font-weight:700;white-space:nowrap;border-bottom:3px solid transparent;color:#6b7c93;background:none;border:none;border-bottom:3px solid transparent;border-radius:0;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center}
+.tab-btn.active{color:#2e6fba;border-bottom-color:#2e6fba;font-weight:800}
+.tab-btn .tab-icon{display:block;font-size:16px;margin-bottom:2px}
 
 /* PANELS */
-.panel{display:none;padding:16px;padding-bottom:90px}
+.panel{display:none;padding:16px;padding-bottom:16px}
 .panel.active{display:block}
 
 /* CARDS */
@@ -89,11 +89,11 @@ body{font-family:'Open Sans',sans-serif;background:#f0f2f5;color:var(--text);min
 /* MCQ */
 .mcq-question{font-size:14px;font-weight:600;color:var(--text);margin-bottom:14px;line-height:1.6}
 .mcq-options{display:flex;flex-direction:column;gap:8px}
-.mcq-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;cursor:pointer;font-size:14px;transition:all 0.25s;display:flex;align-items:center;gap:10px;min-height:48px}
+.mcq-opt{display:block;width:100%;text-align:left;padding:12px 16px;margin-bottom:8px;border-radius:10px;border:1.5px solid #d0dff0;background:#fff;font-size:14px;cursor:pointer;transition:all 0.15s;box-sizing:border-box;min-height:48px}
 .mcq-opt:hover{border-color:var(--primary);background:#f0f7ff}
-.mcq-opt.selected{border-color:var(--primary);background:#daeeff;font-weight:600;transform:scale(1.01)}
-.mcq-opt.correct{border-color:var(--green);background:#eafaf1;color:var(--green)}
-.mcq-opt.wrong{border-color:var(--red);background:#fdf0ef;color:var(--red)}
+.mcq-opt.selected{border-color:#2e6fba;background:#daeeff;font-weight:600}
+.mcq-opt.correct{border-color:#27ae60;background:#e8f8ee}
+.mcq-opt.wrong{border-color:#e74c3c;background:#fdf0ef}
 .opt-key{width:24px;height:24px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
 .mcq-opt.selected .opt-key{background:var(--primary);color:#fff}
 .mcq-opt.correct .opt-key{background:var(--green);color:#fff}
@@ -261,18 +261,28 @@ body{font-size:15px}
     <div class="header-top">
       <div>
         <div class="app-title">ERIC SHL TEST</div>
-        <div class="app-subtitle">CEFR B1 · Mock Exam 模拟考试 · 20 min</div>
+        
       </div>
       <div style="display:flex;align-items:center;gap:6px">
-        <div class="score-badge" id="totalScore">Score 得分: —</div>
-        <div class="global-timer" id="globalTimer">⏱ 30:00</div>
+        <div class="score-badge" id="totalScore" style="display:none">Score 得分: —</div>
+        <div class="global-timer" id="globalTimer" style="display:none">⏱ 30:00</div>
       </div>
     </div>
     <div class="overall-progress">
       <div class="progress-label">OVERALL PROGRESS</div>
       <div class="progress-track"><div class="progress-fill" id="overallBar"></div></div>
     </div>
-    <nav class="tab-bar">
+<div style="display:flex;gap:8px;padding:8px 16px 10px;justify-content:center">
+      <div id="score-badge-card" style="flex:1;background:#1e7e4e;color:#fff;border-radius:12px;padding:8px 12px;text-align:center;max-width:160px">
+        <div style="font-size:10px;font-weight:600;opacity:0.85;letter-spacing:0.5px">SCORE 得分</div>
+        <div id="score-badge-val" style="font-size:22px;font-weight:800;line-height:1.2">0</div>
+      </div>
+      <div id="timer-badge" style="flex:1;background:#c87941;color:#fff;border-radius:12px;padding:8px 12px;text-align:center;max-width:160px">
+        <div style="font-size:10px;font-weight:600;opacity:0.85;letter-spacing:0.5px">TIME 剩余</div>
+        <div id="timer-badge-val" style="font-size:22px;font-weight:800;line-height:1.2">30:00</div>
+      </div>
+    </div>
+        <nav class="tab-bar">
       <button class="tab-btn active" onclick="switchTab('a')"><span class="tab-icon">🗣️</span>A · Read 朗读</button>
       <button class="tab-btn" onclick="switchTab('b')"><span class="tab-icon">🔁</span>B · Repeat 复述</button>
       <button class="tab-btn" onclick="switchTab('c')"><span class="tab-icon">💬</span>C · Listen 听力</button>
@@ -323,7 +333,7 @@ body{font-size:15px}
       <button class="btn btn-primary btn-record-unified" id="b-rec-btn" onclick="recordB()">🎙 Repeat Now</button>
     </div>
     <div id="b-stt-result"></div>
-    <div class="assess-row">
+    <div class="assess-row" style="display:none">
       <button class="assess-btn green" onclick="scoreB('got')">✅ Got it / 复述成功</button>
       <button class="assess-btn red" onclick="scoreB('missed')">❌ Missed / 未复述</button>
     </div>
@@ -382,8 +392,8 @@ body{font-size:15px}
   </div>
   <div class="card" id="d-card">
     <div class="vocab-q-num" id="d-num">Question 1 / 10</div>
-    <div class="timer-label">TIME REMAINING</div>
-    <div class="timer-display" id="d-timer">15</div>
+    <div class="timer-label" style="display:none">TIME REMAINING</div>
+    <div class="timer-display" id="d-timer" style="display:none">15</div>
     <div class="vocab-word" id="d-word"></div>
     <div class="vocab-instruction">What is the best synonym for this word?</div>
     <div class="mcq-options" id="d-options"></div>
@@ -450,16 +460,16 @@ body{font-size:15px}
   <div id="f-prep-phase" style="display:none">
     <div class="card">
       <div class="card-title">Preparation Time</div>
-      <div class="timer-label">GET READY</div>
-      <div class="timer-display" id="f-prep-timer">30</div>
+      <div class="timer-label" style="display:none">GET READY</div>
+      <div class="timer-display" id="f-prep-timer" style="display:none">30</div>
       <div id="f-selected-topic" style="background:var(--bg);border-radius:10px;padding:12px;font-size:14px;font-weight:600;line-height:1.6;color:var(--text);border:1.5px solid var(--border)"></div>
     </div>
   </div>
   <div id="f-speak-phase" style="display:none">
     <div class="card">
       <div class="card-title">Speaking Time</div>
-      <div class="timer-label">SPEAK NOW</div>
-      <div class="timer-display" id="f-speak-timer">90</div>
+      <div class="timer-label" style="display:none">SPEAK NOW</div>
+      <div class="timer-display" id="f-speak-timer" style="display:none">90</div>
       <div id="f-speak-topic" style="background:var(--bg);border-radius:10px;padding:12px;font-size:14px;font-weight:600;line-height:1.6;color:var(--text);border:1.5px solid var(--border);margin-bottom:16px"></div>
       <div style="text-align:center;margin-top:16px">
         <button class="btn btn-primary btn-record-unified" id="f-rec-btn" onclick="recordF()">🎙 Start Speaking / 开始说话</button>
@@ -512,6 +522,8 @@ function updateGlobalTimerDisplay(){
   var ss=s<10?'0'+s:String(s);
   el.textContent='⏱ '+mm+':'+ss;
   el.className='global-timer'+(globalSecondsLeft<=300?' danger':globalSecondsLeft<=600?' warning':'');
+  var tb=document.getElementById('timer-badge-val');
+  if(tb) tb.textContent=el.textContent.replace('⏱ ','');
 }
 (function(){
   if(localStorage.getItem('ERIC_INVITE_OK')==='1'){
@@ -542,14 +554,14 @@ var A_SENTENCES = [
 ];
 
 var B_SENTENCES = [
-  "The client confirmed the order will arrive on Monday.",
-  "Please submit your expense report before the deadline.",
-  "We have decided to postpone the product launch until further notice.",
-  "Could you forward the presentation to all team members?",
-  "The quarterly review meeting is scheduled for next Wednesday.",
-  "I need you to double-check the figures in the third column.",
-  "The supplier has agreed to extend the contract for six months.",
-  "Make sure the warehouse team is informed about the change."
+  "The marketing team has submitted the annual budget proposal for review.",
+  "Please ensure all safety procedures are followed during the site inspection.",
+  "The project deadline has been moved to the end of next month due to delays.",
+  "We are currently reviewing applications for the senior analyst position.",
+  "Could you arrange a follow-up meeting with the regional sales managers?",
+  "The board has approved the new investment strategy for the coming year.",
+  "All employees are required to complete the compliance training by Friday.",
+  "The customer service department reported a significant increase in complaints."
 ];
 
 var C_SCENARIOS = [
@@ -595,6 +607,11 @@ var F_TOPICS = [
   "Describe a challenging situation at work and how you handled it.",
   "What are the most important qualities of a good team member?",
   "How has technology changed the way you work?"
+];
+var F_TOPIC_KEYWORDS = [
+  ["challenge","situation","problem","solution","handled","resolved","difficult","learned","team","result"],
+  ["quality","qualities","teamwork","communication","reliable","trust","collaborate","support","skill","important"],
+  ["technology","changed","digital","remote","efficient","tools","software","online","automation","work"]
 ];
 
 // ============ STATE ============
@@ -673,6 +690,8 @@ function updateProgress(){
   var cnt = ['a','b','c','d','e','f'].filter(function(k){return scores[k]!=null;}).length;
   var overall = calcWeightedScore(scores);
   document.getElementById('totalScore').textContent=cnt>0?'Score 得分: '+overall:'Score 得分: —';
+  var sb=document.getElementById('score-badge-val');
+  if(sb) sb.textContent=cnt>0?overall:0;
 }
 
 // ============ SECTION A ============
@@ -695,7 +714,7 @@ function initA(){
     html+='<div class="sentence-actions">';
     html+='<div class="audio-bar" onclick="playBarTts(this,A_SENTENCES['+i+'])" style="margin-bottom:6px"><div class="play-icon">▶</div><div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="bar-label">🔊 Listen</div></div>';
     if(isHi){
-      html+='<button class="btn btn-primary btn-record-unified" onclick="recordA('+i+',this)">🎙 Tap to Read / 点击朗读</button>';
+      html+='<button class="btn btn-primary btn-record-unified" onclick="recordA('+i+',this)">🎙 点击朗读</button>';
     }
     html+='</div>';
     if(isHi){
@@ -787,7 +806,7 @@ function recordA(idx,btn){
   startSTTWithInterim(
     function(interim){if(interimEl)interimEl.textContent=interim;},
     function(t){
-      btn.textContent='🎙 Tap to Read / 点击朗读';btn.style.background='';btn.disabled=false;
+      btn.textContent='🎙 点击朗读';btn.style.background='';btn.disabled=false;
       if(interimEl)interimEl.textContent='';
       var c=compareTexts(t,A_SENTENCES[idx]);
       aSTR[idx]={transcript:t,pct:c.pct,missing:c.missing};
@@ -796,7 +815,7 @@ function recordA(idx,btn){
       if(el) showWordHighlight(t,A_SENTENCES[idx],el);
     },
     function(err){
-      btn.textContent='🎙 Tap to Read / 点击朗读';btn.style.background='';btn.disabled=false;
+      btn.textContent='🎙 点击朗读';btn.style.background='';btn.disabled=false;
       if(interimEl)interimEl.textContent='';
       var el=document.getElementById('a-stt-'+idx);
       if(el)el.innerHTML='<div style="color:#e74c3c;font-size:12px;padding:8px">Mic error: '+err+'</div>';
@@ -816,7 +835,7 @@ function renderB(){
   renderBScore();
 }
 var bSTR={};
-function recordB(){var btn=document.getElementById('b-rec-btn');btn.textContent='⏺ Recording... / 录音中...';btn.style.background='#e74c3c';btn.disabled=true;startSTT(function(t){btn.textContent='🎙 Repeat Now';btn.style.background='';btn.disabled=false;var c=compareTexts(t,B_SENTENCES[bIdx]);bSTR[bIdx]={transcript:t,pct:c.pct,missing:c.missing};var el=document.getElementById('b-stt-result');if(el)el.innerHTML='<div style="font-size:11px;color:#27ae60;padding:6px 0">✅ Recorded — feedback after exam</div>';if(c.pct>=60)scoreB('got');else scoreB('missed');},function(err){btn.textContent='🎙 Repeat Now';btn.style.background='';btn.disabled=false;var el=document.getElementById('b-stt-result');if(el)el.innerHTML='<div style="color:#e74c3c;font-size:12px;padding:8px">Mic error: '+err+'</div>';});}
+function recordB(){var btn=document.getElementById('b-rec-btn');btn.textContent='⏺ Recording... / 录音中...';btn.style.background='#e74c3c';btn.disabled=true;startSTT(function(t){btn.textContent='🎙 Repeat Now';btn.style.background='';btn.disabled=false;var c=compareTexts(t,B_SENTENCES[bIdx]);bSTR[bIdx]={transcript:t,pct:c.pct,missing:c.missing};var el=document.getElementById('b-stt-result');if(el){var col=c.pct>=80?'#27ae60':c.pct>=50?'#f39c12':'#e74c3c';var grade=c.pct>=80?'优秀 Excellent':c.pct>=50?'一般 Fair':'需练习 Needs Work';el.innerHTML='<div style="background:#f0f7ff;border-radius:10px;padding:10px 14px;margin-top:8px;border-left:3px solid '+col+'"><div style="font-size:12px;font-weight:700;color:'+col+'">复述准确率: '+c.pct+'% — '+grade+'</div><div style="font-size:11px;color:#555;margin-top:4px">你说了: <em>"'+t+'"</em></div>'+(c.missing.length?'<div style="font-size:11px;color:#e74c3c;margin-top:4px">漏词: <strong>'+c.missing.join(', ')+'</strong></div>':'')+'</div>';}if(c.pct>=50)scoreB('got');else scoreB('missed');},function(err){btn.textContent='🎙 Repeat Now';btn.style.background='';btn.disabled=false;var el=document.getElementById('b-stt-result');if(el)el.innerHTML='<div style="color:#e74c3c;font-size:12px;padding:8px">Mic error: '+err+'</div>';});}
 function playB(){
   tts(B_SENTENCES[bIdx]);
   document.getElementById('b-text-display').textContent='🔊 Playing...';
@@ -1041,8 +1060,8 @@ function startFSpeak(){
     if(el){el.textContent=sec;el.className='timer-display'+(sec<=15?' danger':sec<=30?' warning':'');}
     if(sec<=0){
       clearInterval(fSpeakTimer);
-      document.getElementById('f-speak-phase').style.display='none';
-      document.getElementById('f-rate-phase').style.display='block';
+      // Timer reached 0 but don't force transition - user can keep speaking
+      // Just show a hint in the timer (but it's hidden anyway)
     }
   },1000);
 }
@@ -1179,7 +1198,8 @@ function renderFScore(){
   }
 }
 var fSTRText='';
-function recordF(){var btn=document.getElementById('f-rec-btn');btn.textContent='⏺ Recording... / 录音中...';btn.style.background='#e74c3c';btn.disabled=true;var sr=startSTT(function(t){fSTRText=t;btn.textContent='🎙 Start Speaking / 开始说话';btn.style.background='';btn.disabled=false;var el=document.getElementById('f-stt-result');if(el)el.innerHTML='<div style="font-size:11px;color:#27ae60;padding:6px 0">✅ Recorded — feedback after exam</div>';},function(err){btn.textContent='🎙 Start Speaking / 开始说话';btn.style.background='';btn.disabled=false;});if(sr)setTimeout(function(){try{sr.stop();}catch(e){}},5000);}
+function recordF(){var btn=document.getElementById('f-rec-btn');btn.textContent='⏺ Recording... / 录音中...';btn.style.background='#e74c3c';btn.disabled=true;var sr=startSTT(function(t){fSTRText=t;btn.textContent='🎙 Start Speaking / 开始说话';btn.style.background='';btn.disabled=false;var el=document.getElementById('f-stt-result');if(el&&fSTRText){var keywords=fSelected>=0?F_TOPIC_KEYWORDS[fSelected]:[];var hit=keywords.filter(function(k){return fSTRText.toLowerCase().includes(k.toLowerCase());}).length;var pct=keywords.length?Math.round(hit/keywords.length*100):0;var col=pct>=70?'#27ae60':pct>=40?'#f39c12':'#e74c3c';el.innerHTML='<div style="background:#f0f7ff;border-radius:10px;padding:10px 14px;border-left:3px solid '+col+'"><div style="font-size:12px;font-weight:700;color:'+col+'">关键词覆盖: '+hit+'/'+keywords.length+' ('+pct+'%)</div><div style="font-size:11px;color:#555;margin-top:4px">你说了: <em>"'+fSTRText.substring(0,100)+(fSTRText.length>100?'...':'')+'"</em></div></div>';} else if(el) el.innerHTML='<div style="font-size:11px;color:#27ae60;padding:6px 0">✅ Recorded — rate yourself below</div>';// Show rate phase after recording
+document.getElementById('f-speak-phase').style.display='none';document.getElementById('f-rate-phase').style.display='block';},function(err){btn.textContent='🎙 Start Speaking / 开始说话';btn.style.background='';btn.disabled=false;});if(sr)setTimeout(function(){try{sr.stop();}catch(e){}},15000);}
 function showReportAnalysis(){
   var old=document.getElementById('report-analysis');if(old)old.remove();
   var html='<div id="report-analysis" style="background:#fff;border-radius:16px;padding:20px;margin-top:16px;box-shadow:0 2px 12px rgba(46,111,186,0.12);border:1px solid #d0dff0">';
@@ -1253,6 +1273,13 @@ function addStressMarks(sentence) {
     .replace(/([,;]) /g, '$1 <span class="pause-mark">|</span> ');
 }
 
+// ============ SUBMIT EXAM ============
+function submitExam(){
+  if(confirm('确定提交考试？\nReady to submit?')){
+    endExam();
+  }
+}
+
 // ============ INIT ============
 window.addEventListener('load',function(){
   initA(); initB(); initC(); initD(); initE(); initF();
@@ -1260,6 +1287,11 @@ window.addEventListener('load',function(){
   speechSynthesis.getVoices(); // warm up
 });
 </script>
+<div style="padding:16px;text-align:center;background:#fff;border-top:1px solid #e0e6ef">
+  <button onclick="submitExam()" style="width:100%;max-width:400px;height:52px;background:#1e7e4e;color:#fff;border:none;border-radius:26px;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(30,126,78,0.35);letter-spacing:0.3px">
+    ✅ 提交考试 Submit Exam
+  </button>
+</div>
 </div>
 </body>
 </html>
