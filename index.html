@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-1021-linear">
+<meta name="app-version" content="20260331-1036-stable">
 <meta name="theme-color" content="#2e6fba">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -513,26 +513,23 @@ function renderVocabQ(q){
     +'<div class="mcq-options">';
   D_SHUFFLED[q.idx].forEach(function(origIdx,pos){
     var cls='mcq-opt';
-    if(ans!=null){
-      if(ans.choice===origIdx && origIdx===w.correct) cls+=' correct';
-      else if(ans.choice===origIdx && origIdx!==w.correct) cls+=' wrong';
-      else if(ans.choice!==origIdx && origIdx===w.correct) cls+=' correct';
-    }
+    if(ans!=null && ans.choice===origIdx){ cls+=' selected'; }
     var onclick=ans!=null?'':'onclick="selectVocab('+origIdx+','+q.idx+','+curQ+')"';
     html+='<div class="'+cls+'" '+onclick+'><span class="opt-key">'+keys[pos]+'</span> '+w.opts[origIdx]+'</div>';
   });
   html+='</div>';
-  if(ans!=null){
-    var correct=ans.choice===w.correct;
-    html+='<div style="margin-top:12px;padding:10px 12px;border-radius:10px;background:'+(correct?'#eafaf1':'#fdf0ef')+';font-size:13px;font-weight:600;color:'+(correct?'#27ae60':'#e74c3c')+'">'+(correct?'✅ Correct! 正确！':'❌ Correct answer: '+w.opts[w.correct])+'</div>';
-  }
   return html;
 }
 
 function selectVocab(origIdx,wIdx,qIdx){
   var w=D_WORDS[wIdx];
-  onAnswered(qIdx,{sec:'D',choice:origIdx,correct:origIdx===w.correct,idx:wIdx});
-  renderQuestion();
+  ANSWERS[qIdx]={sec:'D',choice:origIdx,correct:origIdx===w.correct,idx:wIdx};
+  renderProgress();
+  renderVocabHighlight(qIdx);
+  setTimeout(function(){
+    if(qIdx<QUEST_SEQ.length-1){curQ=qIdx+1;renderQuestion();}
+    else{showFinalResults();}
+  },800);
 }
 
 // ============ E: COMPREHENSION ============
@@ -552,26 +549,45 @@ function renderCompQ(q){
     +'<div class="mcq-options">';
   keys.forEach(function(k,oi){
     var cls='mcq-opt';
-    if(ans!=null){
-      if(ans.choice===oi && oi===qdata.correct) cls+=' correct';
-      else if(ans.choice===oi && oi!==qdata.correct) cls+=' wrong';
-      else if(ans.choice!==oi && oi===qdata.correct) cls+=' correct';
-    }
+    if(ans!=null && ans.choice===oi){ cls+=' selected'; }
     var onclick=ans!=null?'':'onclick="selectComp('+oi+','+qdata.correct+','+curQ+')"';
     html+='<div class="'+cls+'" '+onclick+'><span class="opt-key">'+k+'</span> '+qdata.opts[oi]+'</div>';
   });
   html+='</div>';
-  if(ans!=null){
-    var correct=ans.choice===qdata.correct;
-    html+='<div style="margin-top:12px;padding:10px 12px;border-radius:10px;background:'+(correct?'#eafaf1':'#fdf0ef')+';font-size:13px;font-weight:600;color:'+(correct?'#27ae60':'#e74c3c')+'">'+(correct?'✅ Correct! 正确！':'❌ Correct: '+qdata.opts[qdata.correct])+'</div>';
-  }
+
   return html;
 }
 
 function selectComp(optIdx,correct,qIdx){
-  onAnswered(qIdx,{sec:'E',choice:optIdx,correct:optIdx===correct});
-  renderQuestion();
+  ANSWERS[qIdx]={sec:'E',choice:optIdx,correct:optIdx===correct};
+  renderProgress();
+  renderCompHighlight(qIdx);
+  setTimeout(function(){
+    if(qIdx<QUEST_SEQ.length-1){curQ=qIdx+1;renderQuestion();}
+    else{showFinalResults();}
+  },800);
 }
+function renderVocabHighlight(qIdx){
+  var ans=ANSWERS[qIdx];
+  if(!ans) return;
+  var opts=document.querySelectorAll('.mcq-opt');
+  var q=QUEST_SEQ[qIdx];
+  var shuffled=D_SHUFFLED[q.idx]||[];
+  opts.forEach(function(el,pos){
+    el.removeAttribute('onclick');
+    if(shuffled[pos]===ans.choice) el.classList.add('selected');
+  });
+}
+function renderCompHighlight(qIdx){
+  var ans=ANSWERS[qIdx];
+  if(!ans) return;
+  var opts=document.querySelectorAll('.mcq-opt');
+  opts.forEach(function(el,oi){
+    el.removeAttribute('onclick');
+    if(oi===ans.choice) el.classList.add('selected');
+  });
+}
+
 
 // ============ F: SPEAKING ============
 function renderSpeakQ(q){
