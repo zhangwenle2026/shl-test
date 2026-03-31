@@ -472,7 +472,10 @@ body{font-size:15px}
       <div class="timer-display" id="f-speak-timer" style="display:none">90</div>
       <div id="f-speak-topic" style="background:var(--bg);border-radius:10px;padding:12px;font-size:14px;font-weight:600;line-height:1.6;color:var(--text);border:1.5px solid var(--border);margin-bottom:16px"></div>
       <div style="text-align:center;margin-top:16px">
-        <button class="btn btn-primary btn-record-unified" id="f-rec-btn" onclick="recordF()">🎙 Start Speaking / 开始说话</button>
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <button class="btn btn-tts" id="f-listen-btn" onclick="playFTopic(this)" style="flex:1;height:48px;font-size:14px">🔊 朗读题目</button>
+          <button class="btn btn-primary btn-record-unified" id="f-rec-btn" onclick="recordF()" style="flex:2;height:48px">🎙 开始演讲 / Start Speaking</button>
+        </div>
       </div>
       <div id="f-stt-result" style="margin-top:10px"></div>
     </div>
@@ -714,7 +717,7 @@ function initA(){
     html+='<div class="sentence-actions">';
     html+='<div class="audio-bar" onclick="playBarTts(this,A_SENTENCES['+i+'])" style="margin-bottom:6px"><div class="play-icon">▶</div><div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="bar-label">🔊 Listen</div></div>';
     if(isHi){
-      html+='<button class="btn btn-primary btn-record-unified" onclick="recordA('+i+',this)">🎙 点击朗读</button>';
+      html+='<button class="btn btn-primary btn-record-unified" onclick="recordA('+i+',this)">🎙 朗读</button>';
     }
     html+='</div>';
     if(isHi){
@@ -806,7 +809,7 @@ function recordA(idx,btn){
   startSTTWithInterim(
     function(interim){if(interimEl)interimEl.textContent=interim;},
     function(t){
-      btn.textContent='🎙 点击朗读';btn.style.background='';btn.disabled=false;
+      btn.textContent='🎙 朗读';btn.style.background='';btn.disabled=false;
       if(interimEl)interimEl.textContent='';
       var c=compareTexts(t,A_SENTENCES[idx]);
       aSTR[idx]={transcript:t,pct:c.pct,missing:c.missing};
@@ -815,7 +818,7 @@ function recordA(idx,btn){
       if(el) showWordHighlight(t,A_SENTENCES[idx],el);
     },
     function(err){
-      btn.textContent='🎙 点击朗读';btn.style.background='';btn.disabled=false;
+      btn.textContent='🎙 朗读';btn.style.background='';btn.disabled=false;
       if(interimEl)interimEl.textContent='';
       var el=document.getElementById('a-stt-'+idx);
       if(el)el.innerHTML='<div style="color:#e74c3c;font-size:12px;padding:8px">Mic error: '+err+'</div>';
@@ -1286,6 +1289,23 @@ window.addEventListener('load',function(){
   updateProgress();
   speechSynthesis.getVoices(); // warm up
 });
+
+function playFTopic(btn) {
+  var topicText = fSelected >= 0 ? F_TOPICS[fSelected] : '';
+  if (!topicText) return;
+  var bar = btn;
+  window.speechSynthesis.cancel();
+  bar.textContent = '⏹ 停止';
+  var u = new SpeechSynthesisUtterance(topicText);
+  u.lang = 'en-US'; u.rate = 0.85; u.pitch = 1.0;
+  var voices = window.speechSynthesis.getVoices();
+  var en = voices.find(function(v){return v.lang==='en-US'&&v.name.includes('Samantha');}) ||
+           voices.find(function(v){return v.lang.startsWith('en');});
+  if (en) u.voice = en;
+  u.onend = function() { bar.textContent = '🔊 朗读题目'; };
+  u.onerror = function() { bar.textContent = '🔊 朗读题目'; };
+  setTimeout(function(){ window.speechSynthesis.speak(u); }, 50);
+}
 </script>
 <div style="padding:16px;text-align:center;background:#fff;border-top:1px solid #e0e6ef">
   <button onclick="submitExam()" style="width:100%;max-width:400px;height:52px;background:#1e7e4e;color:#fff;border:none;border-radius:26px;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(30,126,78,0.35);letter-spacing:0.3px">
