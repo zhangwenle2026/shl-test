@@ -246,12 +246,12 @@ body{font-size:15px}
 
 <div id="invite-overlay" style="position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#1a4a8a,#2e6fba);display:flex;align-items:center;justify-content:center;padding:24px">
   <div style="background:#fff;border-radius:20px;padding:32px 24px;width:100%;max-width:360px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,0.25)">
-    <div style="font-size:40px;margin-bottom:12px">🔐</div>
+    <div style="font-size:40px;margin-bottom:12px">👤</div>
     <div style="font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:#1a4a8a;margin-bottom:6px">ERIC SHL TEST</div>
-    <div style="font-size:13px;color:#6b7c93;margin-bottom:24px">Enter your invite code to access</div>
-    <input id="invite-input" type="text" placeholder="Invite Code / 邀请码" style="width:100%;padding:14px 16px;border:2px solid #d0dff0;border-radius:12px;font-size:16px;text-align:center;letter-spacing:2px;outline:none;margin-bottom:12px;font-family:inherit;text-transform:uppercase;height:52px" oninput="this.value=this.value.toUpperCase()">
-    <div id="invite-error" style="color:#e74c3c;font-size:12px;margin-bottom:10px;display:none">Invalid code. Please try again.</div>
-    <button onclick="checkInvite()" style="width:100%;padding:14px;background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;height:52px">Enter / 进入 →</button>
+    <div style="font-size:13px;color:#6b7c93;margin-bottom:24px">请输入你的名字 Enter Your Name</div>
+    <input id="invite-input" type="text" placeholder="你的名字 / Your name" style="width:100%;padding:14px 16px;border:2px solid #d0dff0;border-radius:12px;font-size:16px;text-align:center;outline:none;margin-bottom:12px;font-family:inherit;height:52px">
+    <div id="invite-error" style="color:#e74c3c;font-size:12px;margin-bottom:10px;display:none">请输入你的名字 Please enter your name</div>
+    <button onclick="checkInvite()" style="width:100%;padding:14px;background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;height:52px">开始测试 Start Test</button>
     <div style="font-size:11px;color:#aab;margin-top:16px">Powered by ERIC · Meituan Keeta Brazil</div>
   </div>
 </div>
@@ -453,9 +453,7 @@ body{font-size:15px}
   <div id="f-step1" class="card">
     <div class="card-title" style="margin-bottom:12px">📋 Step 1 · 选择题目 Choose Topic</div>
     <div id="f-topics"></div>
-    <button class="btn btn-tts" id="f-listen-btn" onclick="playFTopic(this)" style="width:100%;height:44px;margin-top:10px;font-size:14px;display:none">
-      🔊 朗读题目 Listen to Topic
-    </button>
+
     <button class="btn btn-primary" onclick="goFStep2()" style="width:100%;height:48px;margin-top:10px;font-size:15px;font-weight:700">
       ▶ 开始演讲 Start Speaking
     </button>
@@ -465,10 +463,7 @@ body{font-size:15px}
   <div id="f-step2" class="card" style="display:none">
     <div class="card-title" style="margin-bottom:10px">🎙 Step 2 · 开始演讲 Speak Now</div>
     <div id="f-speak-topic" style="background:#f0f7ff;border-radius:10px;padding:14px;font-size:15px;font-weight:600;line-height:1.7;color:#1a2a3a;border:1.5px solid #c5daf5;margin-bottom:16px"></div>
-    <div style="display:flex;gap:8px;margin-bottom:10px">
-      <button class="btn btn-tts" id="f-listen-btn2" onclick="playFTopic(this)" style="flex:1;height:48px;font-size:14px">🔊 朗读题目</button>
-      <button class="btn btn-primary btn-record-unified" id="f-rec-btn" onclick="recordF()" style="flex:2;height:48px">🎙 开始演讲</button>
-    </div>
+    <button class="btn btn-primary btn-record-unified" id="f-rec-btn" onclick="recordF()" style="width:100%;height:52px;font-size:15px;font-weight:700">🎙 开始演讲 Start Speaking</button>
     <div id="f-stt-result" style="margin-top:8px"></div>
   </div>
 
@@ -495,8 +490,8 @@ body{font-size:15px}
 </div>
 
 <script>
-// version: 20260331-0935-ftalk
-var INVITE_CODE='ERIC';
+// version: 20260331-0953-fix4
+var userName = '';
 // ============ GLOBAL TIMER ============
 var globalTimerInterval=null;
 var globalSecondsLeft=30*60;
@@ -524,13 +519,14 @@ function updateGlobalTimerDisplay(){
   var tb=document.getElementById('timer-badge-val');
   if(tb) tb.textContent=el.textContent.replace('⏱ ','');
 }
-(function(){
-  if(localStorage.getItem('ERIC_INVITE_OK')==='1'){
-    document.getElementById('invite-overlay').style.display='none';
-    startGlobalTimer();
-  }
-})();
-function checkInvite(){var v=(document.getElementById('invite-input').value||'').trim().toUpperCase();if(v===INVITE_CODE.toUpperCase()){localStorage.setItem('ERIC_INVITE_OK','1');document.getElementById('invite-overlay').style.display='none';startGlobalTimer();}else{document.getElementById('invite-error').style.display='block';document.getElementById('invite-input').style.borderColor='#e74c3c';setTimeout(function(){document.getElementById('invite-input').style.borderColor='#d0dff0';},1500);}}
+
+function checkInvite(){
+  var val=document.getElementById('invite-input').value.trim();
+  if(!val){alert('请输入你的名字 Please enter your name');return;}
+  userName=val;
+  document.getElementById('invite-overlay').style.display='none';
+  startGlobalTimer();
+}
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.getElementById('invite-overlay').style.display!=='none')checkInvite();});
 var SRClass=window.SpeechRecognition||window.webkitSpeechRecognition;
 function startSTT(onResult,onError){if(!SRClass){alert('Speech recognition not supported. Use Safari iOS or Chrome desktop.');if(onError)onError('not-supported');return null;}var sr=new SRClass();sr.lang='en-US';sr.continuous=false;sr.interimResults=false;sr.maxAlternatives=3;sr.onresult=function(e){onResult(e.results[0][0].transcript,e.results[0][0].confidence);};sr.onerror=function(e){if(onError)onError(e.error);};sr.start();return sr;}
@@ -614,13 +610,13 @@ var F_TOPIC_KEYWORDS = [
 ];
 
 // ============ STATE ============
-var scores = JSON.parse(localStorage.getItem(KEY+'_scores') || '{}');
-var aRatings = JSON.parse(localStorage.getItem(KEY+'_aRatings') || '[]');
-var bResults = JSON.parse(localStorage.getItem(KEY+'_bResults') || '[]');
-var cResults = JSON.parse(localStorage.getItem(KEY+'_cResults') || '[]');
-var dResults = JSON.parse(localStorage.getItem(KEY+'_dResults') || '[]');
-var eResults = JSON.parse(localStorage.getItem(KEY+'_eResults') || '[]');
-var fRubric  = JSON.parse(localStorage.getItem(KEY+'_fRubric')  || '{}');
+var scores = {};
+var aRatings = [];
+var bResults = [];
+var cResults = [];
+var dResults = [];
+var eResults = [];
+var fRubric  = {};
 
 var bIdx=0, cIdx=0, dIdx=0;
 var dTimer=null;
@@ -733,7 +729,6 @@ function initA(){
 
 function rateA(idx,rating){
   aRatings[idx]=rating;
-  localStorage.setItem(KEY+'_aRatings',JSON.stringify(aRatings));
   var stars=document.querySelectorAll('#star-'+idx+' .star');
   stars.forEach(function(s,i){s.classList.toggle('active',i<rating);});
   renderAScore();
@@ -746,7 +741,6 @@ function renderAScore(){
   var avg=sum/aHighlighted.length;
   var pct=Math.round(avg/5*100);
   scores.a=pct;
-  localStorage.setItem(KEY+'_scores',JSON.stringify(scores));
   document.getElementById('a-score-display').innerHTML='<strong style="color:var(--primary);font-size:18px">'+pct+'</strong>/100 ('+rated.length+'/'+aHighlighted.length+' rated)';
   updateProgress();
 }
@@ -846,7 +840,6 @@ function revealB(){
 }
 function scoreB(v){
   bResults[bIdx]=v;
-  localStorage.setItem(KEY+'_bResults',JSON.stringify(bResults));
   renderBScore();
 }
 function renderBScore(){
@@ -855,7 +848,6 @@ function renderBScore(){
   if(total===0){document.getElementById('b-score-display').textContent='Complete all 8 sentences to see your score.';return;}
   var pct=Math.round(got/8*100);
   scores.b=pct;
-  localStorage.setItem(KEY+'_scores',JSON.stringify(scores));
   document.getElementById('b-score-display').innerHTML='<strong style="color:var(--primary);font-size:18px">'+pct+'</strong>/100 ('+got+'/8 correct)';
   updateProgress();
 }
@@ -878,7 +870,6 @@ function playC(){tts(C_SCENARIOS[cIdx].text);}
 function scoreC(v){
   document.getElementById('c-answer-reveal').style.display='block';
   cResults[cIdx]=v;
-  localStorage.setItem(KEY+'_cResults',JSON.stringify(cResults));
   renderCScore();
 }
 function renderCScore(){
@@ -887,7 +878,6 @@ function renderCScore(){
   if(total===0){document.getElementById('c-score-display').textContent='Complete all 4 questions to see your score.';return;}
   var pct=Math.round(conf/4*100);
   scores.c=pct;
-  localStorage.setItem(KEY+'_scores',JSON.stringify(scores));
   document.getElementById('c-score-display').innerHTML='<strong style="color:var(--primary);font-size:18px">'+pct+'</strong>/100 ('+conf+'/4 confident)';
   updateProgress();
 }
@@ -911,7 +901,7 @@ function renderD(){
     var isCorrect=(origIdx===w.correct);
     var stored=dResults[dIdx];
     var cls='mcq-opt';
-    if(stored!=null){cls+=isCorrect?' correct':(stored===origIdx?' wrong':'');}
+    if(stored!=null){cls+=stored===origIdx?(isCorrect?' correct':' wrong'):'';}
     html+='<div class="'+cls+'" onclick="selectD('+origIdx+')">';
     html+='<span class="opt-key">'+keys[pos]+'</span> '+w.opts[origIdx]+'</div>';
   });
@@ -922,7 +912,6 @@ function renderD(){
 function selectD(optIdx){
   if(dResults[dIdx]!=null) return; // already answered
   dResults[dIdx]=optIdx;
-  localStorage.setItem(KEY+'_dResults',JSON.stringify(dResults));
   stopDTimer();
   renderD();
   renderDScore();
@@ -951,7 +940,6 @@ function renderDScore(){
   if(total===0){document.getElementById('d-score-display').textContent='Complete all 10 questions to see your score.';return;}
   var pct=Math.round(correct/10*100);
   scores.d=pct;
-  localStorage.setItem(KEY+'_scores',JSON.stringify(scores));
   document.getElementById('d-score-display').innerHTML='<strong style="color:var(--primary);font-size:18px">'+pct+'</strong>/100 ('+correct+'/10 correct)';
   updateProgress();
 }
@@ -972,7 +960,7 @@ function initE(){
       q.opts.forEach(function(opt,oi){
         var stored=eResults[eIdx];
         var cls='mcq-opt';
-        if(stored!=null){cls+=(oi===q.correct)?' correct':(stored===oi?' wrong':'');}
+        if(stored!=null){cls+=stored===oi?(oi===q.correct?' correct':' wrong'):'';}
         html+='<div class="'+cls+'" onclick="selectE('+eIdx+','+oi+','+q.correct+')">';
         html+='<span class="opt-key">'+keys[oi]+'</span> '+opt+'</div>';
       });
@@ -985,7 +973,6 @@ function initE(){
 function selectE(eIdx,optIdx,correct){
   if(eResults[eIdx]!=null) return;
   eResults[eIdx]=optIdx;
-  localStorage.setItem(KEY+'_eResults',JSON.stringify(eResults));
   initE();
   renderEScore();
 }
@@ -1001,7 +988,6 @@ function renderEScore(){
   if(total===0){document.getElementById('e-score-display').textContent='Answer all 6 questions to see your score.';return;}
   var pct=Math.round(correct/6*100);
   scores.e=pct;
-  localStorage.setItem(KEY+'_scores',JSON.stringify(scores));
   document.getElementById('e-score-display').innerHTML='<strong style="color:var(--primary);font-size:18px">'+pct+'</strong>/100 ('+correct+'/6 correct)';
   updateProgress();
 }
@@ -1033,18 +1019,14 @@ function selectFTopic(i){
   fSelected=i;
   document.querySelectorAll('.topic-card').forEach(function(c){c.classList.remove('selected');});
   document.getElementById('f-topic-'+i).classList.add('selected');
-  document.getElementById('f-listen-btn').style.display='block';
+
 }
 function goFStep2(){
   if(fSelected<0){alert('请先选择一个题目 Please select a topic first');return;}
   document.getElementById('f-step1').style.display='none';
   document.getElementById('f-step2').style.display='block';
   document.getElementById('f-speak-topic').textContent=F_TOPICS[fSelected];
-  // 自动朗读题目
-  setTimeout(function(){
-    var btn=document.getElementById('f-listen-btn2');
-    if(btn) playFTopic(btn);
-  },300);
+
 }
 function rateF(dim,val){
   fRubric[dim]=val;
@@ -1056,11 +1038,9 @@ function submitF(){
     alert('Please rate all 4 dimensions.');return;
   }
   fRubric.submitted=true;
-  localStorage.setItem(KEY+'_fRubric',JSON.stringify(fRubric));
   var avg=(fRubric.fluency+fRubric.vocab+fRubric.logic+fRubric.grammar)/4;
   var pct=Math.round(avg/5*100);
   scores.f=pct;
-  localStorage.setItem(KEY+'_scores',JSON.stringify(scores));
   document.getElementById('f-score-display').innerHTML='<strong style="color:var(--primary);font-size:18px">'+pct+'</strong>/100';
   updateProgress();
   renderFScore();
@@ -1072,10 +1052,8 @@ function endExam(){
   // compute F score from rubric if available
   if(fRubric.fluency&&fRubric.vocab&&fRubric.logic&&fRubric.grammar&&!fRubric.submitted){
     fRubric.submitted=true;
-    localStorage.setItem(KEY+'_fRubric',JSON.stringify(fRubric));
     var avg=(fRubric.fluency+fRubric.vocab+fRubric.logic+fRubric.grammar)/4;
     scores.f=Math.round(avg/5*100);
-    localStorage.setItem(KEY+'_scores',JSON.stringify(scores));
   }
   updateProgress();
   showResultModal();
@@ -1153,7 +1131,7 @@ function showResultModal(){
   });
   var modal='<div id="result-modal"><div class="result-card">';
   modal+='<div style="font-size:32px;text-align:center;margin-bottom:8px">🎓</div>';
-  modal+='<h2>Test Result / 测试结果</h2>';
+  modal+='<h2>'+(userName?userName+' 的测试结果':'Test Result / 测试结果')+'</h2>';
   modal+='<div class="result-score-big">'+overall+'</div>';
   modal+='<canvas id="radarChart" width="280" height="280" style="display:block;margin:0 auto 10px"></canvas>';
   modal+='<div class="result-level" style="color:'+cefrResult.color+'">CEFR Level: '+level+'</div>';
