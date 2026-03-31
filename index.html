@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-2305-longer-review">
+<meta name="app-version" content="20260331-2325-stability">
 <meta name="theme-color" content="#4a90d9">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -708,6 +708,9 @@ function updateTimerDisplay(){
 
 // ============ INVITE / LOGIN ============
 function startMainApp(){
+  // Reset all state before starting
+  ANSWERS={};curQ=0;fStep=1;fRubric={fluency:0,vocab:0,logic:0,grammar:0};fSTRText='';
+  try{window.speechSynthesis.cancel();}catch(e){}
   document.getElementById('welcome-screen').style.display='none';
   document.getElementById('float-nav').style.display='block';
   document.getElementById('nav-toggle-btn').style.display='flex';
@@ -1363,12 +1366,16 @@ function playBarTts(barEl,text){
   barEl.classList.add('playing');barEl.querySelector('.play-icon').textContent='⏹';
   window.speechSynthesis.cancel();
   var u=new SpeechSynthesisUtterance(text);
-  u.lang='en-GB';u.rate=0.9;
+  u.lang='en-US';u.rate=0.9;
   u.onend=function(){barEl.classList.remove('playing');barEl.querySelector('.play-icon').textContent='▶';window._curBar=null;};
   u.onerror=function(){barEl.classList.remove('playing');barEl.querySelector('.play-icon').textContent='▶';window._curBar=null;};
   var voices=window.speechSynthesis.getVoices();
-  var en=voices.filter(function(v){return v.lang.startsWith('en');});
-  if(en.length)u.voice=en[0];
+  // Prefer en-US (American), fallback to en-GB (British), then any English voice
+  var usVoice=voices.filter(function(v){return v.lang==='en-US';});
+  var gbVoice=voices.filter(function(v){return v.lang==='en-GB';});
+  var enVoice=voices.filter(function(v){return v.lang.startsWith('en');});
+  var picked=usVoice[0]||gbVoice[0]||enVoice[0]||null;
+  if(picked)u.voice=picked;
   window.speechSynthesis.speak(u);
 }
 
@@ -1386,7 +1393,7 @@ function startSTT(onResult,onError){
   var fired=false;
   function _start(){
     var sr=new SRClass();sr.lang='en-US';sr.continuous=false;sr.interimResults=false;sr.maxAlternatives=3;
-    sr.onresult=function(e){if(!fired){fired=true;onResult(e.results[0][0].transcript,e.results[0][0].confidence);}};
+    sr.onresult=function(e){if(!fired&&e.results&&e.results.length>0&&e.results[0].length>0){fired=true;onResult(e.results[0][0].transcript,e.results[0][0].confidence);}};
     sr.onend=function(){if(!fired){fired=true;if(onError)onError('no-speech');}};
     sr.onerror=function(e){if(!fired){fired=true;if(onError)onError(e.error);}};
     try{sr.start();}catch(e){if(!fired){fired=true;if(onError)onError('start-failed');}}
