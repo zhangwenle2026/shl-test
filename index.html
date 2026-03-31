@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-1945-welcome-theme">
+<meta name="app-version" content="20260331-1955-welcome-compact">
 <meta name="theme-color" content="#4a90d9">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -485,69 +485,50 @@ textarea:focus{border-color:var(--primary);background:#fff}
 
 
 <!-- WELCOME SCREEN -->
-<div id="welcome-screen" style="display:none;position:fixed;inset:0;z-index:9998;background:linear-gradient(160deg,#e8f0fb,#f0f7ff);overflow-y:auto;padding:28px 20px 40px;">
-  <div style="max-width:400px;margin:0 auto;">
-    <div style="text-align:center;margin-bottom:24px;">
-      <div style="font-size:44px;margin-bottom:8px">📋</div>
-      <div style="font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:#1a4a8a;margin-bottom:4px">Welcome to ERIC SHL Test</div>
-      <div style="font-size:13px;color:#6b7c93">欢迎参加 ERIC SHL 英语模拟测评</div>
+<div id="welcome-screen" style="display:none;position:fixed;inset:0;z-index:9998;background:linear-gradient(160deg,#e8f0fb,#f0f7ff);overflow:hidden;padding:0;">
+  <div style="max-width:420px;margin:0 auto;height:100%;display:flex;flex-direction:column;justify-content:center;padding:20px 20px 24px;">
+    <div style="text-align:center;margin-bottom:14px;flex-shrink:0;">
+      <div style="font-size:36px;line-height:1;margin-bottom:6px">📋</div>
+      <div style="font-family:'Montserrat',sans-serif;font-size:18px;font-weight:800;color:#1a4a8a;margin-bottom:2px">ERIC SHL Test</div>
+      <div style="font-size:12px;color:#6b7c93">28 questions · 30 min · 6 sections &nbsp;｜&nbsp; 共28题 · 约30分钟</div>
     </div>
-
-    <!-- EN section -->
-    <div style="background:#fff;border-radius:16px;box-shadow:0 4px 18px rgba(0,0,0,0.08);padding:20px 20px 18px;margin-bottom:14px;">
-      <div style="font-size:13px;font-weight:700;color:#1a4a8a;margin-bottom:12px;letter-spacing:0.5px">📌 TEST OVERVIEW</div>
-      <div style="font-size:12.5px;color:#2a3a4a;line-height:1.8;">
-        This mock test simulates the SHL oral English assessment used by Meituan. It covers <strong>6 sections</strong> and <strong>28 questions</strong> in total, with a recommended time limit of <strong>30 minutes</strong>.
-      </div>
-      <div style="margin-top:12px;display:grid;gap:7px;">
-        <div style="display:flex;align-items:center;gap:10px;background:#f0f6ff;border-radius:10px;padding:9px 12px;">
-          <span style="width:26px;height:26px;border-radius:8px;background:#2e6fba;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0">A</span>
-          <span style="font-size:12px;color:#2a3a4a"><strong>Read Aloud</strong> · 3 questions · Read sentences clearly</span>
+    <div style="background:#fff;border-radius:16px;box-shadow:0 4px 18px rgba(0,0,0,0.08);padding:14px 14px 12px;margin-bottom:12px;flex-shrink:0;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;">
+        <div style="display:flex;align-items:center;gap:8px;background:#f0f6ff;border-radius:9px;padding:8px 10px;">
+          <span style="width:24px;height:24px;border-radius:7px;background:#2e6fba;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">A</span>
+          <span style="font-size:11px;color:#2a3a4a;line-height:1.3"><strong>Read Aloud</strong><br>朗读句子 · 3题</span>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;background:#f0fff4;border-radius:10px;padding:9px 12px;">
-          <span style="width:26px;height:26px;border-radius:8px;background:#27ae60;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0">B</span>
-          <span style="font-size:12px;color:#2a3a4a"><strong>Repeat Sentence</strong> · 4 questions · Repeat accurately</span>
+        <div style="display:flex;align-items:center;gap:8px;background:#f0fff4;border-radius:9px;padding:8px 10px;">
+          <span style="width:24px;height:24px;border-radius:7px;background:#27ae60;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">B</span>
+          <span style="font-size:11px;color:#2a3a4a;line-height:1.3"><strong>Repeat</strong><br>复述句子 · 4题</span>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;background:#fffbf0;border-radius:10px;padding:9px 12px;">
-          <span style="width:26px;height:26px;border-radius:8px;background:#f39c12;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0">C</span>
-          <span style="font-size:12px;color:#2a3a4a"><strong>Listen &amp; Answer</strong> · 3 questions · Answer after listening</span>
+        <div style="display:flex;align-items:center;gap:8px;background:#fffbf0;border-radius:9px;padding:8px 10px;">
+          <span style="width:24px;height:24px;border-radius:7px;background:#f39c12;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">C</span>
+          <span style="font-size:11px;color:#2a3a4a;line-height:1.3"><strong>Listen &amp; Answer</strong><br>听力回答 · 3题</span>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;background:#fdf4ff;border-radius:10px;padding:9px 12px;">
-          <span style="width:26px;height:26px;border-radius:8px;background:#8e44ad;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0">D</span>
-          <span style="font-size:12px;color:#2a3a4a"><strong>Vocabulary</strong> · 10 questions · Choose the best word</span>
+        <div style="display:flex;align-items:center;gap:8px;background:#fdf4ff;border-radius:9px;padding:8px 10px;">
+          <span style="width:24px;height:24px;border-radius:7px;background:#8e44ad;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">D</span>
+          <span style="font-size:11px;color:#2a3a4a;line-height:1.3"><strong>Vocabulary</strong><br>词汇选择 · 10题</span>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;background:#fff5f5;border-radius:10px;padding:9px 12px;">
-          <span style="width:26px;height:26px;border-radius:8px;background:#e74c3c;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0">E</span>
-          <span style="font-size:12px;color:#2a3a4a"><strong>Reading Comp</strong> · 5 questions · Read &amp; answer</span>
+        <div style="display:flex;align-items:center;gap:8px;background:#fff5f5;border-radius:9px;padding:8px 10px;">
+          <span style="width:24px;height:24px;border-radius:7px;background:#e74c3c;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">E</span>
+          <span style="font-size:11px;color:#2a3a4a;line-height:1.3"><strong>Reading Comp</strong><br>阅读理解 · 5题</span>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;background:#fffef0;border-radius:10px;padding:9px 12px;">
-          <span style="width:26px;height:26px;border-radius:8px;background:#d4ac0d;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0">F</span>
-          <span style="font-size:12px;color:#2a3a4a"><strong>Speak Freely</strong> · 3 questions · 45–60 sec per topic</span>
+        <div style="display:flex;align-items:center;gap:8px;background:#fffef0;border-radius:9px;padding:8px 10px;">
+          <span style="width:24px;height:24px;border-radius:7px;background:#d4ac0d;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">F</span>
+          <span style="font-size:11px;color:#2a3a4a;line-height:1.3"><strong>Speak Freely</strong><br>自由发言 · 3题</span>
         </div>
-      </div>
-      <div style="margin-top:12px;font-size:12px;color:#6b7c93;line-height:1.7;">
-        💡 <strong>Tips:</strong> Find a quiet place · Allow microphone access · Speak clearly · Do not refresh during the test.
       </div>
     </div>
-
-    <!-- CN section -->
-    <div style="background:#fff;border-radius:16px;box-shadow:0 4px 18px rgba(0,0,0,0.08);padding:20px 20px 18px;margin-bottom:20px;">
-      <div style="font-size:13px;font-weight:700;color:#1a4a8a;margin-bottom:10px;letter-spacing:0.5px">📌 测试说明</div>
-      <div style="font-size:12.5px;color:#2a3a4a;line-height:1.8;">
-        本测试模拟美团 SHL 英语口语考试，共 <strong>6 个板块、28 道题</strong>，建议用时 <strong>30 分钟</strong>内完成。
-      </div>
-      <div style="margin-top:10px;font-size:12px;color:#6b7c93;line-height:1.8;">
-        🎤 A/B/F 题型需要录音，请允许麦克风权限<br>
-        🔊 B/C 题型需要播放音频，请确保音量打开<br>
-        📵 测试期间请勿刷新页面，否则进度将丢失<br>
-        🌿 找一个安静的地方，放松心态作答即可
+    <div style="background:rgba(255,255,255,0.7);border-radius:12px;padding:10px 14px;margin-bottom:14px;flex-shrink:0;">
+      <div style="font-size:11.5px;color:#4a6080;line-height:1.8;">
+        🎤 允许麦克风 &nbsp;🔊 音量打开 &nbsp;📵 勿刷新 &nbsp;🌿 找安静的地方
       </div>
     </div>
-
-    <button onclick="startMainApp()" style="width:100%;padding:16px;background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:0.5px;box-shadow:0 4px 16px rgba(30,80,180,0.3)">
+    <button onclick="startMainApp()" style="width:100%;padding:15px;background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:0.5px;box-shadow:0 4px 16px rgba(30,80,180,0.3);flex-shrink:0;">
       开始测试 · Start Test 🚀
     </button>
-    <div style="text-align:center;font-size:11px;color:#aab;margin-top:12px">Powered by ERIC · Meituan Keeta Brazil</div>
+    <div style="text-align:center;font-size:11px;color:#aab;margin-top:8px;flex-shrink:0">Powered by ERIC · Meituan Keeta Brazil</div>
   </div>
 </div>
 
@@ -847,7 +828,7 @@ function renderQuestion(){
     +'<div class="card-body">'
     +'<div class="card-header">'
     +'<span class="sec-tag" style="background:'+color+'22;color:'+color+'">'+label+'</span>'
-    +'<span class="q-num-badge" style="background:'+color+';color:#fff;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:800;font-family:Montserrat,sans-serif;">'+String(curQ+1).padStart(2,'0')+' <span style="opacity:0.7;font-size:11px;font-weight:600;">/ '+QUEST_SEQ.length+'</span></span>'
+    +'<span class="q-num-badge" style="background:'+color+';color:#fff;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:800;font-family:Montserrat,sans-serif;">'第'+(curQ+1)+'题 <span style="opacity:0.7;font-size:11px;font-weight:600;">Q'+(curQ+1)+'/'+QUEST_SEQ.length+'</span></span>'
     +'</div>'
     +descHtml
     +inner
