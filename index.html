@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-2016-no-name-input">
+<meta name="app-version" content="20260331-2018-invite-eric">
 <meta name="theme-color" content="#4a90d9">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -720,7 +720,7 @@ function startMainApp(){
 function checkInvite(){
   var code=document.getElementById('invite-code-input').value.trim().toUpperCase();
   var errEl=document.getElementById('invite-error');
-  if(code!=='SMB'){errEl.style.display='block';return;}
+  if(code!=='ERIC'){errEl.style.display='block';return;}
   errEl.style.display='none';
   userName='User';
   // init data early so startMainApp can use it
