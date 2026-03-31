@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-purple-cambridge">
+<meta name="app-version" content="20260331-0800-fix5">
 <meta name="theme-color" content="#2d1b69">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -52,7 +52,7 @@ body{font-family:'Open Sans',sans-serif;background:#f0f2f5;color:var(--text);min
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),#f2c47a);border-radius:3px;transition:width 0.5s ease;width:0%}
 
 /* TAB BAR */
-.tab-bar{display:flex;overflow-x:auto;scrollbar-width:none;gap:0;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:200;background:#ffffff;border-top:1px solid #e0daf0;box-shadow:0 -2px 12px rgba(26,58,92,0.06)}
+.tab-bar{display:none !important}
 .tab-bar::-webkit-scrollbar{display:none}
 .tab-btn{flex:1;min-width:60px;padding:8px 4px 6px;background:none;border:none;color:#7a6d90;font-size:10px;font-weight:600;cursor:pointer;transition:all 0.2s;white-space:nowrap;text-align:center;display:flex;flex-direction:column;align-items:center}
 .tab-btn.active{color:#2d1b69;font-weight:700}
@@ -60,7 +60,7 @@ body{font-family:'Open Sans',sans-serif;background:#f0f2f5;color:var(--text);min
 .tab-btn .tab-icon{display:block;font-size:18px;margin-bottom:3px}
 
 /* PANELS */
-.panel{display:none;padding:16px;padding-bottom:90px}
+.panel{display:none;padding:16px;padding-bottom:80px}
 .panel.active{display:block}
 
 /* CARDS */
@@ -83,10 +83,13 @@ body{font-family:'Open Sans',sans-serif;background:#f0f2f5;color:var(--text);min
 .btn-primary{background:#2d1b69;color:#fff;padding:11px 20px;font-size:13px;font-weight:700;min-height:44px}
 .btn-accent{background:#c87941;color:#fff;padding:11px 20px;font-size:13px;font-weight:700;min-height:44px}
 .btn-small{padding:6px 12px;font-size:11px}
-.btn-tts{background:#2d1b69;color:#fff;padding:0 16px;height:44px;border-radius:22px;font-size:13px;display:inline-flex;align-items:center;gap:8px;flex:1;border:none;font-weight:700;cursor:pointer}
+.btn-tts{background:#5b87c5;color:#fff;padding:0 16px;height:44px;border-radius:22px;font-size:13px;display:inline-flex;align-items:center;gap:8px;flex:1;border:none;font-weight:700;cursor:pointer}
 .btn-tts::before{content:'▶';font-size:11px}
-.btn-tts:hover{background:#4a3080;transform:translateY(-1px)}
+.btn-tts:hover{background:#4a76b4;transform:translateY(-1px)}
 .btn-tts.playing{background:#2e7d5e}
+/* Button row: equal-size listen + record */
+.sentence-actions{display:flex;align-items:stretch;gap:8px;margin-top:10px}
+.sentence-actions .btn-tts,.sentence-actions .btn-primary{flex:1;height:44px;justify-content:center}
 .btn-outline{background:transparent;color:var(--primary);padding:8px 16px;font-size:12px;border:1.5px solid var(--primary);border-radius:20px}
 
 /* STARS */
@@ -219,10 +222,10 @@ body{font-size:15px}
 /* STRESS MARK */
 .stress{background:none;color:inherit;border-bottom:2px dotted #4a3080;font-weight:700}
 /* SECTION INDICATOR */
-.section-indicator{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:8px 16px;background:rgba(255,255,255,0.08)}
+.section-indicator{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:10px 16px;background:rgba(0,0,0,0.15)}
 .section-indicator::-webkit-scrollbar{display:none}
-.sec-pill{flex-shrink:0;padding:4px 12px;border-radius:20px;font-size:10px;font-weight:700;color:rgba(255,255,255,0.6);background:transparent;border:1px solid rgba(255,255,255,0.2);white-space:nowrap;cursor:pointer;transition:all 0.2s}
-.sec-pill.active{background:#ffffff;color:#2d1b69;border-color:#ffffff}
+.sec-pill{flex-shrink:0;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:800;color:rgba(255,255,255,0.75);background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.3);white-space:nowrap;cursor:pointer;letter-spacing:0.3px;transition:all 0.2s}
+.sec-pill.active{background:#ffffff;color:#2d1b69;border-color:#ffffff;font-weight:900;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
 </style>
 </head>
 <body>
@@ -376,8 +379,9 @@ body{font-size:15px}
   </div>
   <div class="card" id="d-card">
     <div class="vocab-q-num" id="d-num">Question 1 / 10</div>
-    <div class="timer-label">TIME REMAINING</div>
-    <div class="timer-display" id="d-timer">15</div>
+    <!-- vocab timer hidden per UX fix -->
+    <div class="timer-label" style="display:none">TIME REMAINING</div>
+    <div class="timer-display" id="d-timer" style="display:none">15</div>
     <div class="vocab-word" id="d-word"></div>
     <div class="vocab-instruction">What is the best synonym for this word?</div>
     <div class="mcq-options" id="d-options"></div>
@@ -470,6 +474,10 @@ body{font-size:15px}
     <div class="card-title">Section Score / 本节得分</div>
     <div id="f-score-display" style="font-size:13px;color:var(--muted)">Complete the speaking task to see your score.</div>
   </div>
+</div>
+
+<div id="submit-btn-wrap" style="position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:200;width:calc(100% - 32px);max-width:448px">
+  <button onclick="submitAndShowResult()" style="width:100%;height:48px;background:#2e7d5e;color:#fff;border:none;border-radius:24px;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(46,125,94,0.4);letter-spacing:0.3px">✅ 提交查看得分 Submit</button>
 </div>
 
 <script>
@@ -1194,6 +1202,21 @@ function showReportAnalysis(){
   html+='</div>';
   document.getElementById('f-score-display').insertAdjacentHTML('afterend',html);
   document.getElementById('report-analysis').scrollIntoView({behavior:'smooth'});
+}
+
+// ============ DIRECT SUBMIT ============
+function submitAndShowResult(){
+  stopGlobalTimer();
+  // compute F score from rubric if already rated
+  if(fRubric.fluency&&fRubric.vocab&&fRubric.logic&&fRubric.grammar&&!fRubric.submitted){
+    fRubric.submitted=true;
+    localStorage.setItem(KEY+'_fRubric',JSON.stringify(fRubric));
+    var avg=(fRubric.fluency+fRubric.vocab+fRubric.logic+fRubric.grammar)/4;
+    scores.f=Math.round(avg/5*100);
+    localStorage.setItem(KEY+'_scores',JSON.stringify(scores));
+  }
+  updateProgress();
+  showResultModal();
 }
 
 // ============ INIT ============
