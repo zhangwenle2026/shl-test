@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-1004-bigfix">
+<meta name="app-version" content="20260331-1011-dtimer">
 <meta name="theme-color" content="#2e6fba">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -971,7 +971,7 @@ function nextC(){if(cIdx<3){cIdx++;renderC();}}
 function prevC(){if(cIdx>0){cIdx--;renderC();}}
 
 // ============ SECTION D ============
-function initD(){renderD();startDTimer();}
+function initD(){renderD();}
 function renderD(){
   var w=D_WORDS[dIdx];
   document.getElementById('d-num').textContent='Question '+(dIdx+1)+' / 10';
@@ -993,13 +993,10 @@ function renderD(){
     html+='<span class="opt-key">'+keys[pos]+'</span> '+w.opts[origIdx]+'</div>';
   });
   document.getElementById('d-options').innerHTML=html;
-  stopDTimer(); startDTimer();
   renderDScore();
 }
 function selectD(optIdx){
-  if(dResults[dIdx]!=null) return; // already answered
   dResults[dIdx]=optIdx;
-  stopDTimer();
   renderD();
   renderDScore();
 }
@@ -1030,8 +1027,8 @@ function renderDScore(){
   document.getElementById('d-score-display').innerHTML='<strong style="color:var(--primary);font-size:18px">'+pct+'</strong>/100 ('+correct+'/10 correct)';
   updateProgress();
 }
-function nextD(){stopDTimer();if(dIdx<9){dIdx++;renderD();if(dResults[dIdx]==null)startDTimer();}}
-function prevD(){stopDTimer();if(dIdx>0){dIdx--;renderD();if(dResults[dIdx]==null)startDTimer();}}
+function nextD(){if(dIdx<9){dIdx++;renderD();}}
+function prevD(){if(dIdx>0){dIdx--;renderD();}}
 
 // ============ SECTION E ============
 function initE(){
