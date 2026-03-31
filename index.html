@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260331-1955-welcome-compact">
+<meta name="app-version" content="20260331-2012-welcome-fix">
 <meta name="theme-color" content="#4a90d9">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
@@ -478,21 +478,25 @@ textarea:focus{border-color:var(--primary);background:#fff}
     <input id="invite-input" type="text" placeholder="你的名字 / Your name" style="width:100%;padding:14px 16px;border:2px solid #d0dff0;border-radius:12px;font-size:16px;text-align:center;outline:none;margin-bottom:10px;font-family:inherit;height:52px;box-sizing:border-box">
     <input id="invite-code-input" type="text" placeholder="邀请码 / Invite code" style="width:100%;padding:14px 16px;border:2px solid #d0dff0;border-radius:12px;font-size:16px;text-align:center;outline:none;margin-bottom:12px;font-family:inherit;height:52px;box-sizing:border-box">
     <div id="invite-error" style="color:#e74c3c;font-size:12px;margin-bottom:10px;display:none">名字或邀请码有误 Invalid name or invite code</div>
-    <button onclick="checkInvite()" style="width:100%;padding:14px;background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;height:52px">进入测试 Start Test</button>
+    <button onclick="checkInvite()" style="width:100%;padding:14px;background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;height:52px">开始测试 Start Test</button>
     <div style="font-size:11px;color:#aab;margin-top:16px">Powered by ERIC · Meituan Keeta Brazil</div>
   </div>
 </div>
 
 
 <!-- WELCOME SCREEN -->
-<div id="welcome-screen" style="display:none;position:fixed;inset:0;z-index:9998;background:linear-gradient(160deg,#e8f0fb,#f0f7ff);overflow:hidden;padding:0;">
-  <div style="max-width:420px;margin:0 auto;height:100%;display:flex;flex-direction:column;justify-content:center;padding:20px 20px 24px;">
-    <div style="text-align:center;margin-bottom:14px;flex-shrink:0;">
+<div id="welcome-screen" style="display:none;position:fixed;inset:0;z-index:9998;background:linear-gradient(160deg,#e8f0fb,#f0f7ff);overflow-y:auto;-webkit-overflow-scrolling:touch;">
+  <div style="max-width:420px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;justify-content:center;padding:24px 20px 32px;box-sizing:border-box;">
+
+    <!-- Header -->
+    <div style="text-align:center;margin-bottom:14px;">
       <div style="font-size:36px;line-height:1;margin-bottom:6px">📋</div>
       <div style="font-family:'Montserrat',sans-serif;font-size:18px;font-weight:800;color:#1a4a8a;margin-bottom:2px">ERIC SHL Test</div>
       <div style="font-size:12px;color:#6b7c93">28 questions · 30 min · 6 sections &nbsp;｜&nbsp; 共28题 · 约30分钟</div>
     </div>
-    <div style="background:#fff;border-radius:16px;box-shadow:0 4px 18px rgba(0,0,0,0.08);padding:14px 14px 12px;margin-bottom:12px;flex-shrink:0;">
+
+    <!-- Section grid -->
+    <div style="background:#fff;border-radius:16px;box-shadow:0 4px 18px rgba(0,0,0,0.08);padding:14px;margin-bottom:12px;">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;">
         <div style="display:flex;align-items:center;gap:8px;background:#f0f6ff;border-radius:9px;padding:8px 10px;">
           <span style="width:24px;height:24px;border-radius:7px;background:#2e6fba;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">A</span>
@@ -520,15 +524,19 @@ textarea:focus{border-color:var(--primary);background:#fff}
         </div>
       </div>
     </div>
-    <div style="background:rgba(255,255,255,0.7);border-radius:12px;padding:10px 14px;margin-bottom:14px;flex-shrink:0;">
+
+    <!-- Tips -->
+    <div style="background:rgba(255,255,255,0.7);border-radius:12px;padding:10px 14px;margin-bottom:16px;">
       <div style="font-size:11.5px;color:#4a6080;line-height:1.8;">
         🎤 允许麦克风 &nbsp;🔊 音量打开 &nbsp;📵 勿刷新 &nbsp;🌿 找安静的地方
       </div>
     </div>
-    <button onclick="startMainApp()" style="width:100%;padding:15px;background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:0.5px;box-shadow:0 4px 16px rgba(30,80,180,0.3);flex-shrink:0;">
+
+    <!-- CTA -->
+    <button onclick="startMainApp()" style="display:block;width:100%;padding:15px;background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:0.5px;box-shadow:0 4px 16px rgba(30,80,180,0.3);-webkit-appearance:none;">
       开始测试 · Start Test 🚀
     </button>
-    <div style="text-align:center;font-size:11px;color:#aab;margin-top:8px;flex-shrink:0">Powered by ERIC · Meituan Keeta Brazil</div>
+    <div style="text-align:center;font-size:11px;color:#aab;margin-top:10px">Powered by ERIC · Meituan Keeta Brazil</div>
   </div>
 </div>
 
