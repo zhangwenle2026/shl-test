@@ -215,7 +215,9 @@ var E_WORDS_BANK = [
   {word:"FLEXIBLE",type:"antonym", opts:["rigid","adaptable","versatile","open"], correct:0},
   {word:"PROFIT",type:"antonym", opts:["loss","gain","revenue","income"], correct:0},
   {word:"HIRE",type:"antonym", opts:["dismiss","recruit","employ","onboard"], correct:0},
-  {word:"APPROVE",type:"antonym", opts:["reject","accept","confirm","endorse"], correct:0}
+  {word:"APPROVE",type:"antonym", opts:["reject","accept","confirm","endorse"], correct:0},
+  // Usage questions (type:'usage') — choose correct sentence ⭐真题
+  {word:"⭐ COMPRISE",type:"usage", opts:["The company comprises 30% women.","The company comprise 30% women.","The company is comprised 30% women.","The company comprises of 30% women."], correct:0, explain:"comprise = 包含/由…构成，不与 of 连用；主语单数用 comprises。"}
 ];
 var D_PASSAGES_BANK = [
   {title:"Office Relocation Discussion",text:"Woman: Have you heard? The company is planning to move to a new office next month. Man: Yes, I read the email. It says the new building is closer to the train station, which would make my commute shorter. But I'm a bit worried about the open-plan layout. Woman: Me too. I find it hard to concentrate when there's a lot of noise. I wonder if they'll have quiet rooms. Man: The email mentioned some meeting pods and focus rooms, but I'm not sure how many. If there aren't enough, people might end up booking them all day. Woman: That's a good point. I think we should bring this up at the next team meeting. Maybe management hasn't considered how many people actually need quiet space. Man: Agreed. Also, I noticed the new office doesn't have a cafeteria — just a small kitchen. Woman: Really? That could be a problem for people who don't bring lunch. There are probably restaurants nearby though. Man: I hope so. Overall I think the move could be positive, but there are definitely some things they need to sort out first.",qs:[{q:"What does the man like about the new office?",opts:["It has a cafeteria","It's closer to the train station","It has an open-plan layout","It's in a quieter neighborhood"],correct:1},{q:"Why is the woman concerned?",opts:["The new office is too far away","She doesn't like her new manager","She finds it hard to concentrate in noisy environments","She doesn't want to change her desk"],correct:2},{q:"What can you infer about the meeting pods?",opts:["There are more than enough for everyone","They might not be sufficient for all staff","They are only for managers","They haven't been built yet"],correct:1},{q:"What will the man probably do next?",opts:["Start looking for a new job","Book a meeting pod immediately","Raise concerns at the team meeting","Send an email to HR"],correct:2},{q:"What is the overall tone of the conversation?",opts:["Angry and frustrated","Cautiously positive with some concerns","Completely negative","Excited without reservation"],correct:1}]},
@@ -321,12 +323,14 @@ function checkInvite(){
   E_SHUFFLED=[];
   F_SHUFFLED=[];
   var mainSeed=getDailySeed(userName);
-  // Mix: 3 synonyms + 2 antonyms (or as many as available)
-  var synBank=E_WORDS_BANK.filter(function(w){return w.type!=='antonym';});
+  // Mix: 2 synonyms + 2 antonyms + 1 usage (or as many as available)
+  var synBank=E_WORDS_BANK.filter(function(w){return !w.type;});
   var antBank=E_WORDS_BANK.filter(function(w){return w.type==='antonym';});
-  var synPick=seededShuffle(synBank,mainSeed).slice(0,3);
+  var usageBank=E_WORDS_BANK.filter(function(w){return w.type==='usage';});
+  var synPick=seededShuffle(synBank,mainSeed).slice(0,2);
   var antPick=seededShuffle(antBank,(mainSeed*31+7)>>>0).slice(0,2);
-  E_WORDS=seededShuffle(synPick.concat(antPick),(mainSeed*13+3)>>>0);
+  var usagePick=seededShuffle(usageBank,(mainSeed*61+11)>>>0).slice(0,1);
+  E_WORDS=seededShuffle(synPick.concat(antPick).concat(usagePick),(mainSeed*13+3)>>>0);
   var seed2=(mainSeed*1664525+1013904223)>>>0;
   D_PASSAGES=seededShuffle(D_PASSAGES_BANK,seed2).slice(0,1);
   F_GRAMMAR=seededShuffle(F_GRAMMAR_BANK,(seed2*31+17)>>>0).slice(0,5);
@@ -648,8 +652,11 @@ function renderVocabQ(q){
   var keys=['A','B','C','D'];
   var ans=ANSWERS[curQ];
   var isAnt=w.type==='antonym';
-  var html='<div style="font-size:28px;font-weight:800;color:'+(isAnt?'#8e44ad':'#e74c3c')+';text-align:center;margin:16px 0;letter-spacing:2px">'+w.word+'</div>'
-    +'<div style="font-size:13px;color:#888;text-align:center;margin-bottom:16px">'+(isAnt?'Choose the best <strong>antonym</strong> / 选择最佳<strong>反义词</strong>':'Choose the best synonym / 选择最佳近义词')+'</div>'
+  var isUsage=w.type==='usage';
+  var wordColor=isUsage?'#2980b9':(isAnt?'#8e44ad':'#e74c3c');
+  var prompt=isUsage?'Choose the correct sentence / 选出正确的句子':(isAnt?'Choose the best <strong>antonym</strong> / 选择最佳<strong>反义词</strong>':'Choose the best synonym / 选择最佳近义词');
+  var html='<div style="font-size:28px;font-weight:800;color:'+wordColor+';text-align:center;margin:16px 0;letter-spacing:2px">'+w.word+'</div>'
+    +'<div style="font-size:13px;color:#888;text-align:center;margin-bottom:16px">'+prompt+'</div>'
     +'<div class="mcq-options">';
   E_SHUFFLED[q.idx].forEach(function(origIdx,pos){
     var cls='mcq-opt';
@@ -883,9 +890,12 @@ function showWrongItems(){
     eWrong.forEach(function(x){
       var w=E_WORDS[x.q.idx];
       var isAnt=w.type==='antonym';
+      var isUsage=w.type==='usage';
+      var tag=isUsage?' <span style="color:#2980b9;font-size:11px">(usage 用法)</span>':(isAnt?' <span style="color:#8e44ad;font-size:11px">(antonym 反义词)</span>':'');
       var ya=ANSWERS[x.i].choice!=null?w.opts[ANSWERS[x.i].choice]:'(no answer)';
       html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c">'
-        +'<div style="font-size:13px;font-weight:700;margin-bottom:4px">'+w.word+(isAnt?' <span style="color:#8e44ad;font-size:11px">(antonym 反义词)</span>':'')+'</div>'
+        +'<div style="font-size:13px;font-weight:700;margin-bottom:4px">'+w.word+tag+'</div>'
+        +(w.explain?'<div style="font-size:11px;color:#666;margin-bottom:4px">💡 '+w.explain+'</div>':'')
         +'<div style="font-size:12px;color:#e74c3c">❌ 你选: '+ya+'</div>'
         +'<div style="font-size:12px;color:#27ae60">✅ 正确: '+w.opts[w.correct]+'</div>'
         +'</div>';
