@@ -3,128 +3,116 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="app-version" content="20260418-0535-wext-nologin">
+<meta name="app-version" content="20260418-0618-tab-layout">
 <meta name="theme-color" content="#4f46e5">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ERIC SHL TEST">
 <title>ERIC SHL TEST</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--primary:#4f46e5;--primary-dark:#1e1b4b;--primary-light:#818cf8;--bg:#f5f3ff;--card:rgba(255,255,255,0.85);--text:#1e1b4b;--muted:#6b7280;--border:rgba(139,92,246,0.15);--green:#10b981;--red:#ef4444;--orange:#f59e0b;--glass:rgba(255,255,255,0.6);--glass-border:rgba(255,255,255,0.3)}
+:root{--primary:#4f46e5;--primary-dark:#1e1b4b;--primary-light:#818cf8;--accent:#a78bfa;--bg:#f5f3ff;--card:rgba(255,255,255,0.85);--text:#1e1b4b;--muted:#6b7280;--border:rgba(139,92,246,0.15);--green:#10b981;--red:#ef4444;--orange:#f59e0b;--radius:20px;--shadow:0 4px 24px rgba(79,70,229,0.08);--glass-border:rgba(255,255,255,0.3)}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Open Sans',sans-serif;background:linear-gradient(135deg,#ede9fe 0%,#f5f3ff 30%,#eef2ff 60%,#f0f9ff 100%);background-attachment:fixed;color:var(--text);min-height:100vh;overflow-x:hidden}
-#app-wrapper{max-width:520px;margin:0 auto;min-height:100vh;background:transparent}
-.app-header{background:linear-gradient(135deg,#1e1b4b,#312e81,#4f46e5);padding:14px 18px 12px;color:#fff;box-shadow:0 4px 20px rgba(30,27,75,0.3);position:relative}
+body{font-family:'Open Sans',sans-serif;background:linear-gradient(135deg,#ede9fe 0%,#f5f3ff 30%,#eef2ff 60%,#f0f9ff 100%);background-attachment:fixed;color:var(--text);min-height:100vh;overflow-x:hidden;font-size:15px}
+.app-header{background:linear-gradient(135deg,#1e1b4b,#312e81,#4f46e5);color:#fff;padding:14px 16px 0;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(30,27,75,0.3);backdrop-filter:blur(12px)}
 .app-header::before{content:'';display:block;position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#a78bfa,#f472b6,#fb923c,#a78bfa)}
-.app-header-title{font-family:'Montserrat',sans-serif;font-size:18px;font-weight:800;letter-spacing:1px}
-#progress-container{background:rgba(255,255,255,0.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(139,92,246,0.1);padding:9px 10px}
-.prog-bar-inner{display:flex;gap:5px}
-.prog-sec{cursor:pointer;border-radius:8px;overflow:hidden;padding:6px 7px;transition:transform 0.2s,box-shadow 0.2s;flex-shrink:0}
-.prog-sec.active{transform:scaleY(1.08);box-shadow:0 2px 10px rgba(0,0,0,0.2)}
-.prog-sec-label{font-size:9px;font-weight:800;margin-bottom:4px;white-space:nowrap}
-.prog-dots{display:flex;gap:3px;flex-wrap:wrap}
-.prog-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;transition:background 0.2s}
-#question-area{padding:13px 13px 4px}
-#question-card{background:var(--card);border-radius:16px;box-shadow:0 4px 24px rgba(79,70,229,0.08);overflow:hidden;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--glass-border)}
-.card-top-bar{height:5px}
-.card-body{padding:18px 18px 14px}
-.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.sec-tag{padding:4px 11px;border-radius:20px;font-size:11px;font-weight:700}
-.q-counter{font-size:12px;color:var(--muted)}
-#bottom-nav{display:flex;gap:10px;padding:10px 13px 28px}
-#btn-prev{flex:1;padding:13px;border:2px solid var(--border);background:var(--glass);backdrop-filter:blur(8px);border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;color:var(--text);transition:all 0.25s}
-#btn-prev:hover{border-color:var(--primary-light);transform:translateY(-2px)}
-#btn-next{flex:2;padding:13px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.25s;box-shadow:0 4px 16px rgba(79,70,229,0.25)}
-#btn-next:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(79,70,229,0.35)}
-.mcq-options{display:flex;flex-direction:column;gap:8px;margin-top:4px}
-.mcq-opt{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:13px 16px;border-radius:14px;border:1.5px solid rgba(139,92,246,0.12);background:var(--card);font-size:14px;cursor:pointer;transition:all 0.2s;min-height:48px;font-family:inherit;backdrop-filter:blur(8px)}
-.mcq-opt:hover{border-color:var(--primary-light);background:rgba(79,70,229,0.06);transform:translateY(-1px)}
-.mcq-opt.selected{border-color:var(--primary);background:rgba(79,70,229,0.1);font-weight:600}
-.mcq-opt.correct{border-color:var(--green);background:rgba(16,185,129,0.08)}
-.mcq-opt.wrong{border-color:var(--red);background:rgba(239,68,68,0.06)}
-.opt-key{width:26px;height:26px;border-radius:50%;background:rgba(139,92,246,0.1);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
-.mcq-opt.selected .opt-key{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff}
-.mcq-opt.correct .opt-key{background:var(--green);color:#fff}
-.mcq-opt.wrong .opt-key{background:var(--red);color:#fff}
-.audio-bar{display:flex;align-items:center;gap:10px;background:rgba(79,70,229,0.06);border:1.5px solid rgba(79,70,229,0.15);border-radius:14px;padding:10px 14px;margin-bottom:10px;cursor:pointer;backdrop-filter:blur(8px);transition:all 0.2s}
-.audio-bar:hover{background:rgba(79,70,229,0.1);border-color:var(--primary-light)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding-top:4px}
+.app-title{font-family:'Montserrat',sans-serif;font-size:16px;font-weight:800;letter-spacing:1px}
+.app-subtitle{font-size:10px;opacity:0.75}
+#global-timer-bar{background:rgba(255,255,255,0.2);border-radius:20px;padding:5px 14px;font-size:13px;font-weight:700}
+.tab-bar{display:flex;overflow-x:auto;scrollbar-width:none;border-top:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.15)}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-btn{flex:1;min-width:70px;padding:10px 6px;background:none;border:none;color:rgba(255,255,255,0.55);font-size:12px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;transition:all 0.25s;white-space:nowrap;text-align:center}
+.tab-btn.active{color:#fff;border-bottom-color:#a78bfa;font-weight:700;background:rgba(167,139,250,0.15)}
+.tab-btn .tab-icon{display:block;font-size:14px;margin-bottom:2px}
+.panel{display:none;padding:16px;padding-bottom:80px}
+.panel.active{display:block}
+.card{background:var(--card);border-radius:var(--radius);padding:20px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid var(--glass-border);backdrop-filter:blur(16px);transition:transform 0.2s,box-shadow 0.2s}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(79,70,229,0.12)}
+.card-title{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:var(--primary);margin-bottom:10px;letter-spacing:0.8px}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.section-icon{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 4px 12px rgba(79,70,229,0.25)}
+.section-info h2{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:800;color:var(--primary-dark)}
+.section-info p{font-size:11px;color:var(--muted);margin-top:2px}
+.tip-box{background:linear-gradient(135deg,rgba(167,139,250,0.08),rgba(196,181,253,0.12));border-left:3px solid var(--accent);border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:13px;color:#4c1d95;line-height:1.7}
+.tip-box strong{color:#7c3aed}
+.sentence-item{background:var(--card);border-radius:16px;padding:16px;margin-bottom:12px;border:1px solid var(--glass-border);backdrop-filter:blur(12px);box-shadow:0 2px 12px rgba(79,70,229,0.06);transition:all 0.25s}
+.sentence-item:hover{border-color:var(--primary-light);transform:translateY(-2px)}
+.sentence-num{font-size:10px;color:var(--muted);font-weight:700;margin-bottom:4px}
+.sentence-text{font-size:15px;line-height:1.7;color:var(--text);margin-bottom:10px}
+.audio-bar{display:flex;align-items:center;gap:10px;background:rgba(79,70,229,0.06);border:1.5px solid rgba(79,70,229,0.15);border-radius:14px;padding:10px 14px;margin-bottom:10px;cursor:pointer;transition:all 0.2s}
+.audio-bar:hover{background:rgba(79,70,229,0.1)}
 .audio-bar.playing{background:rgba(79,70,229,0.12);border-color:var(--primary)}
-.audio-bar .play-icon{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;box-shadow:0 2px 8px rgba(79,70,229,0.3)}
-.audio-bar.playing .play-icon{background:linear-gradient(135deg,#1e1b4b,#4f46e5)}
+.audio-bar .play-icon{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
 .audio-bar .wave{display:flex;align-items:center;gap:3px;height:28px;flex:1}
 .audio-bar .wave span{width:3px;border-radius:3px;background:linear-gradient(180deg,#4f46e5,#a78bfa);opacity:0.5;height:4px}
 .audio-bar.playing .wave span{animation:wb 0.6s ease-in-out infinite alternate}
 .audio-bar.playing .wave span:nth-child(2){animation-delay:0.1s}
 .audio-bar.playing .wave span:nth-child(3){animation-delay:0.2s}
 .audio-bar.playing .wave span:nth-child(4){animation-delay:0.3s}
-.audio-bar.playing .wave span:nth-child(5){animation-delay:0.1s}
-.audio-bar.playing .wave span:nth-child(6){animation-delay:0.25s}
-.audio-bar.playing .wave span:nth-child(7){animation-delay:0.15s}
-.audio-bar.playing .wave span:nth-child(8){animation-delay:0.35s}
-@keyframes wb{from{height:4px}to{height:20px}}
+@keyframes wb{to{height:22px;opacity:1}}
 .audio-bar .bar-label{font-size:13px;font-weight:600;color:var(--primary);white-space:nowrap}
-.stt-card{background:rgba(79,70,229,0.04);border-radius:14px;padding:12px 14px;margin-top:8px;border:1.5px solid rgba(79,70,229,0.12);font-size:14px;backdrop-filter:blur(8px)}
+.stt-card{background:rgba(79,70,229,0.04);border-radius:14px;padding:12px 14px;margin-top:8px;border:1.5px solid rgba(79,70,229,0.12);font-size:14px}
 .word-ok{background:rgba(16,185,129,0.1);color:var(--green);border-radius:4px;padding:1px 4px;margin:1px;font-size:14px;line-height:2}
-.word-miss{color:var(--red);text-decoration:underline wavy;border-bottom:2px solid var(--red);margin:1px;font-size:14px;line-height:2}
+.word-miss{color:var(--red);text-decoration:underline wavy;margin:1px;font-size:14px;line-height:2}
+.mcq-options{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.mcq-opt{display:flex;align-items:center;gap:10px;padding:13px 16px;border-radius:14px;border:1.5px solid rgba(139,92,246,0.12);background:var(--card);font-size:14px;cursor:pointer;transition:all 0.2s;min-height:48px}
+.mcq-opt:hover{border-color:var(--primary-light);background:rgba(79,70,229,0.06)}
+.mcq-opt.correct{border-color:var(--green);background:rgba(16,185,129,0.08);font-weight:600}
+.mcq-opt.wrong{border-color:var(--red);background:rgba(239,68,68,0.06)}
+.opt-key{width:26px;height:26px;border-radius:50%;background:rgba(139,92,246,0.1);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.mcq-opt.correct .opt-key{background:var(--green);color:#fff}
+.mcq-opt.wrong .opt-key{background:var(--red);color:#fff}
 .rubric-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.rubric-label{font-size:13px;font-weight:600;width:115px}
+.rubric-label{font-size:13px;font-weight:600;width:130px}
 .rubric-stars{display:flex;gap:5px}
-.rubric-star{font-size:22px;cursor:pointer;color:#ddd}
+.rubric-star{font-size:22px;cursor:pointer;color:#ddd;transition:color 0.15s}
 .rubric-star.active{color:#f39c12}
-.topic-card{background:var(--card);border-radius:14px;padding:14px;border:1.5px solid var(--glass-border);cursor:pointer;margin-bottom:10px;transition:all 0.25s;backdrop-filter:blur(8px)}
-.topic-card:hover,.topic-card.selected{border-color:var(--primary-light);background:rgba(79,70,229,0.08);transform:translateY(-2px)}
-.topic-num{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:0.5px;margin-bottom:4px}
-.topic-text{font-size:13px;font-weight:600;line-height:1.5}
-#result-page{padding:14px}
+.passage-box{background:rgba(245,243,255,0.8);border:1.5px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px;font-size:13px;line-height:1.9}
 .res-header{background:linear-gradient(135deg,#1e1b4b,#312e81,#4f46e5);color:#fff;border-radius:18px;padding:24px 20px;text-align:center;margin-bottom:14px;box-shadow:0 8px 32px rgba(30,27,75,0.25)}
 .res-score{font-family:'Montserrat',sans-serif;font-size:54px;font-weight:800;line-height:1}
-.res-level{font-size:13px;opacity:0.85;letter-spacing:0.8px;margin-top:6px}
+.res-level{font-size:13px;opacity:0.85;margin-top:6px}
 .res-bar-row{margin-bottom:10px}
 .res-bar-label{display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:3px}
 .res-bar-track{height:8px;background:#eef5fc;border-radius:4px;overflow:hidden}
-.res-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#2e6fba,#4a90d9);transition:width 0.8s ease}
-.stress{border-bottom:2px dotted #2e6fba;font-weight:600}
-.pause-mark{color:#aaa;font-size:0.85em;margin:0 2px}
-textarea{width:100%;padding:12px;border:1.5px solid #d0dff0;border-radius:10px;font-size:14px;resize:none;height:90px;font-family:inherit;outline:none}
-textarea:focus{border-color:var(--primary)}
-.btn-full{width:100%;padding:13px;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
-.btn-primary{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff}
-.btn-outline{background:var(--glass);color:var(--primary);border:2px solid var(--border) !important;backdrop-filter:blur(8px)}
-#global-timer-bar{background:rgba(167,139,250,0.3);border:1px solid rgba(167,139,250,0.3);border-radius:10px;padding:4px 12px;font-size:11px;font-weight:700}
+.res-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#4f46e5,#7c3aed);transition:width 0.8s ease}
+.grammar-explain{margin-top:12px;border-radius:12px;padding:12px 16px;font-size:13px;line-height:1.7}
+.grammar-explain.correct-bg{background:rgba(16,185,129,0.08);border-left:3px solid var(--green);color:#065f46}
+.grammar-explain.wrong-bg{background:rgba(239,68,68,0.06);border-left:3px solid var(--red);color:#991b1b}
+.btn-tts{background:rgba(79,70,229,0.08);color:var(--primary);padding:7px 16px;font-size:12px;border-radius:12px;border:1px solid rgba(79,70,229,0.2);cursor:pointer;font-weight:600;transition:all 0.2s}
+.btn-tts:hover{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border-color:transparent}
+#submit-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,0.9);backdrop-filter:blur(16px);padding:12px 16px;border-top:1px solid var(--glass-border);z-index:99}
+#submit-bar button{width:100%;padding:14px;border:none;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;box-shadow:0 4px 16px rgba(79,70,229,0.25);transition:all 0.2s}
+#submit-bar button:hover{transform:translateY(-2px)}
 </style>
 </head>
 <body>
-<div id="app-wrapper">
-
-<!-- MAIN APP (no login required) -->
-<div id="main-app">
-  <div class="app-header">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <div>
-        <div class="app-header-title">ERIC SHL Test</div>
-        <div style="font-size:11px;opacity:0.7;margin-top:2px" id="user-greeting"></div>
-      </div>
-      <div id="global-timer-bar">⏱ 30:00</div>
-    </div>
+<header class="app-header">
+  <div class="header-top">
+    <div><div class="app-title">ERIC SHL Test</div><div class="app-subtitle">模拟测试 · Simulated Exam</div></div>
+    <div id="global-timer-bar">⏱ 30:00</div>
   </div>
-  <div id="progress-container"></div>
-  <div id="question-area">
-    <div id="question-card"></div>
-  </div>
-  <div id="bottom-nav">
-    <button id="btn-prev" onclick="goPrev()">← 返回</button>
-    <button id="btn-next" onclick="goNext()">下一题 →</button>
-  </div>
-  <div id="result-page" style="display:none"></div>
-</div>
-</div>
-
+  <nav class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('a')"><span class="tab-icon">📖</span>A·Read</button>
+    <button class="tab-btn" onclick="switchTab('b')"><span class="tab-icon">🔁</span>B·Repeat</button>
+    <button class="tab-btn" onclick="switchTab('c')"><span class="tab-icon">🎤</span>C·Talk</button>
+    <button class="tab-btn" onclick="switchTab('d')"><span class="tab-icon">🎧</span>D·Listen</button>
+    <button class="tab-btn" onclick="switchTab('e')"><span class="tab-icon">📝</span>E·Vocab</button>
+    <button class="tab-btn" onclick="switchTab('f')"><span class="tab-icon">✍️</span>F·Grammar</button>
+  </nav>
+</header>
+<div class="panel active" id="panel-a"><div class="section-header"><div class="section-icon">📖</div><div class="section-info"><h2>A · Read Aloud 朗读</h2><p>9 sentences (from 16) · 每日随机9句</p></div></div><div class="tip-box"><strong>📖 考试模式：</strong>先点 🔊 听一遍，然后点 🎤 录音朗读。系统用 STT 计算准确率。</div><div id="a-list"></div></div>
+<div class="panel" id="panel-b"><div class="section-header"><div class="section-icon">🔁</div><div class="section-info"><h2>B · Repeat 复述</h2><p>9 sentences (from 12) · 盲听后复述</p></div></div><div class="tip-box"><strong>🔁 考试模式：</strong>点 🔊 播放（不显示原文），然后点 🎙 录音复述。录完后自动显示原文和准确率。</div><div id="b-list"></div></div>
+<div class="panel" id="panel-c"><div class="section-header"><div class="section-icon">🎤</div><div class="section-info"><h2>C · Talk 自由演讲</h2><p>1 random topic · 随机1个话题</p></div></div><div class="tip-box"><strong>🎤 考试模式：</strong>Step1 听题 → Step2 录音演讲 → Step3 四维自评打分</div><div id="c-content"></div></div>
+<div class="panel" id="panel-d"><div class="section-header"><div class="section-icon">🎧</div><div class="section-info"><h2>D · Listen 听力</h2><p>1 dialogue × 5 MCQ · 随机1篇对话</p></div></div><div class="tip-box"><strong>🎧 考试模式：</strong>先播放对话，然后回答5道推理选择题。</div><div id="d-content"></div></div>
+<div class="panel" id="panel-e"><div class="section-header"><div class="section-icon">📝</div><div class="section-info"><h2>E · Vocab 词汇</h2><p>5 MCQ (2 synonym + 2 antonym + 1 usage)</p></div></div><div class="tip-box"><strong>📝 考试模式：</strong>选择最佳近义词/反义词/正确用法。</div><div id="e-list"></div></div>
+<div class="panel" id="panel-f"><div class="section-header"><div class="section-icon">✍️</div><div class="section-info"><h2>F · Grammar 语法</h2><p>5 MCQ (from 11) · 随机5题</p></div></div><div class="tip-box"><strong>✍️ 考试模式：</strong>选出语法正确的句子。</div><div id="f-list"></div></div>
+<div class="panel" id="panel-result" style="display:none"></div>
+<div id="submit-bar"><button onclick="showFinalResults()">📊 Submit Test 提交测试</button></div>
 <script>
-// ============ DATA ============
-var A_SENTENCES = [
+// ============ ORIGINAL DATA BANKS ============
+var A_SENTENCES=[
   "The meeting has been rescheduled to Thursday at two o'clock.",
   "Could you please send me the report by end of day?",
   "We need to review the budget before approving the project.",
@@ -142,7 +130,7 @@ var A_SENTENCES = [
   "Customers who experience issues should contact our support team directly.",
   "The warehouse has been relocated to a larger facility near the airport."
 ];
-var B_SENTENCES = [
+var B_SENTENCES=[
   "The marketing team has submitted the annual budget proposal for review.",
   "Please ensure all safety procedures are followed during the site inspection.",
   "The project deadline has been moved to the end of next month due to delays.",
@@ -156,631 +144,465 @@ var B_SENTENCES = [
   "We strongly recommend that all departments submit their proposals before the deadline.",
   "Management has decided to implement a flexible working arrangement starting next quarter."
 ];
-// C_SCENARIOS removed — Q&A section deleted
-var E_WORDS_BANK = [
-  {word:"HUGE", opts:["large","heavy","tiny","little"], correct:0},
-  {word:"POSTPONE", opts:["delay","cancel","start","finish"], correct:0},
-  {word:"CONFIRM", opts:["verify","deny","question","forget"], correct:0},
-  {word:"URGENT", opts:["immediate","slow","optional","relaxed"], correct:0},
-  {word:"CLARIFY", opts:["explain","confuse","hide","rush"], correct:0},
-  {word:"EXCEED", opts:["surpass","fail","reach","miss"], correct:0},
-  {word:"SUBMIT", opts:["hand in","receive","reject","review"], correct:0},
-  {word:"NEGOTIATE", opts:["discuss terms","agree instantly","refuse","ignore"], correct:0},
-  {word:"EFFICIENT", opts:["productive","lazy","slow","wasteful"], correct:0},
-  {word:"APPROXIMATELY", opts:["roughly","exactly","never","always"], correct:0},
-  {word:"ALLOCATE", opts:["assign","remove","ignore","combine"], correct:0},
-  {word:"INITIATIVE", opts:["proactive effort","passive wait","final decision","quick reply"], correct:0},
-  {word:"BENCHMARK", opts:["standard reference","random guess","final result","team leader"], correct:0},
-  {word:"DELEGATE", opts:["assign tasks","do it yourself","refuse work","report upward"], correct:0},
-  {word:"FEASIBLE", opts:["possible","impossible","expensive","risky"], correct:0},
-  {word:"COMPREHENSIVE", opts:["thorough","brief","partial","unclear"], correct:0},
-  {word:"FACILITATE", opts:["make easier","make harder","block","ignore"], correct:0},
-  {word:"IMPLEMENT", opts:["carry out","plan only","cancel","discuss"], correct:0},
-  {word:"MONITOR", opts:["track progress","ignore","report","approve"], correct:0},
-  {word:"PRIORITIZE", opts:["rank by importance","delay all","ignore order","complete randomly"], correct:0},
-  {word:"STREAMLINE", opts:["simplify process","add steps","complicate","delay"], correct:0},
-  {word:"COLLABORATE", opts:["work together","work alone","compete","argue"], correct:0},
-  {word:"EVALUATE", opts:["assess","ignore","approve blindly","skip"], correct:0},
-  {word:"ESCALATE", opts:["raise to higher level","reduce","ignore","solve alone"], correct:0},
-  {word:"PROACTIVE", opts:["acting in advance","reactive","passive","slow"], correct:0},
-  {word:"CONSENSUS", opts:["general agreement","strong disagreement","one opinion","silence"], correct:0},
-  {word:"MITIGATE", opts:["reduce severity","increase risk","ignore problem","create issue"], correct:0},
-  {word:"STAKEHOLDER", opts:["interested party","random person","competitor","supplier only"], correct:0},
-  {word:"TRANSPARENT", opts:["open and clear","hidden","complicated","vague"], correct:0},
-  {word:"DEADLINE", opts:["due date","start date","optional date","estimated date"], correct:0},
-  // Antonym questions (type:'antonym')
-  {word:"EXPAND",type:"antonym", opts:["shrink","grow","maintain","develop"], correct:0},
-  {word:"ACCEPT",type:"antonym", opts:["reject","receive","allow","welcome"], correct:0},
-  {word:"INCREASE",type:"antonym", opts:["decrease","grow","multiply","raise"], correct:0},
-  {word:"TEMPORARY",type:"antonym", opts:["permanent","short","brief","instant"], correct:0},
-  {word:"IMPORT",type:"antonym", opts:["export","bring in","receive","purchase"], correct:0},
-  {word:"VOLUNTARY",type:"antonym", opts:["compulsory","optional","willing","free"], correct:0},
-  {word:"STRENGTHEN",type:"antonym", opts:["weaken","support","improve","build"], correct:0},
-  {word:"ADVANCE",type:"antonym", opts:["retreat","progress","promote","develop"], correct:0},
-  {word:"COMPLICATED",type:"antonym", opts:["simple","complex","difficult","intricate"], correct:0},
-  {word:"GENEROUS",type:"antonym", opts:["stingy","kind","giving","charitable"], correct:0},
-  {word:"MAJORITY",type:"antonym", opts:["minority","most","bulk","larger part"], correct:0},
-  {word:"FLEXIBLE",type:"antonym", opts:["rigid","adaptable","versatile","open"], correct:0},
-  {word:"PROFIT",type:"antonym", opts:["loss","gain","revenue","income"], correct:0},
-  {word:"HIRE",type:"antonym", opts:["dismiss","recruit","employ","onboard"], correct:0},
-  {word:"APPROVE",type:"antonym", opts:["reject","accept","confirm","endorse"], correct:0},
-  // Usage questions (type:'usage') — choose correct sentence ⭐真题
-  {word:"⭐ COMPRISE",type:"usage", opts:["The company comprises 30% women.","The company comprise 30% women.","The company is comprised 30% women.","The company comprises of 30% women."], correct:0, explain:"comprise = 包含/由…构成，不与 of 连用；主语单数用 comprises。"}
+var C_TOPICS=[
+  "You are at a team meeting. Your manager has asked everyone to suggest ideas for improving customer satisfaction. Give your suggestion and explain why you think it would work.",
+  "Your company is planning to open a new office in another city. Your manager wants your opinion. Talk about the advantages and disadvantages of expanding to a new location.",
+  "A colleague is leaving the company. You have been asked to give a short farewell speech at the goodbye party. Talk about their contributions and wish them well.",
+  "Your department has been asked to reduce costs by ten percent. Suggest ways to save money without affecting the quality of work."
 ];
-var D_PASSAGES_BANK = [
-  {title:"Office Relocation Discussion",text:"Woman: Have you heard? The company is planning to move to a new office next month. Man: Yes, I read the email. It says the new building is closer to the train station, which would make my commute shorter. But I'm a bit worried about the open-plan layout. Woman: Me too. I find it hard to concentrate when there's a lot of noise. I wonder if they'll have quiet rooms. Man: The email mentioned some meeting pods and focus rooms, but I'm not sure how many. If there aren't enough, people might end up booking them all day. Woman: That's a good point. I think we should bring this up at the next team meeting. Maybe management hasn't considered how many people actually need quiet space. Man: Agreed. Also, I noticed the new office doesn't have a cafeteria — just a small kitchen. Woman: Really? That could be a problem for people who don't bring lunch. There are probably restaurants nearby though. Man: I hope so. Overall I think the move could be positive, but there are definitely some things they need to sort out first.",qs:[{q:"What does the man like about the new office?",opts:["It has a cafeteria","It's closer to the train station","It has an open-plan layout","It's in a quieter neighborhood"],correct:1},{q:"Why is the woman concerned?",opts:["The new office is too far away","She doesn't like her new manager","She finds it hard to concentrate in noisy environments","She doesn't want to change her desk"],correct:2},{q:"What can you infer about the meeting pods?",opts:["There are more than enough for everyone","They might not be sufficient for all staff","They are only for managers","They haven't been built yet"],correct:1},{q:"What will the man probably do next?",opts:["Start looking for a new job","Book a meeting pod immediately","Raise concerns at the team meeting","Send an email to HR"],correct:2},{q:"What is the overall tone of the conversation?",opts:["Angry and frustrated","Cautiously positive with some concerns","Completely negative","Excited without reservation"],correct:1}]},
-  {title:"Project Deadline Negotiation",text:"Manager: I need to talk to you about the Henderson project. The client wants to move the deadline forward by two weeks. Developer: Two weeks? That's going to be very tight. We're already behind on the testing phase because of the bugs we found last week. Manager: I understand. But the client is under pressure from their board to show progress. Is there any way we can deliver a basic version first and add the remaining features later? Developer: We could do a phased delivery. The core functionality is about eighty percent done. If we skip some of the nice-to-have features, we could probably have something ready. Manager: What about quality? I don't want us to deliver something buggy. Developer: If we focus on the core features only, I'm fairly confident we can maintain quality. But we'd need an extra developer for the next two weeks. Manager: I'll see what I can do. Let me talk to the resource team. In the meantime, can you prepare a revised timeline showing what we can deliver and when? Developer: Sure, I'll have that ready by tomorrow morning.",qs:[{q:"Why does the client want to move the deadline forward?",opts:["They want to save money","They are under pressure from their board","The project is too simple","They found a cheaper provider"],correct:1},{q:"What is the developer's main concern?",opts:["He wants a pay raise","He doesn't like the client","They are behind on testing due to bugs","He wants to quit the project"],correct:2},{q:"What solution does the manager propose?",opts:["Cancel the project","Hire a completely new team","Deliver a basic version first and add features later","Ask the client to wait another month"],correct:2},{q:"What does the developer need to meet the new deadline?",opts:["A bigger office","An extra developer for two weeks","Permission to skip all testing","A meeting with the client"],correct:1},{q:"What will the developer do by tomorrow morning?",opts:["Finish the entire project","Prepare a revised timeline","Meet with the client","Request a transfer"],correct:1}]},
-  {title:"Customer Complaint Resolution",text:"Customer: I'm calling because I received the wrong item in my order. I ordered a blue laptop bag, but I received a black one instead. Agent: I'm very sorry about that, sir. Let me pull up your order. Can you give me your order number? Customer: It's MT-7829. Agent: Thank you. I can see the order here. You're right — it shows a blue laptop bag, but it looks like the warehouse sent the wrong colour. I apologize for the inconvenience. I can arrange for a replacement to be sent out today, and we'll include a prepaid return label for the incorrect item. Customer: How long will the replacement take? Agent: It should arrive within three to five business days. As a gesture of goodwill, I'd also like to offer you a fifteen percent discount on your next order. Customer: That sounds fair. But I need the blue bag for a trip next Thursday. Will it definitely arrive by then? Agent: If I upgrade the shipping to express, it should arrive by Tuesday at the latest. There's no extra charge for that. Customer: Alright, that works. Please go ahead with the express shipping. Agent: Done. You'll receive a confirmation email shortly with the tracking number.",qs:[{q:"What is the customer's problem?",opts:["The item was damaged","The wrong colour was sent","The order never arrived","The price was wrong"],correct:1},{q:"What does the agent offer as compensation?",opts:["A full refund","A free laptop bag","A fifteen percent discount on the next order","Free lifetime shipping"],correct:2},{q:"Why is the customer concerned about delivery time?",opts:["He's moving to a new city","He wants to return the item quickly","He has a trip next Thursday","He's leaving the country permanently"],correct:2},{q:"What can you infer about the agent's approach?",opts:["She is unhelpful and dismissive","She tries to resolve the issue quickly and fairly","She blames the customer","She doesn't know the company's policies"],correct:1},{q:"When will the replacement most likely arrive?",opts:["Today","Within 24 hours","By Tuesday at the latest","Next Thursday"],correct:2}]},
-  {title:"⭐ Vending Machine Supplier Meeting",text:"Man: I was about to come to your office. Good, I found you on the way. Woman: Good morning, sir. Has something happened? I was just going to the cafeteria. Man: I am afraid I won't be able to make it to the meeting with the vending machine supplier today. Woman: Oh, should I cancel the meeting for the day? Man: No, no. Why cancel it? You can attend and take notes of their presentation. Woman: Yes, sir. Anything else that you want me to do? Man: Yes, I want you to negotiate a better price on the machine. We want to find a less expensive machine to replace the existing one. Woman: Do you want a less expensive machine even if it has fewer beverage options? Man: No, we want to keep at least five options, but we don't want to spend more than ten thousand dollars. Woman: Okay, I'll make a note of it. I will leave the office in a while. Man: Great. And please remember that we do not want to compromise on quality. Woman: I understand that, sir. I will try to get the best deal for cost and quality. Is there anything else you want to ask me? Man: Do I have the liberty to close the deal if I find the right machine? Woman: No, because I would still like to consider other suppliers in the market, even if our present supplier offers us a good price. Man: Sounds good. I'll have my lunch and then leave for the meeting. Woman: All the best, Sarah. Call me when you reach the meeting venue.",qs:[{q:"Why can't the man attend the meeting?",opts:["He is sick","He has another appointment","He doesn't say the specific reason, but he won't be able to make it","He is on vacation"],correct:2},{q:"What does the man ask Sarah to do at the meeting?",opts:["Cancel the meeting","Just observe and leave","Take notes and negotiate a better price","Sign the contract immediately"],correct:2},{q:"What is the budget limit for the new machine?",opts:["Five thousand dollars","Ten thousand dollars","Fifteen thousand dollars","Twenty thousand dollars"],correct:1},{q:"Why doesn't the man want Sarah to close the deal?",opts:["He doesn't trust her judgment","He wants to consider other suppliers in the market","The budget hasn't been approved yet","He wants to attend the next meeting himself"],correct:1},{q:"What can you infer about the man's priorities?",opts:["He only cares about the lowest price","He wants good quality with at least five beverage options within budget","He doesn't care about the vending machine at all","He wants the most expensive machine available"],correct:1}]},
-  {title:"Training Program Feedback",text:"Trainer: Thank you all for completing the three-day leadership training program. Before you go, I'd like to get some quick feedback. What did you find most useful? Participant 1: I thought the communication workshop on day two was excellent. The role-playing exercises really helped me understand how to handle difficult conversations. Participant 2: I agree. But I felt like the time management session on day one was a bit too basic. Most of us already use those techniques. Trainer: That's helpful feedback. We'll consider making that session optional or offering an advanced version. What about the team-building activity on day three? Participant 1: Honestly, I didn't see the connection to leadership skills. It was fun, but I'm not sure what I learned from it. Participant 2: I actually found it useful. Working with people from different departments helped me see things from a different perspective. Trainer: Interesting — it shows people have different learning styles. We'll keep the activity but add a reflection session afterward so the learning points are clearer.",qs:[{q:"What did Participant 1 find most useful?",opts:["The time management session","The team-building activity","The communication workshop on day two","The opening keynote"],correct:2},{q:"Why does Participant 2 criticize the time management session?",opts:["It was too long","It was too basic for experienced staff","The trainer was unprepared","It was scheduled too early"],correct:1},{q:"What change will the trainer probably make to the time management session?",opts:["Remove it completely","Keep it exactly the same","Make it optional or offer an advanced version","Move it to day three"],correct:2},{q:"What does Participant 1 think about the team-building activity?",opts:["It was the best part of the training","It was fun but the learning connection was unclear","It was boring and useless","It should be made longer"],correct:1},{q:"What does the trainer plan to add to the team-building activity?",opts:["More games","A written exam","A reflection session","A presentation by each team"],correct:2}]},
-  {title:"⭐ Christmas Party Planning",text:"Tina: Hi, Justin, how are you? Justin: Hi, Tina. I'm fine, thank you. I was planning to meet you this evening. We haven't discussed the plans for the Christmas party yet. Tina: Oh yes, Christmas is just two weeks away. There are so many arrangements to be made. Justin: I think we should schedule the party three days before December twenty-fifth. There are so many employees who have to travel back to their own towns and many of them are probably leaving early in the week. Tina: I agree the party should be on Wednesday, as you say, but not before that. Justin: I have the contact details of a few caterers. I presume you may need these. Tina: Oh yes, that would be helpful. Thanks — being an HR can really get tiresome. Justin: True, you have so many arrangements to make. Do you want me to take care of the catering? You can concentrate on the decorations and also the invitations that need to go out to our clients. Tina: Oh, that would be great. Thanks so much, but please be sure to pick a good caterer — we don't want to disappoint the employees and clients. Justin: Don't worry. I'll find the perfect food and drinks. Tina, if you want, I can send Shiny from my department to help you out with the other arrangements. Tina: Oh no, we absolutely do not need more people on the organizing committee. By the way, I saw a fun game on a TV show. Maybe we can play that game at the party. Justin: It doesn't involve dancing around if you lose a turn, does it? Tina: Ha ha, don't worry, you can be the mediator — the mediator doesn't have to dance. Justin: Thank you so much for your generosity. So I'll work with James and Rita to settle on a caterer. John can help me decide the menu. Tina: Yes, let's meet the day after tomorrow to see where things stand.",qs:[{q:"What can be said about the organizing committee of the Christmas party?",opts:["They need more members","Tina wants to add Shiny to the committee","They do not need more people on the committee","Justin is not on the committee"],correct:2},{q:"What can be inferred from the conversation?",opts:["Tina and Justin are in different departments","They don't get along well","The party will be on December 25th","Justin doesn't want to help"],correct:0},{q:"Who is NOT responsible for helping Justin shortlist the caterers and menu?",opts:["James","Rita","John","Shiny"],correct:3},{q:"What was the inspiration for the idea of the game?",opts:["A colleague's suggestion","A TV show","A previous company party","A team-building exercise"],correct:1},{q:"What can be inferred about Justin from the conversation?",opts:["He loves dancing","He doesn't want to help with the party","He doesn't like dancing and prefers to be the mediator","He is Tina's manager"],correct:2}]}
+var D_PASSAGES_BANK=[
+  {title:"Office Relocation",text:"Woman: Have you heard? The company is planning to move to a new office next month. Man: Yes, I read the email. It says the new building is closer to the train station, which would make my commute shorter. But I'm a bit worried about the open-plan layout. Woman: Me too. I find it hard to concentrate when there's a lot of noise. I wonder if they'll have quiet rooms. Man: The email mentioned some meeting pods and focus rooms, but I'm not sure how many. If there aren't enough, people might end up booking them all day. Woman: That's a good point. I think we should bring this up at the next team meeting. Maybe management hasn't considered how many people actually need quiet space. Man: Agreed. Also, I noticed the new office doesn't have a cafeteria \u2014 just a small kitchen. Woman: Really? That could be a problem for people who don't bring lunch. Man: I hope so. Overall I think the move could be positive, but there are definitely some things they need to sort out first.",qs:[{q:"What does the man like about the new office?",opts:["It has a cafeteria","It is closer to the train station","It has an open-plan layout","It is in a quieter area"],correct:1},{q:"Why is the woman concerned?",opts:["The office is too far","She dislikes her manager","She finds it hard to concentrate with noise","She does not want to move desks"],correct:2},{q:"What can you infer about the meeting pods?",opts:["There are plenty","They might not be enough","They are for managers only","They are not built yet"],correct:1},{q:"What will the man probably do next?",opts:["Look for a new job","Book a meeting pod","Raise concerns at a team meeting","Email HR"],correct:2},{q:"What is the overall tone?",opts:["Angry","Cautiously positive with concerns","Completely negative","Excited"],correct:1}]},
+  {title:"Project Deadline",text:"Manager: I need to talk to you about the Henderson project. The client wants to move the deadline forward by two weeks. Developer: Two weeks? That's going to be very tight. We're already behind on the testing phase because of the bugs we found last week. Manager: I understand. But the client is under pressure from their board to show progress. Is there any way we can deliver a basic version first and add the remaining features later? Developer: We could do a phased delivery. The core functionality is about eighty percent done. If we skip some of the nice-to-have features, we could probably have something ready. Manager: What about quality? I don't want us to deliver something buggy. Developer: If we focus on the core features only, I'm fairly confident we can maintain quality. But we'd need an extra developer for the next two weeks. Manager: I'll see what I can do. In the meantime, can you prepare a revised timeline? Developer: Sure, I'll have that ready by tomorrow morning.",qs:[{q:"Why does the client want to move the deadline?",opts:["To save money","Board pressure to show progress","Project is too simple","Found a cheaper provider"],correct:1},{q:"What is the developer's main concern?",opts:["Pay raise","Dislikes client","Behind on testing due to bugs","Wants to quit"],correct:2},{q:"What solution does the manager propose?",opts:["Cancel project","New team","Deliver basic version first","Wait a month"],correct:2},{q:"What does the developer need?",opts:["Bigger office","Extra developer for two weeks","Skip all testing","Client meeting"],correct:1},{q:"What will the developer do by tomorrow?",opts:["Finish project","Prepare revised timeline","Meet client","Request transfer"],correct:1}]},
+  {title:"Christmas Party Planning",text:"Tina: Hi, Justin, how are you? Justin: Hi, Tina. I'm fine, thank you. I was planning to meet you this evening. We haven't discussed the plans for the Christmas party yet. Tina: Oh yes, Christmas is just two weeks away. There are so many arrangements to be made. Justin: I think we should schedule the party three days before December twenty-fifth. There are so many employees who have to travel back to their own towns and many of them are probably leaving early in the week. Tina: I agree the party should be on Wednesday, as you say, but not before that. Justin: I have the contact details of a few caterers. I presume you may need these. Tina: Oh yes, that would be helpful. Thanks. Justin: True, you have so many arrangements to make. Do you want me to take care of the catering? You can concentrate on the decorations and also the invitations that need to go out to our clients. Tina: Oh, that would be great. Thanks so much, but please be sure to pick a good caterer. Justin: Don't worry. I'll find the perfect food and drinks. Tina, if you want, I can send Shiny from my department to help you out with the other arrangements. Tina: Oh no, we absolutely do not need more people on the organizing committee. By the way, I saw a fun game on a TV show. Maybe we can play that game at the party. Justin: It doesn't involve dancing around if you lose a turn, does it? Tina: Ha ha, don't worry, you can be the mediator. Justin: Thank you so much. So I'll work with James and Rita to settle on a caterer. John can help me decide the menu. Tina: Yes, let's meet the day after tomorrow to see where things stand.",qs:[{q:"What about the organizing committee?",opts:["They need more members","Tina wants to add Shiny","They do not need more people","Justin is not on it"],correct:2},{q:"What can be inferred?",opts:["Tina and Justin are in different departments","They don't get along","Party is on Dec 25","Justin doesn't want to help"],correct:0},{q:"Who is NOT helping Justin with caterers?",opts:["James","Rita","John","Shiny"],correct:3},{q:"Where did the game idea come from?",opts:["A colleague","A TV show","A previous party","A team building exercise"],correct:1},{q:"What about Justin?",opts:["He loves dancing","He doesn't want to help","He prefers to be the mediator","He is Tina's manager"],correct:2}]},
+  {title:"Vending Machine Supplier",text:"Man: I was about to come to your office. Good, I found you on the way. Woman: Good morning, sir. Has something happened? I was just going to the cafeteria. Man: I am afraid I won't be able to make it to the meeting with the vending machine supplier today. Woman: Oh, should I cancel the meeting? Man: No, no. Why cancel it? You can attend and take notes of their presentation. Woman: Yes, sir. Anything else? Man: Yes, I want you to negotiate a better price on the machine. We want a less expensive machine to replace the existing one. Woman: Do you want a less expensive machine even if it has fewer beverage options? Man: No, we want to keep at least five options, but we don't want to spend more than ten thousand dollars. Woman: Okay, I'll make a note. Man: And please remember that we do not want to compromise on quality. Woman: I understand. I will try to get the best deal. Is there anything else? Man: Do I have the liberty to close the deal if I find the right machine? Woman: No, because I would still like to consider other suppliers, even if our present supplier offers a good price. Man: Sounds good. I'll have my lunch and then leave for the meeting. Woman: All the best, Sarah.",qs:[{q:"Why can't the man attend the meeting?",opts:["He is sick","He has another appointment","He doesn't say the specific reason","He is on vacation"],correct:2},{q:"What does the man ask Sarah to do?",opts:["Cancel the meeting","Just observe","Take notes and negotiate a better price","Sign the contract immediately"],correct:2},{q:"What is the budget limit?",opts:["Five thousand","Ten thousand dollars","Fifteen thousand","Twenty thousand"],correct:1},{q:"Why not close the deal?",opts:["Doesn't trust Sarah","Wants to consider other suppliers","Budget not approved","Wants to attend next meeting"],correct:1},{q:"What are the man's priorities?",opts:["Lowest price only","Quality with at least 5 options within budget","Doesn't care","Most expensive machine"],correct:1}]},
+  {title:"Training Program Feedback",text:"HR Manager: Thank you all for attending this feedback session about the new employee training program. I'd like to hear your thoughts. Senior Trainer: Overall, I think the program structure is good, but we're trying to cover too much in the first week. New hires feel overwhelmed. HR Manager: That's a valid point. What do you suggest? Senior Trainer: I'd recommend spreading the technical training over two weeks instead of one. The soft skills modules can move to month two. Team Lead: I agree with that. My new team members said they couldn't absorb everything. They also mentioned the online modules were too long. Each one is about ninety minutes. HR Manager: How long should they be? Team Lead: Research shows thirty to forty-five minutes is optimal for online learning. We should also add more interactive elements. HR Manager: Good suggestions. What about the mentoring component? Senior Trainer: The buddy system is working well. New hires really appreciate having someone to ask questions. But we need to give mentors protected time for this role. Team Lead: Yes, currently mentors are doing it on top of their regular work, which isn't sustainable.",qs:[{q:"What is the main issue with the training?",opts:["Too expensive","Covers too much in week one","Not enough trainers","Wrong content"],correct:1},{q:"What does the Senior Trainer suggest?",opts:["Cancel technical training","Spread it over two weeks","Hire more trainers","Move everything online"],correct:1},{q:"What is the recommended module length?",opts:["15 minutes","30 to 45 minutes","60 minutes","90 minutes"],correct:1},{q:"What works well?",opts:["Online modules","The schedule","The buddy system","The venue"],correct:2},{q:"What problem do mentors face?",opts:["No training","No interest","Doing it on top of regular work","Too many mentees"],correct:2}]},
+  {title:"Budget Review Meeting",text:"CFO: Let's review the Q3 budget variance report. Marketing, you're fifteen percent over budget. What happened? Marketing Director: We had an unplanned product launch in September. The CEO approved additional spending for the campaign, but it wasn't reflected in the original budget. CFO: I see. Going forward, all additional spend needs to be documented with a revised forecast within five business days. Marketing Director: Understood. We've already updated our Q4 projections. Operations Manager: On our side, we're actually eight percent under budget. We renegotiated our logistics contract and saved about two hundred thousand. CFO: That's excellent work. Can you share the negotiation approach with other departments? Operations Manager: Happy to. I can present at next month's leadership meeting. CFO: Perfect. Now, IT department \u2014 I see a large capital expenditure for server upgrades. IT Director: Yes, our current servers are reaching end of life. If we don't upgrade now, we risk system failures that could cost us much more in downtime. The total investment is four hundred thousand, but it should reduce our maintenance costs by thirty percent over three years.",qs:[{q:"Why is Marketing over budget?",opts:["Poor planning","Unplanned product launch","Staff overtime","Wrong forecast"],correct:1},{q:"How much did Operations save?",opts:["$100,000","$200,000","$300,000","$400,000"],correct:1},{q:"What will Operations Manager do?",opts:["Resign","Present negotiation approach at leadership meeting","Cut more costs","Hire new staff"],correct:1},{q:"Why does IT need new servers?",opts:["CEO requested it","Current ones are reaching end of life","For a new product","To save electricity"],correct:1},{q:"What is the expected benefit of the IT upgrade?",opts:["50% cost reduction","30% maintenance cost reduction over 3 years","New features","Faster internet"],correct:1}]}
 ];
-var C_TOPICS = [
-  "Describe the scene of an airport.",
-  "Describe the scene of a shopping mall.",
-  "Describe the scene of a playground.",
-  "Describe the scene of a flood."
+var E_WORDS_BANK=[
+  {word:"HUGE",opts:["large","heavy","tiny","little"],correct:0},
+  {word:"POSTPONE",opts:["delay","cancel","start","finish"],correct:0},
+  {word:"CONFIRM",opts:["verify","deny","question","forget"],correct:0},
+  {word:"URGENT",opts:["immediate","slow","optional","relaxed"],correct:0},
+  {word:"CLARIFY",opts:["explain","confuse","hide","rush"],correct:0},
+  {word:"EXCEED",opts:["surpass","fail","reach","miss"],correct:0},
+  {word:"SUBMIT",opts:["hand in","receive","reject","review"],correct:0},
+  {word:"NEGOTIATE",opts:["discuss terms","agree instantly","refuse","ignore"],correct:0},
+  {word:"EFFICIENT",opts:["productive","lazy","slow","wasteful"],correct:0},
+  {word:"ALLOCATE",opts:["assign","waste","collect","remove"],correct:0},
+  {word:"EXPAND",type:"antonym",opts:["shrink","grow","maintain","develop"],correct:0},
+  {word:"ACCEPT",type:"antonym",opts:["reject","receive","allow","welcome"],correct:0},
+  {word:"INCREASE",type:"antonym",opts:["decrease","grow","multiply","raise"],correct:0},
+  {word:"TEMPORARY",type:"antonym",opts:["permanent","short","brief","instant"],correct:0},
+  {word:"VOLUNTARY",type:"antonym",opts:["compulsory","optional","free","willing"],correct:0},
+  {word:"STRENGTHEN",type:"antonym",opts:["weaken","build","support","improve"],correct:0},
+  {word:"GENEROUS",type:"antonym",opts:["stingy","kind","giving","charitable"],correct:0},
+  {word:"FLEXIBLE",type:"antonym",opts:["rigid","adaptable","versatile","open"],correct:0},
+  {word:"PROFIT",type:"antonym",opts:["loss","gain","revenue","income"],correct:0},
+  {word:"HIRE",type:"antonym",opts:["dismiss","recruit","employ","onboard"],correct:0},
+  {word:"APPROVE",type:"antonym",opts:["reject","accept","confirm","endorse"],correct:0},
+  {word:"COMPRISE",type:"usage",opts:["The company comprises 30% women.","The company comprise 30% women.","The company is comprised 30% women.","The company comprises of 30% women."],correct:0,explain:"comprise = include; no 'of'; singular subject uses comprises."}
 ];
-var C_TOPIC_KEYWORDS = [
-  ["airport","busy","check-in","boarding","security","gate","flight","luggage","passenger","travel","terminal","screen"],
-  ["shopping","mall","stores","clothing","food","crowded","buy","people","cinema","comfortable","weekend","convenient"],
-  ["playground","sports","running","basketball","exercise","students","track","energy","field","children","healthy","fun"],
-  ["flood","water","rain","damage","rescue","scared","roof","boats","streets","strong","help","underwater"]
-];
-var F_GRAMMAR_BANK = [
-  {q:"Choose the correct sentence:",opts:["Most of the milk have gone bad.","Most of the milk has gone bad.","Most of the milk are going bad.","Most of the milk is going bad."],correct:1,explain:"milk 为不可数名词，谓语用单数 has；has gone bad 强调结果。"},
-  {q:"Choose the correct sentence:",opts:["Some of the cake have eaten up.","Some of the cake has eaten up.","Some of the cake has been eaten up.","Some of the cake have been eaten up."],correct:2,explain:"cake 不可数，谓语用 has；被动语态 has been eaten up。"},
-  {q:"Choose the correct sentence:",opts:["He sleeps in the plane.","He sleeps on the plane.","He sleeps into the plane.","He sleeps onto the plane."],correct:1,explain:"on the plane 固定搭配表示乘坐；in 仅强调内部；into/onto 表方向不与 sleep 搭配。"},
-  {q:"Choose the correct sentence:",opts:["She don't like coffee.","She doesn't likes coffee.","She doesn't like coffee.","She not like coffee."],correct:2,explain:"第三人称单数否定用 doesn't + 动词原形。"},
-  {q:"Choose the correct sentence:",opts:["The informations are very useful.","The information are very useful.","The information is very useful.","The informations is very useful."],correct:2,explain:"information 不可数名词，无复数，谓语用 is。"},
-  {q:"Choose the correct sentence:",opts:["Each of the students have a textbook.","Each of the students has a textbook.","Each of the students are having a textbook.","Each of the student has a textbook."],correct:1,explain:"each of + 复数名词，谓语用单数 has。"},
-  {q:"Choose the correct sentence:",opts:["Neither the manager nor the employees was informed.","Neither the manager nor the employees were informed.","Neither the manager nor the employees is informed.","Neither the manager nor the employees has informed."],correct:1,explain:"neither…nor… 就近一致，employees 复数用 were。"},
-  {q:"Choose the correct sentence:",opts:["The team have decided to postpone the meeting.","The team has decided to postpone the meeting.","The team are decide to postpone the meeting.","The team is decide to postpone the meeting."],correct:1,explain:"team 作整体为单数，用 has decided。"},
-  {q:"Choose the correct sentence:",opts:["There is many reasons for the delay.","There are many reasons for the delay.","There has many reasons for the delay.","There have many reasons for the delay."],correct:1,explain:"many reasons 复数，there be 用 are。"},
-  {q:"Choose the correct sentence:",opts:["The news are very surprising today.","The news is very surprising today.","The news were very surprising today.","The news have been very surprising today."],correct:1,explain:"news 不可数名词，谓语用 is。"},
-  {q:"⭐ Choose the correct answer to fill in the blank: Audacious is the opposite of _______.",opts:["brave","cowardly","confident","curious"],correct:1,explain:"audacious 大胆的，有魄力的；cowardly 胆小的，怯懦的。二者互为反义词。"}
+var F_GRAMMAR_BANK=[
+  {q:"Choose the correct sentence:",opts:["Most of the milk have gone bad.","Most of the milk has gone bad.","Most of the milk are going bad.","Most of the milk is going bad."],correct:1,explain:"milk is uncountable; use 'has gone bad' (present perfect)."},
+  {q:"Choose the correct sentence:",opts:["Some of the cake have eaten up.","Some of the cake has eaten up.","Some of the cake has been eaten up.","Some of the cake have been eaten up."],correct:2,explain:"cake uncountable \u2192 'has'; cake is eaten \u2192 passive 'has been eaten up'."},
+  {q:"Choose the correct sentence:",opts:["He sleeps in the plane.","He sleeps on the plane.","He sleeps into the plane.","He sleeps onto the plane."],correct:1,explain:"'on the plane' is the correct preposition for travelling."},
+  {q:"Choose the correct sentence:",opts:["She don't like coffee.","She doesn't likes coffee.","She doesn't like coffee.","She not like coffee."],correct:2,explain:"Third person singular negative: doesn't + base verb."},
+  {q:"Choose the correct sentence:",opts:["The informations are very useful.","The information are very useful.","The information is very useful.","The informations is very useful."],correct:2,explain:"'information' is uncountable, no plural, use 'is'."},
+  {q:"Choose the correct sentence:",opts:["Each of the students have a textbook.","Each of the students has a textbook.","Each of the students are having a textbook.","Each of the student has a textbook."],correct:1,explain:"'each of' + plural noun, but verb is singular 'has'."},
+  {q:"Choose the correct sentence:",opts:["Neither the manager nor the employees was informed.","Neither the manager nor the employees were informed.","Neither the manager nor the employees is informed.","Neither the manager nor the employees has informed."],correct:1,explain:"neither...nor: verb agrees with nearest subject 'employees' (plural) \u2192 'were'."},
+  {q:"Choose the correct sentence:",opts:["The team have decided to postpone the meeting.","The team has decided to postpone the meeting.","The team are decide to postpone the meeting.","The team is decide to postpone the meeting."],correct:1,explain:"'team' as a unit uses singular 'has decided'."},
+  {q:"Choose the correct sentence:",opts:["There is many reasons for the delay.","There are many reasons for the delay.","There has many reasons for the delay.","There have many reasons for the delay."],correct:1,explain:"'many reasons' is plural \u2192 'There are'."},
+  {q:"Choose the correct sentence:",opts:["The news are very surprising today.","The news is very surprising today.","The news were very surprising today.","The news have been very surprising today."],correct:1,explain:"'news' is uncountable \u2192 'is'."},
+  {q:"Fill in the blank: Audacious is the opposite of _______.",opts:["brave","cowardly","confident","curious"],correct:1,explain:"audacious = bold/daring; cowardly = timid. They are antonyms."}
 ];
 
-// ============ SEED / SHUFFLE ============
-function getDailySeed(name){
-  var today=new Date();
-  var ds=today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-  var s=(name||'default')+'_'+ds, h=0;
-  for(var i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))>>>0;
-  return h;
-}
-function seededShuffle(arr,seed){
-  var a=arr.slice(),s=seed;
-  for(var i=a.length-1;i>0;i--){s=(s*1664525+1013904223)>>>0;var j=s%(i+1);var t=a[i];a[i]=a[j];a[j]=t;}
-  return a;
-}
+// ============ SEEDED RANDOM ============
+function getDailySeed(){var d=new Date();return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();}
+function seededRandom(seed){seed=(seed*9301+49297)%233280;return seed/233280;}
+function seededShuffle(arr,seed){var a=arr.slice();for(var i=a.length-1;i>0;i--){seed=(seed*9301+49297)%233280;var j=Math.floor((seed/233280)*i);var t=a[i];a[i]=a[j];a[j]=t;}return a;}
 
 // ============ GLOBAL STATE ============
-var userName='';
-var E_WORDS=[];
-var D_PASSAGES=[];
-var E_SHUFFLED=[];
-var F_GRAMMAR=[];
-var F_SHUFFLED=[];
-var QUEST_SEQ=[];
-var curQ=0;
-var ANSWERS={};
-var cSelectedTopic=-1;
-var cStep=1;
-var cRubric={};
-var cSTRText='';
-var aSTR={};
-var globalTimerInterval=null;
-var globalSecondsLeft=30*60;
-var SRClass=window.SpeechRecognition||window.webkitSpeechRecognition;
+var SRClass=window.SpeechRecognition||window.webkitSpeechRecognition||null;
+var SEED=getDailySeed();
+var aIndices=seededShuffle(Array.from({length:A_SENTENCES.length},function(_,i){return i;}),SEED).slice(0,9);
+var bIndices=seededShuffle(Array.from({length:B_SENTENCES.length},function(_,i){return i;}),SEED+1).slice(0,9);
+var cTopicIdx=Math.floor(seededRandom(SEED+2)*C_TOPICS.length);
+var dPassageIdx=Math.floor(seededRandom(SEED+3)*D_PASSAGES_BANK.length);
+// E: pick 2 synonym + 2 antonym + 1 usage
+var eSynonyms=E_WORDS_BANK.filter(function(w){return !w.type;});
+var eAntonyms=E_WORDS_BANK.filter(function(w){return w.type==='antonym';});
+var eUsage=E_WORDS_BANK.filter(function(w){return w.type==='usage';});
+var ePickedSyn=seededShuffle(eSynonyms,SEED+4).slice(0,2);
+var ePickedAnt=seededShuffle(eAntonyms,SEED+5).slice(0,2);
+var ePickedUse=eUsage.slice(0,1);
+var eWords=ePickedSyn.concat(ePickedAnt).concat(ePickedUse);
+var fIndices=seededShuffle(Array.from({length:F_GRAMMAR_BANK.length},function(_,i){return i;}),SEED+6).slice(0,5);
 
-// ============ COLORS ============
-var SEC_COLORS={A:'#4f46e5',B:'#10b981',C:'#d97706',D:'#7c3aed',E:'#ef4444',F:'#f59e0b'};
-var SEC_LABELS={A:'A · Read',B:'B · Repeat',C:'C · Talk',D:'D · Listen',E:'E · Vocab',F:'F · Grammar'};
+// Answer storage
+var aSTR={};  // a_i -> {pct, transcript, missing}
+var bSTR={};  // b_i -> {pct, transcript}
+var cScore=null; // {score:0-100, rubric:{fluency,vocab,logic,grammar}}
+var dAnswers={}; // d_i -> {choice, correct}
+var eAnswers={}; // e_i -> {choice, correct}
+var fAnswers={}; // f_i -> {choice, correct}
+var bRevealed={};
 
-// ============ TIMER ============
+// Timer
+var timerSec=30*60;
+var timerInterval=null;
 function startGlobalTimer(){
-  if(globalTimerInterval) return;
-  updateTimerDisplay();
-  globalTimerInterval=setInterval(function(){
-    globalSecondsLeft--;
-    updateTimerDisplay();
-    if(globalSecondsLeft<=0){stopGlobalTimer();showFinalResults();}
+  timerInterval=setInterval(function(){
+    timerSec--;
+    if(timerSec<=0){clearInterval(timerInterval);showFinalResults();return;}
+    var m=Math.floor(timerSec/60),s=timerSec%60;
+    document.getElementById('global-timer-bar').textContent='\u23f1 '+(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+    if(timerSec<=300) document.getElementById('global-timer-bar').style.color='#ef4444';
   },1000);
 }
-function stopGlobalTimer(){if(globalTimerInterval){clearInterval(globalTimerInterval);globalTimerInterval=null;}}
-function updateTimerDisplay(){
-  var m=Math.floor(globalSecondsLeft/60),s=globalSecondsLeft%60;
-  var t='⏱ '+(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
-  var el=document.getElementById('global-timer-bar');
-  if(el){el.textContent=t;el.style.background=globalSecondsLeft<=300?'rgba(231,76,60,0.4)':globalSecondsLeft<=600?'rgba(243,156,18,0.4)':'rgba(255,255,255,0.2)';}
+function stopGlobalTimer(){if(timerInterval)clearInterval(timerInterval);}
+// ============ TTS ============
+function ttsSpeak(text,rate){
+  if(!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  var u=new SpeechSynthesisUtterance(text);
+  u.lang='en-US';u.rate=rate||0.9;
+  var voices=speechSynthesis.getVoices();
+  var en=voices.find(function(v){return v.lang==='en-US';})||voices.find(function(v){return v.lang.startsWith('en');});
+  if(en)u.voice=en;
+  speechSynthesis.speak(u);
+  return u;
+}
+function playBarTts(barEl,text){
+  document.querySelectorAll('.audio-bar.playing').forEach(function(b){b.classList.remove('playing');b.querySelector('.play-icon').textContent='\u25b6';});
+  if(window._curBar===barEl&&speechSynthesis.speaking){speechSynthesis.cancel();window._curBar=null;return;}
+  window._curBar=barEl;barEl.classList.add('playing');barEl.querySelector('.play-icon').textContent='\u23f9';
+  speechSynthesis.cancel();
+  var u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=0.9;
+  u.onend=function(){barEl.classList.remove('playing');barEl.querySelector('.play-icon').textContent='\u25b6';window._curBar=null;};
+  u.onerror=u.onend;
+  var voices=speechSynthesis.getVoices();
+  var en=voices.find(function(v){return v.lang==='en-US';})||voices.find(function(v){return v.lang.startsWith('en');});
+  if(en)u.voice=en;
+  speechSynthesis.speak(u);
 }
 
-// ============ AUTO-START (no login) ============
-function autoStart(){
-  userName='Student';
-  document.getElementById('user-greeting').textContent='Welcome! Good luck 👋';
-  // init data
-  E_SHUFFLED=[];
-  F_SHUFFLED=[];
-  var mainSeed=getDailySeed(userName);
-  // Mix: 2 synonyms + 2 antonyms + 1 usage (or as many as available)
-  var synBank=E_WORDS_BANK.filter(function(w){return !w.type;});
-  var antBank=E_WORDS_BANK.filter(function(w){return w.type==='antonym';});
-  var usageBank=E_WORDS_BANK.filter(function(w){return w.type==='usage';});
-  var synPick=seededShuffle(synBank,mainSeed).slice(0,2);
-  var antPick=seededShuffle(antBank,(mainSeed*31+7)>>>0).slice(0,2);
-  var usagePick=seededShuffle(usageBank,(mainSeed*61+11)>>>0).slice(0,1);
-  E_WORDS=seededShuffle(synPick.concat(antPick).concat(usagePick),(mainSeed*13+3)>>>0);
-  var seed2=(mainSeed*1664525+1013904223)>>>0;
-  D_PASSAGES=seededShuffle(D_PASSAGES_BANK,seed2).slice(0,1);
-  F_GRAMMAR=seededShuffle(F_GRAMMAR_BANK,(seed2*31+17)>>>0).slice(0,5);
-  buildQuestSeq();
-  renderQuestion();
-  startGlobalTimer();
-  speechSynthesis.getVoices();
+// ============ STT ============
+function startSTT(onResult,onError){
+  if(!SRClass){alert('Speech recognition not supported.');if(onError)onError('not-supported');return null;}
+  var sr=new SRClass();sr.lang='en-US';sr.continuous=false;sr.interimResults=false;sr.maxAlternatives=3;
+  sr.onresult=function(e){onResult(e.results[0][0].transcript,e.results[0][0].confidence);};
+  sr.onerror=function(e){if(onError)onError(e.error);};
+  sr.start();return sr;
 }
-// Auto-start when page loads
-document.addEventListener('DOMContentLoaded', autoStart);
 
-// ============ BUILD SEQUENCE ============
-function buildQuestSeq(){
-  QUEST_SEQ=[];
-  var seed=getDailySeed(userName);
-  // A: 9 random sentences (Read Aloud — real exam has 13, test uses 9)
-  var aAll=[];for(var i=0;i<A_SENTENCES.length;i++)aAll.push(i);
-  seededShuffle(aAll,seed).slice(0,9).forEach(function(i){QUEST_SEQ.push({sec:'A',type:'read',idx:i});});
-  // B: 9 random sentences (Repeat — real exam has 9)
-  var bAll=[];for(var i=0;i<B_SENTENCES.length;i++)bAll.push(i);
-  seededShuffle(bAll,(seed*7+13)>>>0).slice(0,Math.min(9,B_SENTENCES.length)).forEach(function(i){QUEST_SEQ.push({sec:'B',type:'repeat',idx:i});});
-  // C: 1 topic free talk (Talk)
-  var cTopic=seededShuffle([0,1,2],(seed*3+7)>>>0)[0];
-  QUEST_SEQ.push({sec:'C',type:'speak',idx:cTopic});
-  // D: 1 long dialogue x 5 inference questions (Listen)
-  D_PASSAGES.forEach(function(p,pi){
-    p.qs.forEach(function(q,qi){QUEST_SEQ.push({sec:'D',type:'listen',passageIdx:pi,qIdx:qi});});
+// ============ TEXT COMPARE ============
+function compareTexts(spoken,ref){
+  var s=spoken.toLowerCase().replace(/[^a-z0-9\s]/g,'').trim();
+  var r=ref.toLowerCase().replace(/[^a-z0-9\s]/g,'').trim();
+  var sw=s.split(/\s+/),rw=r.split(/\s+/);
+  var ok=0,miss=[];
+  rw.forEach(function(w){if(sw.indexOf(w)>=0)ok++;else miss.push(w);});
+  return{pct:Math.round(ok/rw.length*100),missing:miss};
+}
+function buildWordHighlight(transcript,ref){
+  var spoken=transcript.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/);
+  var refWords=ref.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/);
+  var origWords=ref.split(/\s+/);
+  var ok=0,miss=[];
+  var html='<div class="stt-card"><div style="font-size:11px;font-weight:700;color:#6b7c93;margin-bottom:6px">YOU SAID: <em style="color:#1e1b4b">"'+transcript+'"</em></div><div style="line-height:2">';
+  refWords.forEach(function(w,i){
+    if(spoken.indexOf(w)>=0){ok++;html+='<span class="word-ok">'+origWords[i]+'</span> ';}
+    else{miss.push(w);html+='<span class="word-miss">'+origWords[i]+'</span> ';}
   });
-  // E: 5 synonym questions (Vocab)
-  for(var e=0;e<5;e++){QUEST_SEQ.push({sec:'E',type:'vocab',idx:e});}
-  // F: 5 grammar questions (Grammar)
-  for(var f=0;f<5;f++){QUEST_SEQ.push({sec:'F',type:'grammar',idx:f});}
+  var pct=Math.round(ok/refWords.length*100);
+  var col=pct>=80?'#27ae60':pct>=50?'#f39c12':'#e74c3c';
+  html+='</div><div style="font-size:13px;font-weight:800;color:'+col+';margin-top:6px">\u51c6\u786e\u7387 '+pct+'%'+(miss.length?' \u00b7 \u6f0f: <span style="color:#e74c3c">'+miss.slice(0,6).join(', ')+'</span>':'')+'</div></div>';
+  return html;
 }
 
-// ============ PROGRESS BAR ============
-function renderProgress(){
-  var secs=['A','B','C','D','E','F'];
-  var html='<div class="prog-bar-inner">';
-  secs.forEach(function(sec){
-    var qs=QUEST_SEQ.map(function(q,i){return{q:q,i:i};}).filter(function(x){return x.q.sec===sec;});
-    if(!qs.length) return;
-    var isActive=QUEST_SEQ[curQ]&&QUEST_SEQ[curQ].sec===sec;
-    var color=SEC_COLORS[sec];
-    var bg=isActive?color:'#e8edf2';
-    html+='<div class="prog-sec'+(isActive?' active':'')+'" onclick="jumpToSec(\''+sec+'\')" style="flex:'+qs.length+';background:'+bg+'">';
-    html+='<div class="prog-sec-label" style="color:'+(isActive?'#fff':'#888')+'">'+SEC_LABELS[sec]+'</div>';
-    html+='<div class="prog-dots">';
-    qs.forEach(function(x){
-      var done=ANSWERS[x.i]!=null;
-      var isCur=x.i===curQ;
-      var dotBg=isCur?'#fff':done?(isActive?'rgba(255,255,255,0.85)':'#27ae60'):(isActive?'rgba(255,255,255,0.3)':'#ccc');
-      html+='<div class="prog-dot" style="background:'+dotBg+'"></div>';
-    });
-    html+='</div></div>';
+// ============ SWITCH TAB ============
+function switchTab(id){
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  var panel=document.getElementById('panel-'+id);
+  if(panel){panel.classList.add('active');panel.style.display='block';}
+  var idx={a:0,b:1,c:2,d:3,e:4,f:5}[id];
+  if(idx!==undefined)document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+  if(id==='result'){document.getElementById('submit-bar').style.display='none';}
+}
+
+// ============ INIT A (Read Aloud) ============
+function initA(){
+  var html='';
+  aIndices.forEach(function(origIdx,i){
+    var text=A_SENTENCES[origIdx];
+    var key='a_'+i;
+    html+='<div class="sentence-item" id="a-card-'+i+'">';
+    html+='<div class="sentence-num">Sentence \u53e5\u5b50 '+(i+1)+' / 9</div>';
+    html+='<div class="sentence-text">'+text+'</div>';
+    html+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">';
+    html+='<button class="btn-tts" onclick="ttsSpeak(A_SENTENCES[aIndices['+i+']])">\ud83d\udd0a Listen \u542c\u4e00\u904d</button>';
+    html+='<button class="btn-tts" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none" onclick="recordA('+i+')" id="a-rec-'+i+'">\ud83c\udfa4 Record \u5f55\u97f3</button>';
+    html+='</div>';
+    html+='<div id="a-stt-'+i+'">'+(aSTR[key]?aSTR[key].html:'')+'</div>';
+    html+='</div>';
   });
-  html+='</div>';
-  document.getElementById('progress-container').innerHTML=html;
+  document.getElementById('a-list').innerHTML=html;
+}
+function recordA(i){
+  var key='a_'+i;
+  var btn=document.getElementById('a-rec-'+i);
+  btn.textContent='\ud83d\udd34 Recording...';btn.style.background='#e74c3c';
+  startSTT(function(transcript){
+    btn.textContent='\u2705 Done';btn.style.background='#10b981';
+    var ref=A_SENTENCES[aIndices[i]];
+    var result=compareTexts(transcript,ref);
+    var highlightHtml=buildWordHighlight(transcript,ref);
+    aSTR[key]={pct:result.pct,transcript:transcript,missing:result.missing,html:highlightHtml};
+    document.getElementById('a-stt-'+i).innerHTML=highlightHtml;
+    setTimeout(function(){btn.textContent='\ud83c\udfa4 Record \u5f55\u97f3';btn.style.background='linear-gradient(135deg,#4f46e5,#7c3aed)';},2000);
+  },function(err){
+    btn.textContent='\ud83c\udfa4 Record \u5f55\u97f3';btn.style.background='linear-gradient(135deg,#4f46e5,#7c3aed)';
+  });
 }
 
-function jumpToSec(sec){
-  var idx=QUEST_SEQ.findIndex(function(q){return q.sec===sec;});
-  if(idx>=0){curQ=idx;renderQuestion();}
-}
-
-// ============ RENDER QUESTION ============
-function renderQuestion(){
-  renderProgress();
-  // hide result page, show question area
-  document.getElementById('result-page').style.display='none';
-  document.getElementById('question-area').style.display='block';
-  document.getElementById('bottom-nav').style.display='flex';
-
-  var q=QUEST_SEQ[curQ];
-  var color=SEC_COLORS[q.sec];
-  var label=SEC_LABELS[q.sec];
-  var inner='';
-
-  switch(q.type){
-    case 'read':    inner=renderReadQ(q); break;
-    case 'repeat':  inner=renderRepeatQ(q); break;
-    case 'speak':   inner=renderSpeakQ(q); break;
-    case 'listen':  inner=renderListenQ(q); break;
-    case 'vocab':   inner=renderVocabQ(q); break;
-    case 'grammar': inner=renderGrammarQ(q); break;
-  }
-
-  var html='<div class="card-top-bar" style="background:'+color+'"></div>'
-    +'<div class="card-body">'
-    +'<div class="card-header">'
-    +'<span class="sec-tag" style="background:'+color+'22;color:'+color+'">'+label+'</span>'
-    +'<span class="q-counter">第 '+(curQ+1)+' / '+QUEST_SEQ.length+' 题</span>'
-    +'</div>'
-    +inner
-    +'</div>';
-  document.getElementById('question-card').innerHTML=html;
-
-  // update nav button states
-  document.getElementById('btn-prev').style.opacity=curQ===0?'0.4':'1';
-  document.getElementById('btn-prev').disabled=curQ===0;
-}
-
-// ============ A: READ ALOUD ============
-function renderReadQ(q){
-  var sent=A_SENTENCES[q.idx];
-  var styled=addStressMarks(sent);
-  var ans=ANSWERS[curQ];
-  var sttHtml='';
-  if(aSTR[q.idx]){
-    var r=aSTR[q.idx];
-    sttHtml=buildWordHighlight(r.transcript,sent);
-  }
-  return '<div style="font-size:13px;color:#6b7c93;margin-bottom:10px">📖 Read this sentence aloud / 大声朗读</div>'
-    +'<div style="font-size:16px;font-weight:600;color:#1e1b4b;line-height:1.7;background:#f8fbff;border-radius:10px;padding:14px;border:1.5px solid rgba(79,70,229,0.15);margin-bottom:14px">'+styled+'</div>'
-    +'<div class="audio-bar" id="ab-a-'+q.idx+'" onclick="playBarTts(this,A_SENTENCES['+q.idx+'])">'
-      +'<div class="play-icon">▶</div><div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>'
-      +'<div class="bar-label">🔊 Listen first / 先听</div>'
-    +'</div>'
-    +'<button id="rec-btn-a-'+q.idx+'" onclick="doRecordA('+q.idx+','+curQ+')" style="width:100%;padding:13px;background:'+(ans?'#27ae60':'linear-gradient(135deg,#4f46e5,#7c3aed)')+';color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px">'+(ans?'✅ 已录音 (再次录音)':'🎤 开始录音 Start Recording')+'</button>'
-    +'<div id="stt-interim-a-'+q.idx+'" style="font-size:12px;color:#888;font-style:italic;min-height:16px;margin-bottom:4px"></div>'
-    +'<div id="stt-result-a-'+q.idx+'">'+sttHtml+'</div>';
-}
-
-function doRecordA(idx,qIdx){
-  var btn=document.getElementById('rec-btn-a-'+idx);
-  if(!btn) return;
-  btn.textContent='⏺ Recording... / 录音中...';btn.style.background='#e74c3c';btn.disabled=true;
-  var intEl=document.getElementById('stt-interim-a-'+idx);
-  startSTTWithInterim(
-    function(interim){if(intEl)intEl.textContent=interim;},
-    function(t){
-      btn.disabled=false;
-      if(intEl)intEl.textContent='';
-      var c=compareTexts(t,A_SENTENCES[idx]);
-      aSTR[idx]={transcript:t,pct:c.pct,missing:c.missing};
-      var score=c.pct>=90?5:c.pct>=75?4:c.pct>=55?3:c.pct>=35?2:1;
-      onAnswered(qIdx,{sec:'A',score:Math.round(score/5*100),pct:c.pct,idx:idx});
-      var el=document.getElementById('stt-result-a-'+idx);
-      if(el)el.innerHTML=buildWordHighlight(t,A_SENTENCES[idx]);
-      btn.textContent='✅ 已录音 (再次录音)';btn.style.background='#27ae60';
-    },
-    function(err){
-      btn.textContent='🎤 开始录音 Start Recording';btn.style.background='linear-gradient(135deg,#4f46e5,#7c3aed)';btn.disabled=false;
-      var el=document.getElementById('stt-result-a-'+idx);
-      if(el)el.innerHTML='<div style="color:#e74c3c;font-size:12px;padding:8px">Mic error: '+err+'</div>';
+// ============ INIT B (Repeat) ============
+function initB(){
+  var html='';
+  bIndices.forEach(function(origIdx,i){
+    var text=B_SENTENCES[origIdx];
+    var key='b_'+i;
+    var revealed=bRevealed[key];
+    html+='<div class="sentence-item" id="b-card-'+i+'">';
+    html+='<div class="sentence-num">Sentence \u53e5\u5b50 '+(i+1)+' / 9</div>';
+    html+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">';
+    html+='<button class="btn-tts" onclick="ttsSpeak(B_SENTENCES[bIndices['+i+']])">\ud83d\udd0a Play \u64ad\u653e</button>';
+    html+='<button class="btn-tts" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none" onclick="recordB('+i+')" id="b-rec-'+i+'">\ud83c\udfa4 Repeat \u590d\u8ff0</button>';
+    html+='</div>';
+    if(revealed||bSTR[key]){
+      html+='<div class="sentence-text" style="margin-top:8px">'+text+'</div>';
     }
-  );
-}
-
-// ============ B: REPEAT ============
-function renderRepeatQ(q){
-  var sent=B_SENTENCES[q.idx];
-  var ans=ANSWERS[curQ];
-  var sttHtml='';
-  if(ans&&ans.transcript){
-    sttHtml=buildWordHighlight(ans.transcript,sent);
-  }
-  return '<div style="font-size:13px;color:#6b7c93;margin-bottom:10px">🔁 Listen then repeat / 听后复述</div>'
-    +'<div class="audio-bar" id="ab-b-'+q.idx+'" onclick="playBarTts(this,B_SENTENCES['+q.idx+'])">'
-      +'<div class="play-icon">▶</div><div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>'
-      +'<div class="bar-label">🔊 Play / 播放句子</div>'
-    +'</div>'
-    +'<div style="background:#f8fbff;border-radius:10px;padding:12px;font-size:14px;color:#888;font-style:italic;margin-bottom:12px;border:1.5px dashed rgba(79,70,229,0.15)">--- 听完后再复述，不要看原文 ---</div>'
-    +'<button id="rec-btn-b-'+q.idx+'" onclick="doRecordB('+q.idx+','+curQ+')" style="width:100%;padding:13px;background:'+(ans?'#27ae60':'linear-gradient(135deg,#4f46e5,#7c3aed)')+';color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px">'+(ans?'✅ 已录音 (再次录音)':'🎙 Repeat Now / 开始复述')+'</button>'
-    +'<div id="stt-result-b-'+q.idx+'">'+sttHtml+'</div>'
-    +(ans?'<div style="margin-top:10px;background:rgba(79,70,229,0.04);border-radius:10px;padding:10px 12px;font-size:13px;color:#4f46e5;border:1.5px solid rgba(79,70,229,0.15)"><strong>Reference / 原文:</strong> '+sent+'</div>':'');
-}
-
-function doRecordB(idx,qIdx){
-  var btn=document.getElementById('rec-btn-b-'+idx);
-  if(!btn) return;
-  btn.textContent='⏺ Recording... / 录音中...';btn.style.background='#e74c3c';btn.disabled=true;
-  startSTT(
-    function(t){
-      btn.disabled=false;
-      var c=compareTexts(t,B_SENTENCES[idx]);
-      onAnswered(qIdx,{sec:'B',pct:c.pct,transcript:t,missing:c.missing,idx:idx});
-      var el=document.getElementById('stt-result-b-'+idx);
-      if(el)el.innerHTML=buildWordHighlight(t,B_SENTENCES[idx]);
-      btn.textContent='✅ 已录音 (再次录音)';btn.style.background='#27ae60';
-      // show reference
-      var ref=btn.parentNode.querySelector('.b-ref');
-      if(!ref){
-        var d=document.createElement('div');
-        d.className='b-ref';
-        d.style.cssText='margin-top:10px;background:rgba(79,70,229,0.04);border-radius:10px;padding:10px 12px;font-size:13px;color:#4f46e5;border:1.5px solid rgba(79,70,229,0.15)';
-        d.innerHTML='<strong>Reference / 原文:</strong> '+B_SENTENCES[idx];
-        btn.parentNode.appendChild(d);
-      }
-    },
-    function(err){
-      btn.textContent='🎙 Repeat Now / 开始复述';btn.style.background='linear-gradient(135deg,#4f46e5,#7c3aed)';btn.disabled=false;
-      var el=document.getElementById('stt-result-b-'+idx);
-      if(el)el.innerHTML='<div style="color:#e74c3c;font-size:12px;padding:8px">Mic error: '+err+'</div>';
+    html+='<div id="b-stt-'+i+'">'+(bSTR[key]?bSTR[key].html:'')+'</div>';
+    if(!revealed&&!bSTR[key]){
+      html+='<button class="btn-tts" onclick="revealB(\''+key+'\','+i+')" style="margin-top:8px;width:100%;justify-content:center;padding:10px">\ud83d\udc41 Reveal \u63ed\u793a\u539f\u6587</button>';
     }
-  );
+    html+='</div>';
+  });
+  document.getElementById('b-list').innerHTML=html;
 }
+function recordB(i){
+  var key='b_'+i;
+  var btn=document.getElementById('b-rec-'+i);
+  btn.textContent='\ud83d\udd34 Recording...';btn.style.background='#e74c3c';
+  startSTT(function(transcript){
+    btn.textContent='\u2705 Done';btn.style.background='#10b981';
+    var ref=B_SENTENCES[bIndices[i]];
+    var result=compareTexts(transcript,ref);
+    var highlightHtml=buildWordHighlight(transcript,ref);
+    bSTR[key]={pct:result.pct,transcript:transcript,html:highlightHtml};
+    bRevealed[key]=true;
+    initB(); // re-render to show revealed text
+    setTimeout(function(){btn.textContent='\ud83c\udfa4 Repeat \u590d\u8ff0';btn.style.background='linear-gradient(135deg,#4f46e5,#7c3aed)';},2000);
+  },function(err){
+    btn.textContent='\ud83c\udfa4 Repeat \u590d\u8ff0';btn.style.background='linear-gradient(135deg,#4f46e5,#7c3aed)';
+  });
+}
+function revealB(key,i){bRevealed[key]=true;initB();}
+// ============ INIT C (Talk) ============
+var cStep=0; // 0=listen, 1=record, 2=rubric
+var cRubric={fluency:0,vocab:0,logic:0,grammar:0};
+var cRecTranscript='';
 
-// ============ C: LISTEN ============
-// ============ C: TALK (SPEAKING) ============
-function renderSpeakQ(q){
-  var topic=C_TOPICS[q.idx];
-  var ans=ANSWERS[curQ];
-  if(cStep===1){
-    return '<div style="font-size:13px;color:#6b7c93;margin-bottom:12px">🎤 Free Talk / 自由演讲</div>'
-      +'<div class="audio-bar" onclick="playBarTts(this,C_TOPICS['+q.idx+'])">'
-        +'<div class="play-icon">▶</div><div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>'
-        +'<div class="bar-label">🔊 Listen to topic / 听题目</div>'
-      +'</div>'
-      +'<div style="background:rgba(79,70,229,0.04);border-radius:12px;padding:16px;font-size:15px;font-weight:600;line-height:1.7;color:#1e1b4b;border:1.5px solid rgba(79,70,229,0.15);margin:12px 0">'+topic+'</div>'
-      +'<button onclick="cGoStep2()" style="width:100%;padding:13px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer">▶ 开始演讲 Start Speaking</button>';
-  }
-  if(cStep===2){
-    return '<div style="font-size:13px;color:#6b7c93;margin-bottom:10px">🎙 Step 2 · Speak Now / 演讲中</div>'
-      +'<div style="background:rgba(79,70,229,0.04);border-radius:12px;padding:14px;font-size:14px;font-weight:600;line-height:1.7;color:#1e1b4b;border:1.5px solid rgba(79,70,229,0.15);margin-bottom:14px">'+topic+'</div>'
-      +'<button id="c-rec-btn" onclick="doRecordC('+q.idx+','+curQ+')" style="width:100%;padding:13px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px">🎙 开始录音 Start Recording</button>'
-      +'<div id="c-stt-result" style="margin-top:8px"></div>';
-  }
-  if(cStep===3){
-    var dims=['fluency','vocab','logic','grammar'];
-    var dimLabels={fluency:'Fluency 流利度',vocab:'Vocabulary 词汇',logic:'Logic 逻辑性',grammar:'Grammar 语法'};
-    var html='<div style="font-size:13px;color:#6b7c93;margin-bottom:6px">⭐ Step 3 · Self Assessment / 自评打分</div>';
-    html+='<div style="font-size:12px;color:#8a9ab5;margin-bottom:14px">根据刚才的表现，为每项打 1–5 颗星 ★</div>';
-    if(cSTRText){
-      html+='<div style="background:rgba(79,70,229,0.04);border-radius:10px;padding:10px;font-size:12px;color:#555;margin-bottom:14px;border-left:3px solid #2e6fba">你说了: <em>"'+cSTRText.substring(0,120)+(cSTRText.length>120?'...':'')+'"</em></div>';
+function initC(){
+  var topic=C_TOPICS[cTopicIdx];
+  renderC();
+}
+function renderC(){
+  var topic=C_TOPICS[cTopicIdx];
+  var html='<div class="card">';
+  html+='<div class="card-title">\ud83c\udfa4 Speaking Topic \u6f14\u8bb2\u8bdd\u9898</div>';
+  html+='<div style="font-size:15px;line-height:1.7;color:var(--text);margin-bottom:14px">'+topic+'</div>';
+  // Step 1: Listen to topic
+  html+='<div class="audio-bar" onclick="playBarTts(this,C_TOPICS[cTopicIdx])">';
+  html+='<div class="play-icon">\u25b6</div><div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>';
+  html+='<div class="bar-label">\ud83d\udd0a Step 1: Listen to Topic \u542c\u9898</div></div>';
+
+  if(cStep===0){
+    html+='<button class="btn-tts" style="width:100%;padding:14px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;font-size:14px;font-weight:700;justify-content:center" onclick="cStep=1;renderC()">\u27a1\ufe0f Step 2: Start Recording \u5f00\u59cb\u5f55\u97f3</button>';
+  } else if(cStep===1){
+    html+='<button class="btn-tts" id="c-rec-btn" style="width:100%;padding:14px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;font-size:14px;font-weight:700;justify-content:center" onclick="recordC()">\ud83c\udfa4 Record Your Speech \u5f55\u97f3\u6f14\u8bb2</button>';
+    if(cRecTranscript){
+      html+='<div class="stt-card" style="margin-top:10px"><div style="font-size:11px;font-weight:700;color:#6b7c93;margin-bottom:4px">YOUR SPEECH:</div><div style="font-size:14px;line-height:1.7">'+cRecTranscript+'</div></div>';
+      html+='<button class="btn-tts" style="width:100%;padding:12px;margin-top:8px;background:var(--green);color:#fff;border:none;font-size:13px;font-weight:700;justify-content:center" onclick="cStep=2;renderC()">\u27a1\ufe0f Step 3: Self Evaluation \u81ea\u8bc4</button>';
     }
-    dims.forEach(function(dim){
-      html+='<div class="rubric-row"><span class="rubric-label">'+dimLabels[dim]+'</span><div class="rubric-stars" id="r-'+dim+'">';
-      for(var j=1;j<=5;j++){
-        var active=cRubric[dim]&&cRubric[dim]>=j;
-        html+='<span class="rubric-star'+(active?' active':'')+'" onclick="rateCDim(\''+dim+'\','+j+')">★</span>';
+  } else if(cStep===2){
+    // Rubric
+    html+='<div style="margin-top:14px;padding:16px;background:rgba(79,70,229,0.04);border-radius:14px;border:1.5px solid rgba(79,70,229,0.12)">';
+    html+='<div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:12px">\ud83d\udccb Self Evaluation \u56db\u7ef4\u81ea\u8bc4 (1-5 stars)</div>';
+    ['Fluency \u6d41\u5229\u5ea6','Vocabulary \u8bcd\u6c47','Logic \u903b\u8f91','Grammar \u8bed\u6cd5'].forEach(function(label,li){
+      var key=['fluency','vocab','logic','grammar'][li];
+      html+='<div class="rubric-row"><div class="rubric-label">'+label+'</div><div class="rubric-stars">';
+      for(var s=1;s<=5;s++){
+        html+='<span class="rubric-star'+(cRubric[key]>=s?' active':'')+'" onclick="setCRubric(\''+key+'\','+s+')">\u2b50</span>';
       }
       html+='</div></div>';
     });
-    html+='<button onclick="submitC('+curQ+')" style="width:100%;padding:13px;background:#1e7e4e;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px">✅ 提交得分 Submit Score</button>';
-    return html;
+    html+='</div>';
+    if(cRubric.fluency>0&&cRubric.vocab>0&&cRubric.logic>0&&cRubric.grammar>0){
+      var avg=Math.round((cRubric.fluency+cRubric.vocab+cRubric.logic+cRubric.grammar)/4*20);
+      cScore={score:avg,rubric:Object.assign({},cRubric)};
+      html+='<div style="text-align:center;margin-top:12px;font-size:14px;font-weight:700;color:var(--primary)">\u2705 Score: '+avg+'/100</div>';
+    }
   }
-  return '<div style="text-align:center;padding:20px;color:#27ae60;font-size:15px;font-weight:700">✅ Section C Completed!</div>';
+  html+='</div>';
+  document.getElementById('c-content').innerHTML=html;
 }
-
-function cGoStep2(){cStep=2;renderQuestion();}
-
-function doRecordC(topicIdx,qIdx){
+function recordC(){
   var btn=document.getElementById('c-rec-btn');
-  if(!btn) return;
-  btn.textContent='⏺ Recording... / 录音中...';btn.style.background='#e74c3c';btn.disabled=true;
-  startSTT(
-    function(t){
-      cSTRText=t;
-      btn.textContent='🎙 开始录音 Start Recording';btn.style.background='linear-gradient(135deg,#4f46e5,#7c3aed)';btn.disabled=false;
-      var el=document.getElementById('c-stt-result');
-      if(el){
-        el.innerHTML='<div style="background:rgba(79,70,229,0.04);border-radius:10px;padding:10px 14px;border-left:3px solid #27ae60"><div style="font-size:12px;font-weight:700;color:#27ae60">🎉 Recording done! Now rate yourself below.</div></div>';
+  if(!btn)return;
+  btn.textContent='\ud83d\udd34 Recording...';btn.style.background='#e74c3c';
+  startSTT(function(transcript){
+    cRecTranscript=transcript;
+    btn.textContent='\u2705 Done';btn.style.background='#10b981';
+    setTimeout(function(){renderC();},500);
+  },function(){
+    btn.textContent='\ud83c\udfa4 Record Your Speech';btn.style.background='linear-gradient(135deg,#4f46e5,#7c3aed)';
+  });
+}
+function setCRubric(key,val){cRubric[key]=val;renderC();}
+
+// ============ INIT D (Listen) ============
+function initD(){
+  var passage=D_PASSAGES_BANK[dPassageIdx];
+  var html='<div class="card">';
+  html+='<div class="card-title">\ud83c\udfa7 '+passage.title+'</div>';
+  // Audio bar for dialogue
+  html+='<div class="audio-bar" onclick="playBarTts(this,D_PASSAGES_BANK[dPassageIdx].text)">';
+  html+='<div class="play-icon">\u25b6</div><div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>';
+  html+='<div class="bar-label">\ud83d\udd0a Play Dialogue \u64ad\u653e\u5bf9\u8bdd</div></div>';
+  // Passage text (collapsible)
+  html+='<details style="margin-bottom:14px"><summary style="cursor:pointer;font-size:12px;color:var(--muted);font-weight:600">\ud83d\udc41 Show Transcript \u663e\u793a\u6587\u672c</summary>';
+  html+='<div class="passage-box" style="margin-top:8px">'+passage.text+'</div></details>';
+  html+='</div>';
+
+  // MCQ questions
+  var keys=['A','B','C','D'];
+  passage.qs.forEach(function(q,qi){
+    html+='<div class="card" id="d-card-'+qi+'">';
+    html+='<div style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:6px">Q'+(qi+1)+' / '+passage.qs.length+'</div>';
+    html+='<div style="font-size:15px;font-weight:600;margin-bottom:12px;line-height:1.5">'+q.q+'</div>';
+    html+='<div class="mcq-options">';
+    q.opts.forEach(function(opt,oi){
+      var ans=dAnswers[qi];
+      var cls='mcq-opt';
+      if(ans!==undefined){
+        if(oi===q.correct)cls+=' correct';
+        else if(oi===ans.choice&&!ans.correct)cls+=' wrong';
       }
-      setTimeout(function(){cStep=3;renderQuestion();},1200);
-    },
-    function(err){
-      btn.textContent='🎙 开始录音 Start Recording';btn.style.background='linear-gradient(135deg,#4f46e5,#7c3aed)';btn.disabled=false;
-    }
-  );
-  setTimeout(function(){try{speechSynthesis.cancel();}catch(e){}},15000);
-}
-
-function rateCDim(dim,val){
-  cRubric[dim]=val;
-  var stars=document.querySelectorAll('#r-'+dim+' .rubric-star');
-  stars.forEach(function(s,i){s.classList.toggle('active',i<val);});
-}
-
-function submitC(qIdx){
-  if(!cRubric.fluency||!cRubric.vocab||!cRubric.logic||!cRubric.grammar){
-    alert('Please rate all 4 dimensions. / 请评完4个维度');return;
-  }
-  var avg=(cRubric.fluency+cRubric.vocab+cRubric.logic+cRubric.grammar)/4;
-  var pct=Math.round(avg/5*100);
-  onAnswered(qIdx,{sec:'C',score:pct,rubric:{fluency:cRubric.fluency,vocab:cRubric.vocab,logic:cRubric.logic,grammar:cRubric.grammar}});
-  // auto advance
-  if(qIdx<QUEST_SEQ.length-1){curQ=qIdx+1;renderQuestion();}
-}
-
-// ============ D: LISTEN (PASSAGE MCQ) ============
-function renderListenQ(q){
-  var passage=D_PASSAGES[q.passageIdx];
-  var qdata=passage.qs[q.qIdx];
-  var ans=ANSWERS[curQ];
-  var keys=['A','B','C','D'];
-  var barId='ab-d-'+q.passageIdx+'-'+q.qIdx;
-  var html='<div style="font-size:12px;color:#6b7c93;font-weight:700;margin-bottom:8px">🎧 Dialogue 对话 · Q'+(q.qIdx+1)+' / '+passage.qs.length+'</div>'
-    +'<div class="audio-bar" id="'+barId+'" onclick="playBarTts(this,D_PASSAGES['+q.passageIdx+'].text)">'
-      +'<div class="play-icon">▶</div><div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>'
-      +'<div class="bar-label">🔊 Play Dialogue / 播放对话</div>'
-    +'</div>'
-    +'<div style="font-size:15px;font-weight:600;margin:12px 0 10px;line-height:1.5">'+qdata.q+'</div>'
-    +'<div class="mcq-options">';
-  keys.forEach(function(k,oi){
-    var cls='mcq-opt';
-    if(ans!=null && ans.choice===oi){ cls+=' selected'; }
-    var onclick=ans!=null?'':'onclick="selectListen('+oi+','+qdata.correct+','+curQ+')"';
-    html+='<div class="'+cls+'" '+onclick+'><span class="opt-key">'+k+'</span> '+qdata.opts[oi]+'</div>';
+      var onclick=ans!==undefined?'':'onclick="selectD('+qi+','+oi+','+q.correct+')"';
+      html+='<div class="'+cls+'" '+onclick+'><span class="opt-key">'+keys[oi]+'</span> '+opt+'</div>';
+    });
+    html+='</div></div>';
   });
-  html+='</div>';
-  return html;
+  document.getElementById('d-content').innerHTML=html;
+}
+function selectD(qi,choice,correct){
+  dAnswers[qi]={choice:choice,correct:choice===correct};
+  initD();
 }
 
-function selectListen(optIdx,correct,qIdx){
-  ANSWERS[qIdx]={sec:'D',choice:optIdx,correct:optIdx===correct};
-  renderProgress();
-  highlightMCQ(qIdx);
-  setTimeout(function(){
-    if(qIdx<QUEST_SEQ.length-1){curQ=qIdx+1;renderQuestion();}
-    else{showFinalResults();}
-  },800);
-}
-
-// ============ E: VOCAB (SYNONYM MCQ) ============
-function renderVocabQ(q){
-  var w=E_WORDS[q.idx];
-  if(!E_SHUFFLED[q.idx]){
-    E_SHUFFLED[q.idx]=[0,1,2,3].sort(function(){return Math.random()-0.5;});
-  }
+// ============ INIT E (Vocab) ============
+function initE(){
+  var html='';
   var keys=['A','B','C','D'];
-  var ans=ANSWERS[curQ];
-  var isAnt=w.type==='antonym';
-  var isUsage=w.type==='usage';
-  var wordColor=isUsage?'#2980b9':(isAnt?'#8e44ad':'#e74c3c');
-  var prompt=isUsage?'Choose the correct sentence / 选出正确的句子':(isAnt?'Choose the best <strong>antonym</strong> / 选择最佳<strong>反义词</strong>':'Choose the best synonym / 选择最佳近义词');
-  var html='<div style="font-size:28px;font-weight:800;color:'+wordColor+';text-align:center;margin:16px 0;letter-spacing:2px">'+w.word+'</div>'
-    +'<div style="font-size:13px;color:#888;text-align:center;margin-bottom:16px">'+prompt+'</div>'
-    +'<div class="mcq-options">';
-  E_SHUFFLED[q.idx].forEach(function(origIdx,pos){
-    var cls='mcq-opt';
-    if(ans!=null && ans.choice===origIdx){ cls+=' selected'; }
-    var onclick=ans!=null?'':'onclick="selectVocab('+origIdx+','+q.idx+','+curQ+')"';
-    html+='<div class="'+cls+'" '+onclick+'><span class="opt-key">'+keys[pos]+'</span> '+w.opts[origIdx]+'</div>';
+  eWords.forEach(function(w,i){
+    var isAnt=w.type==='antonym';
+    var isUse=w.type==='usage';
+    var wordColor=isUse?'#2980b9':(isAnt?'#8e44ad':'#e74c3c');
+    var prompt=isUse?'Choose the correct sentence \u9009\u51fa\u6b63\u786e\u7684\u53e5\u5b50':(isAnt?'Choose the best <strong>antonym</strong> \u9009\u62e9\u6700\u4f73<strong>\u53cd\u4e49\u8bcd</strong>':'Choose the best synonym \u9009\u62e9\u6700\u4f73\u8fd1\u4e49\u8bcd');
+    html+='<div class="card" id="e-card-'+i+'">';
+    html+='<div style="font-size:28px;font-weight:800;color:'+wordColor+';text-align:center;margin:8px 0;letter-spacing:2px">'+w.word+'</div>';
+    if(isAnt)html+='<div style="text-align:center;font-size:11px;color:#8e44ad;margin-bottom:6px">\u26a1 ANTONYM \u53cd\u4e49\u8bcd</div>';
+    if(isUse)html+='<div style="text-align:center;font-size:11px;color:#2980b9;margin-bottom:6px">\ud83d\udcdd USAGE \u7528\u6cd5</div>';
+    html+='<div style="font-size:13px;color:#888;text-align:center;margin-bottom:12px">'+prompt+'</div>';
+    html+='<div class="mcq-options">';
+    // Shuffle options with seed
+    var optOrder=seededShuffle([0,1,2,3],SEED+100+i);
+    optOrder.forEach(function(origIdx,pos){
+      var ans=eAnswers[i];
+      var cls='mcq-opt';
+      if(ans!==undefined){
+        if(origIdx===w.correct)cls+=' correct';
+        else if(origIdx===ans.choice&&!ans.correct)cls+=' wrong';
+      }
+      var onclick=ans!==undefined?'':'onclick="selectE('+i+','+origIdx+')"';
+      html+='<div class="'+cls+'" '+onclick+'><span class="opt-key">'+keys[pos]+'</span> '+w.opts[origIdx]+'</div>';
+    });
+    html+='</div>';
+    if(eAnswers[i]!==undefined&&w.explain){
+      html+='<div class="grammar-explain '+(eAnswers[i].correct?'correct-bg':'wrong-bg')+'">'+(eAnswers[i].correct?'\u2705 Correct! ':'\u274c Wrong. ')+w.explain+'</div>';
+    }
+    html+='</div>';
   });
-  html+='</div>';
-  return html;
+  document.getElementById('e-list').innerHTML=html;
 }
-
-function selectVocab(origIdx,wIdx,qIdx){
-  var w=E_WORDS[wIdx];
-  ANSWERS[qIdx]={sec:'E',choice:origIdx,correct:origIdx===w.correct,idx:wIdx};
-  renderProgress();
-  highlightMCQ(qIdx);
-  setTimeout(function(){
-    if(qIdx<QUEST_SEQ.length-1){curQ=qIdx+1;renderQuestion();}
-    else{showFinalResults();}
-  },800);
+function selectE(i,choice){
+  eAnswers[i]={choice:choice,correct:choice===eWords[i].correct};
+  initE();
 }
-
-// ============ F: GRAMMAR (MCQ) ============
-function renderGrammarQ(q){
-  var g=F_GRAMMAR[q.idx];
-  if(!F_SHUFFLED[q.idx]){
-    F_SHUFFLED[q.idx]=[0,1,2,3].sort(function(){return Math.random()-0.5;});
-  }
+// ============ INIT F (Grammar) ============
+function initF(){
+  var html='';
   var keys=['A','B','C','D'];
-  var ans=ANSWERS[curQ];
-  var html='<div style="font-size:15px;font-weight:600;color:var(--orange);margin-bottom:14px">📝 '+g.q+'</div>'
-    +'<div class="mcq-options">';
-  F_SHUFFLED[q.idx].forEach(function(origIdx,pos){
-    var cls='mcq-opt';
-    if(ans!=null){
-      if(origIdx===g.correct) cls+=' correct';
-      else if(origIdx===ans.choice && !ans.correct) cls+=' wrong';
+  fIndices.forEach(function(origIdx,i){
+    var g=F_GRAMMAR_BANK[origIdx];
+    html+='<div class="card" id="f-card-'+i+'">';
+    html+='<div style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:6px">Question '+(i+1)+' / 5</div>';
+    html+='<div style="font-size:15px;font-weight:600;color:var(--orange);margin-bottom:14px">\ud83d\udcdd '+g.q+'</div>';
+    html+='<div class="mcq-options">';
+    var optOrder=seededShuffle([0,1,2,3],SEED+200+origIdx);
+    optOrder.forEach(function(oi,pos){
+      var ans=fAnswers[i];
+      var cls='mcq-opt';
+      if(ans!==undefined){
+        if(oi===g.correct)cls+=' correct';
+        else if(oi===ans.choice&&!ans.correct)cls+=' wrong';
+      }
+      var onclick=ans!==undefined?'':'onclick="selectF('+i+','+oi+','+origIdx+')"';
+      html+='<div class="'+cls+'" '+onclick+'><span class="opt-key">'+keys[pos]+'</span> '+g.opts[oi]+'</div>';
+    });
+    html+='</div>';
+    if(fAnswers[i]!==undefined){
+      html+='<div class="grammar-explain '+(fAnswers[i].correct?'correct-bg':'wrong-bg')+'">'+(fAnswers[i].correct?'\u2705 Correct! ':'\u274c Wrong. ')+g.explain+'</div>';
     }
-    var onclick=ans!=null?'':'onclick="selectGrammar('+origIdx+','+q.idx+','+curQ+')"';
-    html+='<div class="'+cls+'" '+onclick+'><span class="opt-key">'+keys[pos]+'</span> '+g.opts[origIdx]+'</div>';
+    html+='</div>';
   });
-  html+='</div>';
-  if(ans!=null){
-    var isCorrect=ans.correct;
-    html+='<div class="grammar-explain '+(isCorrect?'correct-bg':'wrong-bg')+'">'
-      +(isCorrect?'✅ Correct! ':'❌ Wrong. ')
-      +g.explain+'</div>';
-  }
-  return html;
+  document.getElementById('f-list').innerHTML=html;
 }
-
-function selectGrammar(origIdx,gIdx,qIdx){
-  var g=F_GRAMMAR[gIdx];
-  ANSWERS[qIdx]={sec:'F',choice:origIdx,correct:origIdx===g.correct,idx:gIdx};
-  renderProgress();
-  renderQuestion();
-  setTimeout(function(){
-    if(qIdx<QUEST_SEQ.length-1){curQ=qIdx+1;renderQuestion();}
-    else{showFinalResults();}
-  },1200);
-}
-
-// Shared MCQ highlight
-function highlightMCQ(qIdx){
-  var ans=ANSWERS[qIdx];
-  if(!ans) return;
-  var opts=document.querySelectorAll('.mcq-opt');
-  opts.forEach(function(el){el.removeAttribute('onclick');});
-}
-
-// ============ ON ANSWERED ============
-function onAnswered(qIdx,score,immediate){
-  ANSWERS[qIdx]=score;
-  renderProgress();
-  if(immediate){
-    showFinalResults();
-    return;
-  }
-  setTimeout(function(){
-    if(qIdx<QUEST_SEQ.length-1){
-      curQ=qIdx+1;
-      renderQuestion();
-    } else {
-      showFinalResults();
-    }
-  },800);
-}
-
-// ============ NAVIGATION ============
-function goNext(){
-  if(curQ<QUEST_SEQ.length-1){curQ++;renderQuestion();}
-  else{showFinalResults();}
-}
-function goPrev(){
-  if(curQ>0){curQ--;renderQuestion();}
+function selectF(i,choice,origIdx){
+  var g=F_GRAMMAR_BANK[origIdx];
+  fAnswers[i]={choice:choice,correct:choice===g.correct};
+  initF();
 }
 
 // ============ SCORING ============
 function calcSectionScores(){
   var scores={a:null,b:null,c:null,d:null,e:null,f:null};
-  // A: STT pct average (Pronunciation)
-  var aItems=QUEST_SEQ.map(function(q,i){return{q:q,i:i};}).filter(function(x){return x.q.sec==='A';});
-  if(aItems.length){
-    var aTotal=0,aCnt=0;
-    aItems.forEach(function(x){if(ANSWERS[x.i]!=null){aTotal+=ANSWERS[x.i].pct||0;aCnt++;}});
-    if(aCnt>0) scores.a=Math.round(aTotal/aCnt);
+  // A: STT pct average
+  var aVals=Object.values(aSTR);
+  if(aVals.length>0){
+    var sum=aVals.reduce(function(s,v){return s+(v.pct||0);},0);
+    scores.a=Math.round(sum/aVals.length);
   }
-  // B: STT pct average (Fluency)
-  var bItems=QUEST_SEQ.map(function(q,i){return{q:q,i:i};}).filter(function(x){return x.q.sec==='B';});
-  if(bItems.length){
-    var bTotal=0,bCnt=0;
-    bItems.forEach(function(x){if(ANSWERS[x.i]!=null){bTotal+=ANSWERS[x.i].pct||0;bCnt++;}});
-    if(bCnt>0) scores.b=Math.round(bTotal/bCnt);
+  // B: STT pct average
+  var bVals=Object.values(bSTR);
+  if(bVals.length>0){
+    var sum=bVals.reduce(function(s,v){return s+(v.pct||0);},0);
+    scores.b=Math.round(sum/bVals.length);
   }
-  // C: rubric score (Talk)
-  var cItems=QUEST_SEQ.map(function(q,i){return{q:q,i:i};}).filter(function(x){return x.q.sec==='C';});
-  if(cItems.length&&ANSWERS[cItems[0].i]){
-    scores.c=ANSWERS[cItems[0].i].score||0;
+  // C: rubric
+  if(cScore)scores.c=cScore.score;
+  // D: MCQ correct%
+  var dVals=Object.values(dAnswers);
+  if(dVals.length>0){
+    var corr=dVals.filter(function(v){return v.correct;}).length;
+    scores.d=Math.round(corr/dVals.length*100);
   }
-  // D: MCQ correct% (Listen)
-  var dItems=QUEST_SEQ.map(function(q,i){return{q:q,i:i};}).filter(function(x){return x.q.sec==='D';});
-  if(dItems.length){
-    var dCorr=dItems.filter(function(x){return ANSWERS[x.i]&&ANSWERS[x.i].correct;}).length;
-    scores.d=Math.round(dCorr/dItems.length*100);
+  // E: MCQ correct%
+  var eVals=Object.values(eAnswers);
+  if(eVals.length>0){
+    var corr=eVals.filter(function(v){return v.correct;}).length;
+    scores.e=Math.round(corr/eVals.length*100);
   }
-  // E: MCQ correct% (Vocab)
-  var eItems=QUEST_SEQ.map(function(q,i){return{q:q,i:i};}).filter(function(x){return x.q.sec==='E';});
-  if(eItems.length){
-    var eCorr=eItems.filter(function(x){return ANSWERS[x.i]&&ANSWERS[x.i].correct;}).length;
-    scores.e=Math.round(eCorr/eItems.length*100);
-  }
-  // F: MCQ correct% (Grammar)
-  var fItems=QUEST_SEQ.map(function(q,i){return{q:q,i:i};}).filter(function(x){return x.q.sec==='F';});
-  if(fItems.length){
-    var fCorr=fItems.filter(function(x){return ANSWERS[x.i]&&ANSWERS[x.i].correct;}).length;
-    scores.f=Math.round(fCorr/fItems.length*100);
+  // F: MCQ correct%
+  var fVals=Object.values(fAnswers);
+  if(fVals.length>0){
+    var corr=fVals.filter(function(v){return v.correct;}).length;
+    scores.f=Math.round(corr/fVals.length*100);
   }
   return scores;
 }
-
 function calcWeightedScore(s){
-  // Core(A,B,D)×2 + Supp(C,E,F)×1, ÷9
   var a=s.a||0,b=s.b||0,c=s.c||0,d=s.d||0,e=s.e||0,f=s.f||0;
   return Math.round((a*2+b*2+d*2+c+e+f)/9);
 }
@@ -788,140 +610,12 @@ function calcCEFR(s){
   var total=calcWeightedScore(s);
   var coreAvg=Math.round(((s.a||0)+(s.b||0)+(s.d||0))/3);
   var suppAvg=Math.round(((s.c||0)+(s.e||0)+(s.f||0))/3);
-  if(total>=83&&coreAvg>=70&&suppAvg>=40) return{level:'C2',label:'C2 — Mastery 精通',color:'#0d47a1'};
-  if(total>=70&&coreAvg>=70&&suppAvg>=40) return{level:'C1',label:'C1 — Advanced 高级',color:'#1565c0'};
-  if(total>=61&&coreAvg>=40) return{level:'B2',label:'B2 — Upper Intermediate 中高级',color:'#2e7d32'};
-  if(total>=50&&coreAvg>=40) return{level:'B1',label:'B1 — Intermediate 中级 ✅ Pass 合格',color:'#388e3c'};
-  if(total>=42) return{level:'A2',label:'A2 — Elementary 初级 ❌ 未合格',color:'#f57c00'};
-  return{level:'A1',label:'A1 — Beginner 入门 ❌ 未合格',color:'#c62828'};
-}
-
-// ============ FINAL RESULTS ============
-function showFinalResults(){
-  stopGlobalTimer();
-  document.getElementById('question-area').style.display='none';
-  document.getElementById('bottom-nav').style.display='none';
-  document.getElementById('progress-container').innerHTML='';
-  var rp=document.getElementById('result-page');
-  rp.style.display='block';
-
-  var scores=calcSectionScores();
-  var overall=calcWeightedScore(scores);
-  var cefrResult=calcCEFR(scores);
-  var secNames={a:'A · Read (Pronunciation)',b:'B · Repeat (Fluency)',c:'C · Talk (Spoken Language)',d:'D · Listen (Active Listening)',e:'E · Vocab (Vocabulary)',f:'F · Grammar'};
-
-  var barsHtml='';
-  ['a','b','c','d','e','f'].forEach(function(k){
-    var v=scores[k]!=null?scores[k]:0;
-    barsHtml+='<div class="res-bar-row"><div class="res-bar-label"><span>'+secNames[k]+'</span><span>'+v+'</span></div>'
-      +'<div class="res-bar-track"><div class="res-bar-fill" style="width:'+v+'%"></div></div></div>';
-  });
-
-  var html='<div class="res-header">'
-    +'<div style="font-size:32px;margin-bottom:8px">🎓</div>'
-    +'<div style="font-family:Montserrat,sans-serif;font-size:18px;font-weight:800;letter-spacing:1px">'+(userName?userName+'\'s Result':'Test Result')+'</div>'
-    +'<div class="res-score">'+overall+'</div>'
-    +'<div class="res-level" style="color:#fff">CEFR: '+cefrResult.label+'</div>'
-    +'</div>'
-    +'<div style="background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 12px rgba(46,111,186,0.09);margin-bottom:14px">'
-    +'<div style="font-size:11px;color:#6b7c93;text-align:center;margin-bottom:12px">加权公式: Core(A,B,D)×2 + Supp(C,E,F)×1 ÷ 9</div>'
-    +barsHtml+'</div>'
-    +'<canvas id="radarChart" width="280" height="280" style="display:block;margin:0 auto 14px"></canvas>'
-    +'<div style="display:flex;gap:10px;margin-bottom:28px">'
-    +'<button onclick="location.reload()" style="flex:1;padding:13px;background:#fff;color:#2e6fba;border:2px solid #d0dff0;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer">🔄 重新考试</button>'
-    +'<button onclick="showWrongItems()" style="flex:1;padding:13px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer">📋 错题分析</button>'
-    +'</div>'
-    +'<div id="wrong-items"></div>';
-
-  rp.innerHTML=html;
-  // draw radar
-  var radarScores=[scores.a||0,scores.b||0,scores.c||0,scores.d||0,scores.e||0,scores.f||0];
-  drawRadar('radarChart',radarScores);
-}
-
-function showWrongItems(){
-  var html='<div style="background:#fff;border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:0 2px 12px rgba(46,111,186,0.09)">';
-  html+='<div style="font-family:Montserrat,sans-serif;font-size:14px;font-weight:800;color:#4f46e5;margin-bottom:14px">📊 错题分析 Review</div>';
-  var hasWrong=false;
-
-  // D · Listen wrong
-  var dItems=QUEST_SEQ.map(function(q,i){return{q:q,i:i};}).filter(function(x){return x.q.sec==='D';});
-  var dWrong=dItems.filter(function(x){return ANSWERS[x.i]&&!ANSWERS[x.i].correct;});
-  if(dWrong.length){
-    hasWrong=true;
-    html+='<div style="font-size:12px;font-weight:700;color:#8e44ad;margin-bottom:8px">D · Listen 答错:</div>';
-    dWrong.forEach(function(x){
-      var q=QUEST_SEQ[x.i];
-      var passage=D_PASSAGES[q.passageIdx];
-      var qdata=passage.qs[q.qIdx];
-      var ya=ANSWERS[x.i].choice!=null?qdata.opts[ANSWERS[x.i].choice]:'(no answer)';
-      html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c">'
-        +'<div style="font-size:12px;font-weight:600;margin-bottom:4px">'+qdata.q+'</div>'
-        +'<div style="font-size:12px;color:#e74c3c">❌ 你选: '+ya+'</div>'
-        +'<div style="font-size:12px;color:#27ae60">✅ 正确: '+qdata.opts[qdata.correct]+'</div>'
-        +'</div>';
-    });
-  }
-
-  // E · Vocab wrong
-  var eItems=QUEST_SEQ.map(function(q,i){return{q:q,i:i};}).filter(function(x){return x.q.sec==='E';});
-  var eWrong=eItems.filter(function(x){return ANSWERS[x.i]&&!ANSWERS[x.i].correct;});
-  if(eWrong.length){
-    hasWrong=true;
-    html+='<div style="font-size:12px;font-weight:700;color:#e74c3c;margin:12px 0 8px">E · Vocab 答错:</div>';
-    eWrong.forEach(function(x){
-      var w=E_WORDS[x.q.idx];
-      var isAnt=w.type==='antonym';
-      var isUsage=w.type==='usage';
-      var tag=isUsage?' <span style="color:#2980b9;font-size:11px">(usage 用法)</span>':(isAnt?' <span style="color:#8e44ad;font-size:11px">(antonym 反义词)</span>':'');
-      var ya=ANSWERS[x.i].choice!=null?w.opts[ANSWERS[x.i].choice]:'(no answer)';
-      html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c">'
-        +'<div style="font-size:13px;font-weight:700;margin-bottom:4px">'+w.word+tag+'</div>'
-        +(w.explain?'<div style="font-size:11px;color:#666;margin-bottom:4px">💡 '+w.explain+'</div>':'')
-        +'<div style="font-size:12px;color:#e74c3c">❌ 你选: '+ya+'</div>'
-        +'<div style="font-size:12px;color:#27ae60">✅ 正确: '+w.opts[w.correct]+'</div>'
-        +'</div>';
-    });
-  }
-
-  // F · Grammar wrong
-  var fItems=QUEST_SEQ.map(function(q,i){return{q:q,i:i};}).filter(function(x){return x.q.sec==='F';});
-  var fWrong=fItems.filter(function(x){return ANSWERS[x.i]&&!ANSWERS[x.i].correct;});
-  if(fWrong.length){
-    hasWrong=true;
-    html+='<div style="font-size:12px;font-weight:700;color:#f39c12;margin:12px 0 8px">F · Grammar 答错:</div>';
-    fWrong.forEach(function(x){
-      var g=F_GRAMMAR[x.q.idx];
-      var ya=ANSWERS[x.i].choice!=null?g.opts[ANSWERS[x.i].choice]:'(no answer)';
-      html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c">'
-        +'<div style="font-size:12px;font-weight:600;margin-bottom:4px">'+g.q+'</div>'
-        +'<div style="font-size:12px;color:#e74c3c">❌ 你选: '+ya+'</div>'
-        +'<div style="font-size:12px;color:#27ae60">✅ 正确: '+g.opts[g.correct]+'</div>'
-        +'<div style="font-size:11px;color:#555;margin-top:4px">💡 '+g.explain+'</div>'
-        +'</div>';
-    });
-  }
-
-  // A · Read low scores
-  var aLow=Object.keys(aSTR).filter(function(k){return aSTR[k].pct<80;});
-  if(aLow.length){
-    hasWrong=true;
-    html+='<div style="font-size:12px;font-weight:700;color:#2e6fba;margin:12px 0 8px">A · Read 低分句:</div>';
-    aLow.forEach(function(k){
-      var r=aSTR[k];
-      html+='<div style="background:#fff8e1;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #f39c12">'
-        +'<div style="font-size:12px;font-style:italic;color:#888">你说了: "'+r.transcript+'"</div>'
-        +'<div style="font-size:13px;font-weight:700;color:#f39c12">准确率: '+r.pct+'%</div>'
-        +(r.missing&&r.missing.length?'<div style="font-size:11px;color:#e74c3c">漏词: '+r.missing.join(', ')+'</div>':'')
-        +'</div>';
-    });
-  }
-
-  if(!hasWrong){
-    html+='<div style="text-align:center;color:#27ae60;font-size:14px;font-weight:600;padding:20px">🎉 Great job! No major errors.</div>';
-  }
-  html+='</div>';
-  document.getElementById('wrong-items').innerHTML=html;
+  if(total>=83&&coreAvg>=70&&suppAvg>=40)return{level:'C2',label:'C2 \u2014 Mastery \u7cbe\u901a',color:'#0d47a1'};
+  if(total>=70&&coreAvg>=70&&suppAvg>=40)return{level:'C1',label:'C1 \u2014 Advanced \u9ad8\u7ea7',color:'#1565c0'};
+  if(total>=61&&coreAvg>=40)return{level:'B2',label:'B2 \u2014 Upper Intermediate \u4e2d\u9ad8\u7ea7',color:'#2e7d32'};
+  if(total>=50&&coreAvg>=40)return{level:'B1',label:'B1 \u2014 Intermediate \u4e2d\u7ea7 \u2705 Pass',color:'#388e3c'};
+  if(total>=42)return{level:'A2',label:'A2 \u2014 Elementary \u521d\u7ea7 \u274c',color:'#f57c00'};
+  return{level:'A1',label:'A1 \u2014 Beginner \u5165\u95e8 \u274c',color:'#c62828'};
 }
 
 // ============ RADAR CHART ============
@@ -941,74 +635,125 @@ function drawRadar(id,arr){
   for(var i=0;i<N;i++){var a=Math.PI*2*i/N-Math.PI/2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+R*Math.cos(a),cy+R*Math.sin(a));ctx.strokeStyle='#dde4ee';ctx.lineWidth=1;ctx.stroke();}
   ctx.beginPath();
   for(var i=0;i<N;i++){var a=Math.PI*2*i/N-Math.PI/2;var rv=R*Math.max(0,Math.min(100,arr[i]))/100;var x=cx+rv*Math.cos(a),y=cy+rv*Math.sin(a);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
-  ctx.closePath();ctx.fillStyle='rgba(46,111,186,0.18)';ctx.fill();ctx.strokeStyle='#2e6fba';ctx.lineWidth=2;ctx.stroke();
-  for(var i=0;i<N;i++){var a=Math.PI*2*i/N-Math.PI/2;var rv=R*Math.max(0,Math.min(100,arr[i]))/100;ctx.beginPath();ctx.arc(cx+rv*Math.cos(a),cy+rv*Math.sin(a),4,0,Math.PI*2);ctx.fillStyle='#2e6fba';ctx.fill();}
+  ctx.closePath();ctx.fillStyle='rgba(79,70,229,0.18)';ctx.fill();ctx.strokeStyle='#4f46e5';ctx.lineWidth=2;ctx.stroke();
+  for(var i=0;i<N;i++){var a=Math.PI*2*i/N-Math.PI/2;var rv=R*Math.max(0,Math.min(100,arr[i]))/100;ctx.beginPath();ctx.arc(cx+rv*Math.cos(a),cy+rv*Math.sin(a),4,0,Math.PI*2);ctx.fillStyle='#4f46e5';ctx.fill();}
   ctx.font='bold 10px sans-serif';ctx.fillStyle='#4a5568';ctx.textAlign='center';
   for(var i=0;i<N;i++){var a=Math.PI*2*i/N-Math.PI/2;var lx=cx+(R+30)*Math.cos(a),ly=cy+(R+30)*Math.sin(a);ctx.fillText(labels[i],lx,ly+4);}
 }
+// ============ FINAL RESULTS ============
+function showFinalResults(){
+  stopGlobalTimer();
+  // Hide all panels and submit bar
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');p.style.display='none';});
+  document.getElementById('submit-bar').style.display='none';
+  var rp=document.getElementById('panel-result');
+  rp.style.display='block';rp.classList.add('active');
 
-// ============ TTS ============
-function playBarTts(barEl,text){
-  document.querySelectorAll('.audio-bar.playing').forEach(function(b){b.classList.remove('playing');b.querySelector('.play-icon').textContent='▶';});
-  if(window._curBar===barEl&&window.speechSynthesis.speaking){window.speechSynthesis.cancel();window._curBar=null;return;}
-  window._curBar=barEl;
-  barEl.classList.add('playing');barEl.querySelector('.play-icon').textContent='⏹';
-  window.speechSynthesis.cancel();
-  var u=new SpeechSynthesisUtterance(text);
-  u.lang='en-GB';u.rate=0.9;
-  u.onend=function(){barEl.classList.remove('playing');barEl.querySelector('.play-icon').textContent='▶';window._curBar=null;};
-  u.onerror=function(){barEl.classList.remove('playing');barEl.querySelector('.play-icon').textContent='▶';window._curBar=null;};
-  var voices=window.speechSynthesis.getVoices();
-  var en=voices.filter(function(v){return v.lang.startsWith('en');});
-  if(en.length)u.voice=en[0];
-  window.speechSynthesis.speak(u);
-}
+  var scores=calcSectionScores();
+  var overall=calcWeightedScore(scores);
+  var cefrResult=calcCEFR(scores);
+  var secNames={a:'A \u00b7 Read (Pronunciation)',b:'B \u00b7 Repeat (Fluency)',c:'C \u00b7 Talk (Spoken Language)',d:'D \u00b7 Listen (Active Listening)',e:'E \u00b7 Vocab (Vocabulary)',f:'F \u00b7 Grammar'};
 
-// ============ STT ============
-function startSTT(onResult,onError){
-  if(!SRClass){alert('Speech recognition not supported. Use Safari iOS or Chrome desktop.');if(onError)onError('not-supported');return null;}
-  var sr=new SRClass();sr.lang='en-US';sr.continuous=false;sr.interimResults=false;sr.maxAlternatives=3;
-  sr.onresult=function(e){onResult(e.results[0][0].transcript,e.results[0][0].confidence);};
-  sr.onerror=function(e){if(onError)onError(e.error);};
-  sr.start();return sr;
-}
-function startSTTWithInterim(onInterim,onResult,onError){
-  if(!SRClass){if(onError)onError('not-supported');return null;}
-  var sr=new SRClass();sr.lang='en-US';sr.continuous=false;sr.interimResults=false;sr.maxAlternatives=3;
-  var accumulated='',resultFired=false;
-  var recTimeout=setTimeout(function(){sr.stop();},12000);
-  sr.onresult=function(e){var fin='',interim='';for(var i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal)fin+=e.results[i][0].transcript+' ';else interim+=e.results[i][0].transcript;}if(fin.trim())accumulated=(accumulated+' '+fin).trim();if(interim&&onInterim)onInterim(interim);};
-  sr.onend=function(){clearTimeout(recTimeout);if(accumulated.trim()){if(!resultFired){resultFired=true;onResult(accumulated.trim(),1);}}else{if(onError)onError('no-speech');}};
-  sr.onerror=function(e){clearTimeout(recTimeout);if(onError)onError(e.error);};
-  sr.start();return sr;
-}
+  var barsHtml='';
+  ['a','b','c','d','e','f'].forEach(function(k){
+    var v=scores[k]!=null?scores[k]:0;
+    barsHtml+='<div class="res-bar-row"><div class="res-bar-label"><span>'+secNames[k]+'</span><span>'+v+'</span></div>'
+      +'<div class="res-bar-track"><div class="res-bar-fill" style="width:'+v+'%"></div></div></div>';
+  });
 
-// ============ TEXT COMPARE ============
-function compareTexts(spoken,ref){
-  var s=spoken.toLowerCase().replace(/[^a-z0-9\s]/g,'').trim();
-  var r=ref.toLowerCase().replace(/[^a-z0-9\s]/g,'').trim();
-  var sw=s.split(/\s+/),rw=r.split(/\s+/);
-  var ok=0,miss=[];
-  rw.forEach(function(w){if(sw.indexOf(w)>=0)ok++;else miss.push(w);});
-  return{pct:Math.round(ok/rw.length*100),missing:miss};
-}
-function buildWordHighlight(transcript,ref){
-  var spoken=transcript.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/);
-  var refWords=ref.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/);
-  var origWords=ref.split(/\s+/);
-  var ok=0,miss=[];
-  var html='<div class="stt-card"><div style="font-size:11px;font-weight:700;color:#6b7c93;margin-bottom:6px">YOU SAID: <em style="color:#1e1b4b">"'+transcript+'"</em></div><div style="line-height:2">';
-  refWords.forEach(function(w,i){if(spoken.indexOf(w)>=0){ok++;html+='<span class="word-ok">'+origWords[i]+'</span> ';}else{miss.push(w);html+='<span class="word-miss">'+origWords[i]+'</span> ';}});
-  var pct=Math.round(ok/refWords.length*100);
-  var col=pct>=80?'#27ae60':pct>=50?'#f39c12':'#e74c3c';
-  html+='</div><div style="font-size:13px;font-weight:800;color:'+col+';margin-top:6px">准确率 '+pct+'%'+(miss.length?' · 漏: <span style="color:#e74c3c">'+miss.slice(0,6).join(', ')+'</span>':'')+'</div></div>';
-  return html;
+  var html='<div class="res-header">'
+    +'<div style="font-size:32px;margin-bottom:8px">\ud83c\udf93</div>'
+    +'<div style="font-family:Montserrat,sans-serif;font-size:18px;font-weight:800;letter-spacing:1px">Test Result</div>'
+    +'<div class="res-score">'+overall+'</div>'
+    +'<div class="res-level" style="color:#fff">CEFR: '+cefrResult.label+'</div>'
+    +'</div>'
+    +'<div class="card">'
+    +'<div style="font-size:11px;color:#6b7c93;text-align:center;margin-bottom:12px">\u52a0\u6743\u516c\u5f0f: Core(A,B,D)\u00d72 + Supp(C,E,F)\u00d71 \u00f7 9</div>'
+    +barsHtml+'</div>'
+    +'<canvas id="radarChart" width="280" height="280" style="display:block;margin:0 auto 14px"></canvas>'
+    +'<div style="display:flex;gap:10px;margin-bottom:28px">'
+    +'<button onclick="location.reload()" style="flex:1;padding:13px;background:#fff;color:#4f46e5;border:2px solid var(--border);border-radius:12px;font-size:14px;font-weight:700;cursor:pointer">\ud83d\udd04 \u91cd\u65b0\u8003\u8bd5</button>'
+    +'<button onclick="showWrongItems()" style="flex:1;padding:13px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer">\ud83d\udccb \u9519\u9898\u5206\u6790</button>'
+    +'</div>'
+    +'<div id="wrong-items"></div>';
+
+  rp.innerHTML=html;
+  var radarScores=[scores.a||0,scores.b||0,scores.c||0,scores.d||0,scores.e||0,scores.f||0];
+  drawRadar('radarChart',radarScores);
 }
 
-// ============ STRESS MARKS ============
-function addStressMarks(s){
-  return s.replace(/\b([A-Za-z]{6,})\b/g,'<span class="stress">$1</span>').replace(/([,;]) /g,'$1 <span class="pause-mark">|</span> ');
+function showWrongItems(){
+  var html='<div class="card">';
+  html+='<div class="card-title">\ud83d\udcca \u9519\u9898\u5206\u6790 Review</div>';
+  var hasWrong=false;
+
+  // D wrong
+  var passage=D_PASSAGES_BANK[dPassageIdx];
+  Object.keys(dAnswers).forEach(function(k){
+    var ans=dAnswers[k];
+    if(!ans.correct){
+      hasWrong=true;
+      var q=passage.qs[k];
+      html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid var(--red)">'
+        +'<div style="font-size:12px;font-weight:600;margin-bottom:4px">D \u00b7 Listen: '+q.q+'</div>'
+        +'<div style="font-size:12px;color:var(--red)">\u274c \u4f60\u9009: '+q.opts[ans.choice]+'</div>'
+        +'<div style="font-size:12px;color:var(--green)">\u2705 \u6b63\u786e: '+q.opts[q.correct]+'</div></div>';
+    }
+  });
+
+  // E wrong
+  Object.keys(eAnswers).forEach(function(k){
+    var ans=eAnswers[k];
+    if(!ans.correct){
+      hasWrong=true;
+      var w=eWords[k];
+      html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid var(--red)">'
+        +'<div style="font-size:13px;font-weight:700;margin-bottom:4px">E \u00b7 Vocab: '+w.word+(w.type==='antonym'?' (antonym)':'')+(w.type==='usage'?' (usage)':'')+'</div>'
+        +(w.explain?'<div style="font-size:11px;color:#666;margin-bottom:4px">\ud83d\udca1 '+w.explain+'</div>':'')
+        +'<div style="font-size:12px;color:var(--red)">\u274c \u4f60\u9009: '+w.opts[ans.choice]+'</div>'
+        +'<div style="font-size:12px;color:var(--green)">\u2705 \u6b63\u786e: '+w.opts[w.correct]+'</div></div>';
+    }
+  });
+
+  // F wrong
+  Object.keys(fAnswers).forEach(function(k){
+    var ans=fAnswers[k];
+    if(!ans.correct){
+      hasWrong=true;
+      var g=F_GRAMMAR_BANK[fIndices[k]];
+      html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid var(--red)">'
+        +'<div style="font-size:12px;font-weight:600;margin-bottom:4px">F \u00b7 Grammar: '+g.q+'</div>'
+        +'<div style="font-size:12px;color:var(--red)">\u274c \u4f60\u9009: '+g.opts[ans.choice]+'</div>'
+        +'<div style="font-size:12px;color:var(--green)">\u2705 \u6b63\u786e: '+g.opts[g.correct]+'</div>'
+        +'<div style="font-size:11px;color:#555;margin-top:4px">\ud83d\udca1 '+g.explain+'</div></div>';
+    }
+  });
+
+  // A low scores
+  Object.keys(aSTR).forEach(function(k){
+    if(aSTR[k].pct<80){
+      hasWrong=true;
+      html+='<div style="background:#fff8e1;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid var(--orange)">'
+        +'<div style="font-size:12px;font-style:italic;color:#888">A \u00b7 Read: "'+aSTR[k].transcript+'"</div>'
+        +'<div style="font-size:13px;font-weight:700;color:var(--orange)">\u51c6\u786e\u7387: '+aSTR[k].pct+'%</div>'
+        +(aSTR[k].missing&&aSTR[k].missing.length?'<div style="font-size:11px;color:var(--red)">\u6f0f\u8bcd: '+aSTR[k].missing.join(', ')+'</div>':'')
+        +'</div>';
+    }
+  });
+
+  if(!hasWrong){
+    html+='<div style="text-align:center;color:var(--green);font-size:14px;font-weight:600;padding:20px">\ud83c\udf89 Great job! No major errors.</div>';
+  }
+  html+='</div>';
+  document.getElementById('wrong-items').innerHTML=html;
 }
+
+// ============ INIT ============
+window.addEventListener('load',function(){
+  speechSynthesis.getVoices();
+  startGlobalTimer();
+  initA();initB();initC();initD();initE();initF();
+});
 </script>
 </body>
 </html>
