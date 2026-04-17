@@ -158,13 +158,8 @@ var B_SENTENCES = [
   "All employees are required to complete the compliance training by Friday.",
   "The customer service department reported a significant increase in complaints."
 ];
-var C_SCENARIOS = [
-  {text:"Joe is smiling and laughing. He looks very happy.", q:"Is Joe happy or sad?", ans:"Happy"},
-  {text:"The office temperature is 28 degrees and everyone is sweating.", q:"Is it hot or cold in the office?", ans:"Hot"},
-  {text:"Sarah called to say the delivery truck broke down on the highway.", q:"Will the delivery arrive on time?", ans:"No, it will be delayed."},
-  {text:"The manager said: Great job on the presentation! I was really impressed.", q:"How does the manager feel about the presentation?", ans:"Positive — the manager is impressed."}
-];
-var D_WORDS_BANK = [
+// C_SCENARIOS removed — Q&A section deleted
+var E_WORDS_BANK = [
   {word:"HUGE", opts:["large","heavy","tiny","little"], correct:0},
   {word:"POSTPONE", opts:["delay","cancel","start","finish"], correct:0},
   {word:"CONFIRM", opts:["verify","deny","question","forget"], correct:0},
@@ -196,7 +191,7 @@ var D_WORDS_BANK = [
   {word:"TRANSPARENT", opts:["open and clear","hidden","complicated","vague"], correct:0},
   {word:"DEADLINE", opts:["due date","start date","optional date","estimated date"], correct:0}
 ];
-var E_PASSAGES_BANK = [
+var D_PASSAGES_BANK = [
   {title:"Work Meeting",text:"Good morning everyone. I'd like to start today's meeting by reviewing last week's performance. Our delivery success rate was 94%, which is up 3% from the previous week. However, we had some complaints about customer service response time. Going forward, we need to ensure all customer inquiries are answered within two hours. Additionally, the new pricing structure will be implemented starting next Monday. Please make sure your teams are informed.",qs:[{q:"What was the delivery success rate last week?",opts:["91%","94%","97%","90%"],correct:1},{q:"What was the main complaint from customers?",opts:["Delivery speed","Product quality","Response time","Price"],correct:2},{q:"When will the new pricing structure start?",opts:["This Friday","Next Monday","Next Wednesday","Immediately"],correct:1}]},
   {title:"Client Call",text:"Hello, this is David from the operations team. I am calling regarding the order you placed on March 15th. Unfortunately, two of the items you ordered are currently out of stock. We expect them to be available within five to seven business days. We can either send the available items now and ship the rest later, or wait and send everything together. Please let us know your preference by end of day so we can proceed.",qs:[{q:"Why is David calling?",opts:["To confirm delivery","To report a delay","To cancel the order","To request payment"],correct:1},{q:"How long before the out-of-stock items are available?",opts:["2–3 days","3–5 days","5–7 days","10 days"],correct:2},{q:"What does David ask the customer to do?",opts:["Call back tomorrow","Visit the store","Reply by end of day","Place a new order"],correct:2}]},
   {title:"HR Announcement",text:"This is a message from the HR department. We are pleased to announce that the annual performance review cycle will begin on April 1st. All employees are required to complete their self-assessment forms by April 10th. Managers should schedule one-on-one meetings with their team members before April 20th. The final ratings will be submitted to HR by April 30th. Please contact your HR business partner if you have any questions about the process.",qs:[{q:"When does the performance review cycle begin?",opts:["March 1st","April 1st","April 10th","April 20th"],correct:1},{q:"By when must employees complete self-assessment forms?",opts:["April 1st","April 5th","April 10th","April 30th"],correct:2},{q:"Who should employees contact for questions?",opts:["Their manager","The CEO","HR business partner","Team leader"],correct:2}]},
@@ -204,15 +199,27 @@ var E_PASSAGES_BANK = [
   {title:"Client Presentation",text:"Good afternoon. This is a reminder about the upcoming client presentation scheduled for Thursday at 2 PM in Conference Room B. The sales team is asked to prepare a brief summary of Q1 results. Marketing should have the slide deck ready by Wednesday noon. All participants are expected to arrive 10 minutes early for setup. If you are unable to attend, please notify your team lead immediately and arrange for a colleague to cover.",qs:[{q:"When is the client presentation scheduled?",opts:["Wednesday at 2 PM","Thursday at 2 PM","Friday at 2 PM","Thursday at 10 AM"],correct:1},{q:"By when should the slide deck be ready?",opts:["Tuesday noon","Wednesday noon","Thursday morning","Wednesday evening"],correct:1},{q:"What should you do if you cannot attend?",opts:["Send an email to HR","Skip the meeting","Notify your team lead","Call the client directly"],correct:2}]},
   {title:"Purchase Order",text:"This voicemail is for the purchasing department. We received your request for office supplies dated last Tuesday. However, we noticed that the total order value exceeds the monthly budget by approximately fifteen percent. Before we can process this order, we need written approval from your department head. Once we receive that approval, delivery can be arranged within three working days. Please call us back at extension 2204 to confirm.",qs:[{q:"What is the problem with the order?",opts:["Wrong items ordered","Order placed too late","Exceeds monthly budget","Missing delivery address"],correct:2},{q:"What is required before the order can be processed?",opts:["Payment in advance","Written approval from department head","A revised order form","A new supplier contract"],correct:1},{q:"How long will delivery take after approval?",opts:["One working day","Two working days","Three working days","One week"],correct:2}]}
 ];
-var F_TOPICS = [
+var C_TOPICS = [
   "Describe a challenging situation at work and how you handled it.",
   "What are the most important qualities of a good team member?",
   "How has technology changed the way you work?"
 ];
-var F_TOPIC_KEYWORDS = [
+var C_TOPIC_KEYWORDS = [
   ["challenge","situation","problem","solution","handled","resolved","difficult","learned","team","result"],
   ["quality","qualities","teamwork","communication","reliable","trust","collaborate","support","skill","important"],
   ["technology","changed","digital","remote","efficient","tools","software","online","automation","work"]
+];
+var F_GRAMMAR_BANK = [
+  {q:"Choose the correct sentence:",opts:["Most of the milk have gone bad.","Most of the milk has gone bad.","Most of the milk are going bad.","Most of the milk is going bad."],correct:1,explain:"milk 为不可数名词，谓语用单数 has；has gone bad 强调结果。"},
+  {q:"Choose the correct sentence:",opts:["Some of the cake have eaten up.","Some of the cake has eaten up.","Some of the cake has been eaten up.","Some of the cake have been eaten up."],correct:2,explain:"cake 不可数，谓语用 has；被动语态 has been eaten up。"},
+  {q:"Choose the correct sentence:",opts:["He sleeps in the plane.","He sleeps on the plane.","He sleeps into the plane.","He sleeps onto the plane."],correct:1,explain:"on the plane 固定搭配表示乘坐；in 仅强调内部；into/onto 表方向不与 sleep 搭配。"},
+  {q:"Choose the correct sentence:",opts:["She don't like coffee.","She doesn't likes coffee.","She doesn't like coffee.","She not like coffee."],correct:2,explain:"第三人称单数否定用 doesn't + 动词原形。"},
+  {q:"Choose the correct sentence:",opts:["The informations are very useful.","The information are very useful.","The information is very useful.","The informations is very useful."],correct:2,explain:"information 不可数名词，无复数，谓语用 is。"},
+  {q:"Choose the correct sentence:",opts:["Each of the students have a textbook.","Each of the students has a textbook.","Each of the students are having a textbook.","Each of the student has a textbook."],correct:1,explain:"each of + 复数名词，谓语用单数 has。"},
+  {q:"Choose the correct sentence:",opts:["Neither the manager nor the employees was informed.","Neither the manager nor the employees were informed.","Neither the manager nor the employees is informed.","Neither the manager nor the employees has informed."],correct:1,explain:"neither…nor… 就近一致，employees 复数用 were。"},
+  {q:"Choose the correct sentence:",opts:["The team have decided to postpone the meeting.","The team has decided to postpone the meeting.","The team are decide to postpone the meeting.","The team is decide to postpone the meeting."],correct:1,explain:"team 作整体为单数，用 has decided。"},
+  {q:"Choose the correct sentence:",opts:["There is many reasons for the delay.","There are many reasons for the delay.","There has many reasons for the delay.","There have many reasons for the delay."],correct:1,explain:"many reasons 复数，there be 用 are。"},
+  {q:"Choose the correct sentence:",opts:["The news are very surprising today.","The news is very surprising today.","The news were very surprising today.","The news have been very surprising today."],correct:1,explain:"news 不可数名词，谓语用 is。"}
 ];
 
 // ============ SEED / SHUFFLE ============
@@ -231,24 +238,26 @@ function seededShuffle(arr,seed){
 
 // ============ GLOBAL STATE ============
 var userName='';
-var D_WORDS=[];
-var E_PASSAGES=[];
-var D_SHUFFLED=[];
+var E_WORDS=[];
+var D_PASSAGES=[];
+var E_SHUFFLED=[];
+var F_GRAMMAR=[];
+var F_SHUFFLED=[];
 var QUEST_SEQ=[];
 var curQ=0;
 var ANSWERS={};
-var fSelectedTopic=-1;
-var fStep=1;
-var fRubric={};
-var fSTRText='';
+var cSelectedTopic=-1;
+var cStep=1;
+var cRubric={};
+var cSTRText='';
 var aSTR={};
 var globalTimerInterval=null;
 var globalSecondsLeft=30*60;
 var SRClass=window.SpeechRecognition||window.webkitSpeechRecognition;
 
 // ============ COLORS ============
-var SEC_COLORS={A:'#2e6fba',B:'#27ae60',C:'#f39c12',D:'#8e44ad',E:'#e74c3c',F:'#d4ac0d'};
-var SEC_LABELS={A:'A · Read',B:'B · Repeat',C:'C · Listen',D:'D · Vocab',E:'E · Comp',F:'F · Talk'};
+var SEC_COLORS={A:'#2e6fba',B:'#27ae60',C:'#d4ac0d',D:'#8e44ad',E:'#e74c3c',F:'#f39c12'};
+var SEC_LABELS={A:'A · Read',B:'B · Repeat',C:'C · Talk',D:'D · Listen',E:'E · Vocab',F:'F · Grammar'};
 
 // ============ TIMER ============
 function startGlobalTimer(){
@@ -280,10 +289,13 @@ function checkInvite(){
   document.getElementById('main-app').style.display='block';
   document.getElementById('user-greeting').textContent='Hello, '+val+' 👋';
   // init data
-  D_SHUFFLED=[];
-  D_WORDS=seededShuffle(D_WORDS_BANK,getDailySeed(userName)).slice(0,10);
-  var seed2=(getDailySeed(userName)*1664525+1013904223)>>>0;
-  E_PASSAGES=seededShuffle(E_PASSAGES_BANK,seed2).slice(0,2);
+  E_SHUFFLED=[];
+  F_SHUFFLED=[];
+  var mainSeed=getDailySeed(userName);
+  E_WORDS=seededShuffle(E_WORDS_BANK,mainSeed).slice(0,5);
+  var seed2=(mainSeed*1664525+1013904223)>>>0;
+  D_PASSAGES=seededShuffle(D_PASSAGES_BANK,seed2).slice(0,2);
+  F_GRAMMAR=seededShuffle(F_GRAMMAR_BANK,(seed2*31+17)>>>0).slice(0,5);
   buildQuestSeq();
   renderQuestion();
   startGlobalTimer();
@@ -295,23 +307,23 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.get
 function buildQuestSeq(){
   QUEST_SEQ=[];
   var seed=getDailySeed(userName);
-  // A: 3 random
+  // A: 9 random sentences (Read Aloud — real exam has 13, test uses 9)
   var aAll=[];for(var i=0;i<A_SENTENCES.length;i++)aAll.push(i);
-  seededShuffle(aAll,seed).slice(0,3).forEach(function(i){QUEST_SEQ.push({sec:'A',type:'read',idx:i});});
-  // B: 4 random
+  seededShuffle(aAll,seed).slice(0,9).forEach(function(i){QUEST_SEQ.push({sec:'A',type:'read',idx:i});});
+  // B: 9 random sentences (Repeat — real exam has 9)
   var bAll=[];for(var i=0;i<B_SENTENCES.length;i++)bAll.push(i);
-  seededShuffle(bAll,(seed*7+13)>>>0).slice(0,4).forEach(function(i){QUEST_SEQ.push({sec:'B',type:'repeat',idx:i});});
-  // C: all 4
-  C_SCENARIOS.forEach(function(s,i){QUEST_SEQ.push({sec:'C',type:'listen',idx:i});});
-  // D: 10
-  for(var d=0;d<10;d++){QUEST_SEQ.push({sec:'D',type:'vocab',idx:d});}
-  // E: 6 (2 passages x 3 questions)
-  E_PASSAGES.forEach(function(p,pi){
-    p.qs.forEach(function(q,qi){QUEST_SEQ.push({sec:'E',type:'comp',passageIdx:pi,qIdx:qi});});
+  seededShuffle(bAll,(seed*7+13)>>>0).slice(0,Math.min(9,B_SENTENCES.length)).forEach(function(i){QUEST_SEQ.push({sec:'B',type:'repeat',idx:i});});
+  // C: 1 topic free talk (Talk)
+  var cTopic=seededShuffle([0,1,2],(seed*3+7)>>>0)[0];
+  QUEST_SEQ.push({sec:'C',type:'speak',idx:cTopic});
+  // D: 2 passages x 3 questions = 6 MCQ (Listen)
+  D_PASSAGES.forEach(function(p,pi){
+    p.qs.forEach(function(q,qi){QUEST_SEQ.push({sec:'D',type:'listen',passageIdx:pi,qIdx:qi});});
   });
-  // F: 1
-  var fTopic=seededShuffle([0,1,2],(seed*3+7)>>>0)[0];
-  QUEST_SEQ.push({sec:'F',type:'speak',idx:fTopic});
+  // E: 5 synonym questions (Vocab)
+  for(var e=0;e<5;e++){QUEST_SEQ.push({sec:'E',type:'vocab',idx:e});}
+  // F: 5 grammar questions (Grammar)
+  for(var f=0;f<5;f++){QUEST_SEQ.push({sec:'F',type:'grammar',idx:f});}
 }
 
 // ============ PROGRESS BAR ============
@@ -358,12 +370,12 @@ function renderQuestion(){
   var inner='';
 
   switch(q.type){
-    case 'read':  inner=renderReadQ(q); break;
-    case 'repeat':inner=renderRepeatQ(q); break;
-    case 'listen':inner=renderListenQ(q); break;
-    case 'vocab': inner=renderVocabQ(q); break;
-    case 'comp':  inner=renderCompQ(q); break;
-    case 'speak': inner=renderSpeakQ(q); break;
+    case 'read':    inner=renderReadQ(q); break;
+    case 'repeat':  inner=renderRepeatQ(q); break;
+    case 'speak':   inner=renderSpeakQ(q); break;
+    case 'listen':  inner=renderListenQ(q); break;
+    case 'vocab':   inner=renderVocabQ(q); break;
+    case 'grammar': inner=renderGrammarQ(q); break;
   }
 
   var html='<div class="card-top-bar" style="background:'+color+'"></div>'
@@ -478,40 +490,133 @@ function doRecordB(idx,qIdx){
 }
 
 // ============ C: LISTEN ============
-function renderListenQ(q){
-  var s=C_SCENARIOS[q.idx];
+// ============ C: TALK (SPEAKING) ============
+function renderSpeakQ(q){
+  var topic=C_TOPICS[q.idx];
   var ans=ANSWERS[curQ];
-  var userAns=ans?ans.userAns:'';
-  return '<div style="font-size:13px;color:#6b7c93;margin-bottom:10px">👂 Listen &amp; answer / 听场景回答</div>'
-    +'<div class="audio-bar" id="ab-c-'+q.idx+'" onclick="playBarTts(this,C_SCENARIOS['+q.idx+'].text)">'
+  if(cStep===1){
+    return '<div style="font-size:13px;color:#6b7c93;margin-bottom:12px">🎤 Free Talk / 自由演讲</div>'
+      +'<div class="audio-bar" onclick="playBarTts(this,C_TOPICS['+q.idx+'])">'
+        +'<div class="play-icon">▶</div><div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>'
+        +'<div class="bar-label">🔊 Listen to topic / 听题目</div>'
+      +'</div>'
+      +'<div style="background:#f0f7ff;border-radius:12px;padding:16px;font-size:15px;font-weight:600;line-height:1.7;color:#1a2a3a;border:1.5px solid #c5daf5;margin:12px 0">'+topic+'</div>'
+      +'<button onclick="cGoStep2()" style="width:100%;padding:13px;background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer">▶ 开始演讲 Start Speaking</button>';
+  }
+  if(cStep===2){
+    return '<div style="font-size:13px;color:#6b7c93;margin-bottom:10px">🎙 Step 2 · Speak Now / 演讲中</div>'
+      +'<div style="background:#f0f7ff;border-radius:12px;padding:14px;font-size:14px;font-weight:600;line-height:1.7;color:#1a2a3a;border:1.5px solid #c5daf5;margin-bottom:14px">'+topic+'</div>'
+      +'<button id="c-rec-btn" onclick="doRecordC('+q.idx+','+curQ+')" style="width:100%;padding:13px;background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px">🎙 开始录音 Start Recording</button>'
+      +'<div id="c-stt-result" style="margin-top:8px"></div>';
+  }
+  if(cStep===3){
+    var dims=['fluency','vocab','logic','grammar'];
+    var dimLabels={fluency:'Fluency 流利度',vocab:'Vocabulary 词汇',logic:'Logic 逻辑性',grammar:'Grammar 语法'};
+    var html='<div style="font-size:13px;color:#6b7c93;margin-bottom:6px">⭐ Step 3 · Self Assessment / 自评打分</div>';
+    html+='<div style="font-size:12px;color:#8a9ab5;margin-bottom:14px">根据刚才的表现，为每项打 1–5 颗星 ★</div>';
+    if(cSTRText){
+      html+='<div style="background:#f0f7ff;border-radius:10px;padding:10px;font-size:12px;color:#555;margin-bottom:14px;border-left:3px solid #2e6fba">你说了: <em>"'+cSTRText.substring(0,120)+(cSTRText.length>120?'...':'')+'"</em></div>';
+    }
+    dims.forEach(function(dim){
+      html+='<div class="rubric-row"><span class="rubric-label">'+dimLabels[dim]+'</span><div class="rubric-stars" id="r-'+dim+'">';
+      for(var j=1;j<=5;j++){
+        var active=cRubric[dim]&&cRubric[dim]>=j;
+        html+='<span class="rubric-star'+(active?' active':'')+'" onclick="rateCDim(\''+dim+'\','+j+')">★</span>';
+      }
+      html+='</div></div>';
+    });
+    html+='<button onclick="submitC('+curQ+')" style="width:100%;padding:13px;background:#1e7e4e;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px">✅ 提交得分 Submit Score</button>';
+    return html;
+  }
+  return '<div style="text-align:center;padding:20px;color:#27ae60;font-size:15px;font-weight:700">✅ Section C Completed!</div>';
+}
+
+function cGoStep2(){cStep=2;renderQuestion();}
+
+function doRecordC(topicIdx,qIdx){
+  var btn=document.getElementById('c-rec-btn');
+  if(!btn) return;
+  btn.textContent='⏺ Recording... / 录音中...';btn.style.background='#e74c3c';btn.disabled=true;
+  startSTT(
+    function(t){
+      cSTRText=t;
+      btn.textContent='🎙 开始录音 Start Recording';btn.style.background='linear-gradient(135deg,#1a4a8a,#2e6fba)';btn.disabled=false;
+      var el=document.getElementById('c-stt-result');
+      if(el){
+        el.innerHTML='<div style="background:#f0f7ff;border-radius:10px;padding:10px 14px;border-left:3px solid #27ae60"><div style="font-size:12px;font-weight:700;color:#27ae60">🎉 Recording done! Now rate yourself below.</div></div>';
+      }
+      setTimeout(function(){cStep=3;renderQuestion();},1200);
+    },
+    function(err){
+      btn.textContent='🎙 开始录音 Start Recording';btn.style.background='linear-gradient(135deg,#1a4a8a,#2e6fba)';btn.disabled=false;
+    }
+  );
+  setTimeout(function(){try{speechSynthesis.cancel();}catch(e){}},15000);
+}
+
+function rateCDim(dim,val){
+  cRubric[dim]=val;
+  var stars=document.querySelectorAll('#r-'+dim+' .rubric-star');
+  stars.forEach(function(s,i){s.classList.toggle('active',i<val);});
+}
+
+function submitC(qIdx){
+  if(!cRubric.fluency||!cRubric.vocab||!cRubric.logic||!cRubric.grammar){
+    alert('Please rate all 4 dimensions. / 请评完4个维度');return;
+  }
+  var avg=(cRubric.fluency+cRubric.vocab+cRubric.logic+cRubric.grammar)/4;
+  var pct=Math.round(avg/5*100);
+  onAnswered(qIdx,{sec:'C',score:pct,rubric:{fluency:cRubric.fluency,vocab:cRubric.vocab,logic:cRubric.logic,grammar:cRubric.grammar}});
+  // auto advance
+  if(qIdx<QUEST_SEQ.length-1){curQ=qIdx+1;renderQuestion();}
+}
+
+// ============ D: LISTEN (PASSAGE MCQ) ============
+function renderListenQ(q){
+  var passage=D_PASSAGES[q.passageIdx];
+  var qdata=passage.qs[q.qIdx];
+  var ans=ANSWERS[curQ];
+  var keys=['A','B','C','D'];
+  var barId='ab-d-'+q.passageIdx+'-'+q.qIdx;
+  var html='<div style="font-size:12px;color:#6b7c93;font-weight:700;margin-bottom:8px">Passage '+(q.passageIdx+1)+' · Q'+(q.qIdx+1)+'</div>'
+    +'<div class="audio-bar" id="'+barId+'" onclick="playBarTts(this,D_PASSAGES['+q.passageIdx+'].text)">'
       +'<div class="play-icon">▶</div><div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>'
-      +'<div class="bar-label">🔊 Play Scenario / 播放场景</div>'
+      +'<div class="bar-label">🔊 Play Passage / 播放短文</div>'
     +'</div>'
-    +'<div style="font-size:15px;font-weight:600;margin:12px 0">'+s.q+'</div>'
-    +'<textarea id="c-ans-'+q.idx+'" placeholder="Type your answer... / 输入你的答案..." style="margin-bottom:10px">'+userAns+'</textarea>'
-    +(ans?'<div style="background:#eafaf1;border-radius:10px;padding:10px 12px;font-size:13px;color:#27ae60;font-weight:600;margin-bottom:10px">✅ Model Answer / 参考答案: '+s.ans+'</div>':'')
-    +'<button onclick="submitC('+q.idx+','+curQ+')" style="width:100%;padding:12px;background:'+(ans?'#27ae60':'linear-gradient(135deg,#1a4a8a,#2e6fba)')+';color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer">'+(ans?'✅ 已提交 (重新提交)':'提交答案 Submit')+'</button>';
+    +'<div style="font-size:15px;font-weight:600;margin:12px 0 10px;line-height:1.5">'+qdata.q+'</div>'
+    +'<div class="mcq-options">';
+  keys.forEach(function(k,oi){
+    var cls='mcq-opt';
+    if(ans!=null && ans.choice===oi){ cls+=' selected'; }
+    var onclick=ans!=null?'':'onclick="selectListen('+oi+','+qdata.correct+','+curQ+')"';
+    html+='<div class="'+cls+'" '+onclick+'><span class="opt-key">'+k+'</span> '+qdata.opts[oi]+'</div>';
+  });
+  html+='</div>';
+  return html;
 }
 
-function submitC(idx,qIdx){
-  var ta=document.getElementById('c-ans-'+idx);
-  var val=ta?ta.value.trim():'';
-  onAnswered(qIdx,{sec:'C',userAns:val,idx:idx});
-  renderQuestion();
+function selectListen(optIdx,correct,qIdx){
+  ANSWERS[qIdx]={sec:'D',choice:optIdx,correct:optIdx===correct};
+  renderProgress();
+  highlightMCQ(qIdx);
+  setTimeout(function(){
+    if(qIdx<QUEST_SEQ.length-1){curQ=qIdx+1;renderQuestion();}
+    else{showFinalResults();}
+  },800);
 }
 
-// ============ D: VOCAB ============
+// ============ E: VOCAB (SYNONYM MCQ) ============
 function renderVocabQ(q){
-  var w=D_WORDS[q.idx];
-  if(!D_SHUFFLED[q.idx]){
-    D_SHUFFLED[q.idx]=[0,1,2,3].sort(function(){return Math.random()-0.5;});
+  var w=E_WORDS[q.idx];
+  if(!E_SHUFFLED[q.idx]){
+    E_SHUFFLED[q.idx]=[0,1,2,3].sort(function(){return Math.random()-0.5;});
   }
   var keys=['A','B','C','D'];
   var ans=ANSWERS[curQ];
-  var html='<div style="font-size:28px;font-weight:800;color:#8e44ad;text-align:center;margin:16px 0;letter-spacing:2px">'+w.word+'</div>'
-    +'<div style="font-size:13px;color:#888;text-align:center;margin-bottom:16px">Choose the best synonym / 选择最佳同义词</div>'
+  var html='<div style="font-size:28px;font-weight:800;color:#e74c3c;text-align:center;margin:16px 0;letter-spacing:2px">'+w.word+'</div>'
+    +'<div style="font-size:13px;color:#888;text-align:center;margin-bottom:16px">Choose the best synonym / 选择最佳近义词</div>'
     +'<div class="mcq-options">';
-  D_SHUFFLED[q.idx].forEach(function(origIdx,pos){
+  E_SHUFFLED[q.idx].forEach(function(origIdx,pos){
     var cls='mcq-opt';
     if(ans!=null && ans.choice===origIdx){ cls+=' selected'; }
     var onclick=ans!=null?'':'onclick="selectVocab('+origIdx+','+q.idx+','+curQ+')"';
@@ -522,152 +627,62 @@ function renderVocabQ(q){
 }
 
 function selectVocab(origIdx,wIdx,qIdx){
-  var w=D_WORDS[wIdx];
-  ANSWERS[qIdx]={sec:'D',choice:origIdx,correct:origIdx===w.correct,idx:wIdx};
+  var w=E_WORDS[wIdx];
+  ANSWERS[qIdx]={sec:'E',choice:origIdx,correct:origIdx===w.correct,idx:wIdx};
   renderProgress();
-  renderVocabHighlight(qIdx);
+  highlightMCQ(qIdx);
   setTimeout(function(){
     if(qIdx<QUEST_SEQ.length-1){curQ=qIdx+1;renderQuestion();}
     else{showFinalResults();}
   },800);
 }
 
-// ============ E: COMPREHENSION ============
-function renderCompQ(q){
-  var passage=E_PASSAGES[q.passageIdx];
-  var qdata=passage.qs[q.qIdx];
-  var ans=ANSWERS[curQ];
+// ============ F: GRAMMAR (MCQ) ============
+function renderGrammarQ(q){
+  var g=F_GRAMMAR[q.idx];
+  if(!F_SHUFFLED[q.idx]){
+    F_SHUFFLED[q.idx]=[0,1,2,3].sort(function(){return Math.random()-0.5;});
+  }
   var keys=['A','B','C','D'];
-  var barId='ab-e-'+q.passageIdx+'-'+q.qIdx;
-  var passageText=passage.text.replace(/'/g,"\\'");
-  var html='<div style="font-size:12px;color:#6b7c93;font-weight:700;margin-bottom:8px">Passage '+(q.passageIdx+1)+' · Q'+(q.qIdx+1)+'</div>'
-    +'<div class="audio-bar" id="'+barId+'" onclick="playBarTts(this,E_PASSAGES['+q.passageIdx+'].text)">'
-      +'<div class="play-icon">▶</div><div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>'
-      +'<div class="bar-label">🔊 Play Passage / 播放短文</div>'
-    +'</div>'
-    +'<div style="font-size:15px;font-weight:600;margin:12px 0 10px;line-height:1.5">'+qdata.q+'</div>'
+  var ans=ANSWERS[curQ];
+  var html='<div style="font-size:15px;font-weight:600;color:var(--orange);margin-bottom:14px">📝 '+g.q+'</div>'
     +'<div class="mcq-options">';
-  keys.forEach(function(k,oi){
+  F_SHUFFLED[q.idx].forEach(function(origIdx,pos){
     var cls='mcq-opt';
-    if(ans!=null && ans.choice===oi){ cls+=' selected'; }
-    var onclick=ans!=null?'':'onclick="selectComp('+oi+','+qdata.correct+','+curQ+')"';
-    html+='<div class="'+cls+'" '+onclick+'><span class="opt-key">'+k+'</span> '+qdata.opts[oi]+'</div>';
+    if(ans!=null){
+      if(origIdx===g.correct) cls+=' correct';
+      else if(origIdx===ans.choice && !ans.correct) cls+=' wrong';
+    }
+    var onclick=ans!=null?'':'onclick="selectGrammar('+origIdx+','+q.idx+','+curQ+')"';
+    html+='<div class="'+cls+'" '+onclick+'><span class="opt-key">'+keys[pos]+'</span> '+g.opts[origIdx]+'</div>';
   });
   html+='</div>';
-
+  if(ans!=null){
+    var isCorrect=ans.correct;
+    html+='<div class="grammar-explain '+(isCorrect?'correct-bg':'wrong-bg')+'">'
+      +(isCorrect?'✅ Correct! ':'❌ Wrong. ')
+      +g.explain+'</div>';
+  }
   return html;
 }
 
-function selectComp(optIdx,correct,qIdx){
-  ANSWERS[qIdx]={sec:'E',choice:optIdx,correct:optIdx===correct};
+function selectGrammar(origIdx,gIdx,qIdx){
+  var g=F_GRAMMAR[gIdx];
+  ANSWERS[qIdx]={sec:'F',choice:origIdx,correct:origIdx===g.correct,idx:gIdx};
   renderProgress();
-  renderCompHighlight(qIdx);
+  renderQuestion();
   setTimeout(function(){
     if(qIdx<QUEST_SEQ.length-1){curQ=qIdx+1;renderQuestion();}
     else{showFinalResults();}
-  },800);
+  },1200);
 }
-function renderVocabHighlight(qIdx){
+
+// Shared MCQ highlight
+function highlightMCQ(qIdx){
   var ans=ANSWERS[qIdx];
   if(!ans) return;
   var opts=document.querySelectorAll('.mcq-opt');
-  var q=QUEST_SEQ[qIdx];
-  var shuffled=D_SHUFFLED[q.idx]||[];
-  opts.forEach(function(el,pos){
-    el.removeAttribute('onclick');
-    if(shuffled[pos]===ans.choice) el.classList.add('selected');
-  });
-}
-function renderCompHighlight(qIdx){
-  var ans=ANSWERS[qIdx];
-  if(!ans) return;
-  var opts=document.querySelectorAll('.mcq-opt');
-  opts.forEach(function(el,oi){
-    el.removeAttribute('onclick');
-    if(oi===ans.choice) el.classList.add('selected');
-  });
-}
-
-
-// ============ F: SPEAKING ============
-function renderSpeakQ(q){
-  var topic=F_TOPICS[q.idx];
-  var ans=ANSWERS[curQ];
-  if(fStep===1){
-    return '<div style="font-size:13px;color:#6b7c93;margin-bottom:12px">🎤 Free Talk / 自由演讲</div>'
-      +'<div class="audio-bar" onclick="playBarTts(this,F_TOPICS['+q.idx+'])">'
-        +'<div class="play-icon">▶</div><div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>'
-        +'<div class="bar-label">🔊 Listen to topic / 听题目</div>'
-      +'</div>'
-      +'<div style="background:#f0f7ff;border-radius:12px;padding:16px;font-size:15px;font-weight:600;line-height:1.7;color:#1a2a3a;border:1.5px solid #c5daf5;margin:12px 0">'+topic+'</div>'
-      +'<button onclick="fGoStep2()" style="width:100%;padding:13px;background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer">▶ 开始演讲 Start Speaking</button>';
-  }
-  if(fStep===2){
-    return '<div style="font-size:13px;color:#6b7c93;margin-bottom:10px">🎙 Step 2 · Speak Now / 演讲中</div>'
-      +'<div style="background:#f0f7ff;border-radius:12px;padding:14px;font-size:14px;font-weight:600;line-height:1.7;color:#1a2a3a;border:1.5px solid #c5daf5;margin-bottom:14px">'+topic+'</div>'
-      +'<button id="f-rec-btn" onclick="doRecordF('+q.idx+','+curQ+')" style="width:100%;padding:13px;background:linear-gradient(135deg,#1a4a8a,#2e6fba);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px">🎙 开始录音 Start Recording</button>'
-      +'<div id="f-stt-result" style="margin-top:8px"></div>';
-  }
-  if(fStep===3){
-    var dims=['fluency','vocab','logic','grammar'];
-    var dimLabels={fluency:'Fluency 流利度',vocab:'Vocabulary 词汇',logic:'Logic 逻辑性',grammar:'Grammar 语法'};
-    var html='<div style="font-size:13px;color:#6b7c93;margin-bottom:6px">⭐ Step 3 · Self Assessment / 自评打分</div>';
-    html+='<div style="font-size:12px;color:#8a9ab5;margin-bottom:14px">根据刚才的表现，为每项打 1–5 颗星 ★</div>';
-    if(fSTRText){
-      html+='<div style="background:#f0f7ff;border-radius:10px;padding:10px;font-size:12px;color:#555;margin-bottom:14px;border-left:3px solid #2e6fba">你说了: <em>"'+fSTRText.substring(0,120)+(fSTRText.length>120?'...':'')+'"</em></div>';
-    }
-    dims.forEach(function(dim){
-      html+='<div class="rubric-row"><span class="rubric-label">'+dimLabels[dim]+'</span><div class="rubric-stars" id="r-'+dim+'">';
-      for(var j=1;j<=5;j++){
-        var active=fRubric[dim]&&fRubric[dim]>=j;
-        html+='<span class="rubric-star'+(active?' active':'')+'" onclick="rateFDim(\''+dim+'\','+j+')">★</span>';
-      }
-      html+='</div></div>';
-    });
-    html+='<button onclick="submitF('+curQ+')" style="width:100%;padding:13px;background:#1e7e4e;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px">✅ 提交得分 Submit Score</button>';
-    return html;
-  }
-  // ans submitted
-  return '<div style="text-align:center;padding:20px;color:#27ae60;font-size:15px;font-weight:700">✅ Section F Completed!</div>';
-}
-
-function fGoStep2(){fStep=2;renderQuestion();}
-
-function doRecordF(topicIdx,qIdx){
-  var btn=document.getElementById('f-rec-btn');
-  if(!btn) return;
-  btn.textContent='⏺ Recording... / 录音中...';btn.style.background='#e74c3c';btn.disabled=true;
-  startSTT(
-    function(t){
-      fSTRText=t;
-      btn.textContent='🎙 开始录音 Start Recording';btn.style.background='linear-gradient(135deg,#1a4a8a,#2e6fba)';btn.disabled=false;
-      var el=document.getElementById('f-stt-result');
-      if(el){
-        el.innerHTML='<div style="background:#f0f7ff;border-radius:10px;padding:10px 14px;border-left:3px solid #27ae60"><div style="font-size:12px;font-weight:700;color:#27ae60">🎉 Recording done! Now rate yourself below.</div></div>';
-      }
-      setTimeout(function(){fStep=3;renderQuestion();},1200);
-    },
-    function(err){
-      btn.textContent='🎙 开始录音 Start Recording';btn.style.background='linear-gradient(135deg,#1a4a8a,#2e6fba)';btn.disabled=false;
-    }
-  );
-  setTimeout(function(){try{speechSynthesis.cancel();}catch(e){}},15000);
-}
-
-function rateFDim(dim,val){
-  fRubric[dim]=val;
-  var stars=document.querySelectorAll('#r-'+dim+' .rubric-star');
-  stars.forEach(function(s,i){s.classList.toggle('active',i<val);});
-}
-
-function submitF(qIdx){
-  if(!fRubric.fluency||!fRubric.vocab||!fRubric.logic||!fRubric.grammar){
-    alert('Please rate all 4 dimensions. / 请评完4个维度');return;
-  }
-  var avg=(fRubric.fluency+fRubric.vocab+fRubric.logic+fRubric.grammar)/4;
-  var pct=Math.round(avg/5*100);
-  stopGlobalTimer();
-  onAnswered(qIdx,{sec:'F',score:pct,rubric:{fluency:fRubric.fluency,vocab:fRubric.vocab,logic:fRubric.logic,grammar:fRubric.grammar}},true);
+  opts.forEach(function(el){el.removeAttribute('onclick');});
 }
 
 // ============ ON ANSWERED ============
@@ -700,59 +715,60 @@ function goPrev(){
 // ============ SCORING ============
 function calcSectionScores(){
   var scores={a:null,b:null,c:null,d:null,e:null,f:null};
-  // A: average pct
+  // A: STT pct average (Pronunciation)
   var aItems=QUEST_SEQ.map(function(q,i){return{q:q,i:i};}).filter(function(x){return x.q.sec==='A';});
   if(aItems.length){
     var aTotal=0,aCnt=0;
     aItems.forEach(function(x){if(ANSWERS[x.i]!=null){aTotal+=ANSWERS[x.i].pct||0;aCnt++;}});
     if(aCnt>0) scores.a=Math.round(aTotal/aCnt);
   }
-  // B: pct average
+  // B: STT pct average (Fluency)
   var bItems=QUEST_SEQ.map(function(q,i){return{q:q,i:i};}).filter(function(x){return x.q.sec==='B';});
   if(bItems.length){
     var bTotal=0,bCnt=0;
     bItems.forEach(function(x){if(ANSWERS[x.i]!=null){bTotal+=ANSWERS[x.i].pct||0;bCnt++;}});
     if(bCnt>0) scores.b=Math.round(bTotal/bCnt);
   }
-  // C: answered = 100, not = 0
+  // C: rubric score (Talk)
   var cItems=QUEST_SEQ.map(function(q,i){return{q:q,i:i};}).filter(function(x){return x.q.sec==='C';});
-  if(cItems.length){
-    var cAns=cItems.filter(function(x){return ANSWERS[x.i]&&ANSWERS[x.i].userAns;}).length;
-    scores.c=Math.round(cAns/cItems.length*100);
+  if(cItems.length&&ANSWERS[cItems[0].i]){
+    scores.c=ANSWERS[cItems[0].i].score||0;
   }
-  // D: correct ratio
+  // D: MCQ correct% (Listen)
   var dItems=QUEST_SEQ.map(function(q,i){return{q:q,i:i};}).filter(function(x){return x.q.sec==='D';});
   if(dItems.length){
     var dCorr=dItems.filter(function(x){return ANSWERS[x.i]&&ANSWERS[x.i].correct;}).length;
-    var dAns=dItems.filter(function(x){return ANSWERS[x.i]!=null;}).length;
-    if(dAns>0) scores.d=Math.round(dCorr/dItems.length*100);
+    scores.d=Math.round(dCorr/dItems.length*100);
   }
-  // E: correct ratio
+  // E: MCQ correct% (Vocab)
   var eItems=QUEST_SEQ.map(function(q,i){return{q:q,i:i};}).filter(function(x){return x.q.sec==='E';});
   if(eItems.length){
     var eCorr=eItems.filter(function(x){return ANSWERS[x.i]&&ANSWERS[x.i].correct;}).length;
-    var eAns=eItems.filter(function(x){return ANSWERS[x.i]!=null;}).length;
-    if(eAns>0) scores.e=Math.round(eCorr/eItems.length*100);
+    scores.e=Math.round(eCorr/eItems.length*100);
   }
-  // F: from rubric
+  // F: MCQ correct% (Grammar)
   var fItems=QUEST_SEQ.map(function(q,i){return{q:q,i:i};}).filter(function(x){return x.q.sec==='F';});
-  if(fItems.length&&ANSWERS[fItems[0].i]){
-    scores.f=ANSWERS[fItems[0].i].score||0;
+  if(fItems.length){
+    var fCorr=fItems.filter(function(x){return ANSWERS[x.i]&&ANSWERS[x.i].correct;}).length;
+    scores.f=Math.round(fCorr/fItems.length*100);
   }
   return scores;
 }
 
 function calcWeightedScore(s){
+  // Core(A,B,D)×2 + Supp(C,E,F)×1, ÷9
   var a=s.a||0,b=s.b||0,c=s.c||0,d=s.d||0,e=s.e||0,f=s.f||0;
-  return Math.round(2/9*(a+b+c)+1/9*(d+e+f));
+  return Math.round((a*2+b*2+d*2+c+e+f)/9);
 }
 function calcCEFR(s){
-  var overall=calcWeightedScore(s);
-  var coreMin=Math.min(s.a||0,s.b||0,s.c||0);
-  if(overall>=75&&coreMin>=70) return{level:'C1',label:'C1 — Advanced 高级',color:'#1565c0'};
-  if(overall>=60&&coreMin>=55) return{level:'B2',label:'B2 — Upper Intermediate 中高级',color:'#2e7d32'};
-  if(overall>=45&&coreMin>=45) return{level:'B1',label:'B1 — Intermediate 中级 ✅ Pass 合格',color:'#388e3c'};
-  if(overall>=30) return{level:'A2',label:'A2 — Elementary 初级 ❌ 未合格',color:'#f57c00'};
+  var total=calcWeightedScore(s);
+  var coreAvg=Math.round(((s.a||0)+(s.b||0)+(s.d||0))/3);
+  var suppAvg=Math.round(((s.c||0)+(s.e||0)+(s.f||0))/3);
+  if(total>=83&&coreAvg>=70&&suppAvg>=40) return{level:'C2',label:'C2 — Mastery 精通',color:'#0d47a1'};
+  if(total>=70&&coreAvg>=70&&suppAvg>=40) return{level:'C1',label:'C1 — Advanced 高级',color:'#1565c0'};
+  if(total>=61&&coreAvg>=40) return{level:'B2',label:'B2 — Upper Intermediate 中高级',color:'#2e7d32'};
+  if(total>=50&&coreAvg>=40) return{level:'B1',label:'B1 — Intermediate 中级 ✅ Pass 合格',color:'#388e3c'};
+  if(total>=42) return{level:'A2',label:'A2 — Elementary 初级 ❌ 未合格',color:'#f57c00'};
   return{level:'A1',label:'A1 — Beginner 入门 ❌ 未合格',color:'#c62828'};
 }
 
@@ -768,7 +784,7 @@ function showFinalResults(){
   var scores=calcSectionScores();
   var overall=calcWeightedScore(scores);
   var cefrResult=calcCEFR(scores);
-  var secNames={a:'A · Read (Pronunciation)',b:'B · Repeat (Fluency)',c:'C · Listen',d:'D · Vocab',e:'E · Comp',f:'F · Talk'};
+  var secNames={a:'A · Read (Pronunciation)',b:'B · Repeat (Fluency)',c:'C · Talk (Spoken Language)',d:'D · Listen (Active Listening)',e:'E · Vocab (Vocabulary)',f:'F · Grammar'};
 
   var barsHtml='';
   ['a','b','c','d','e','f'].forEach(function(k){
@@ -784,7 +800,7 @@ function showFinalResults(){
     +'<div class="res-level" style="color:#fff">CEFR: '+cefrResult.label+'</div>'
     +'</div>'
     +'<div style="background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 12px rgba(46,111,186,0.09);margin-bottom:14px">'
-    +'<div style="font-size:11px;color:#6b7c93;text-align:center;margin-bottom:12px">加权公式: A×2+B×2+C×2+D×1+E×1+F×1 ÷ 9</div>'
+    +'<div style="font-size:11px;color:#6b7c93;text-align:center;margin-bottom:12px">加权公式: Core(A,B,D)×2 + Supp(C,E,F)×1 ÷ 9</div>'
     +barsHtml+'</div>'
     +'<canvas id="radarChart" width="280" height="280" style="display:block;margin:0 auto 14px"></canvas>'
     +'<div style="display:flex;gap:10px;margin-bottom:28px">'
@@ -800,34 +816,19 @@ function showFinalResults(){
 }
 
 function showWrongItems(){
-  var scores=calcSectionScores();
   var html='<div style="background:#fff;border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:0 2px 12px rgba(46,111,186,0.09)">';
   html+='<div style="font-family:Montserrat,sans-serif;font-size:14px;font-weight:800;color:#1a4a8a;margin-bottom:14px">📊 错题分析 Review</div>';
+  var hasWrong=false;
 
-  // D wrong
+  // D · Listen wrong
   var dItems=QUEST_SEQ.map(function(q,i){return{q:q,i:i};}).filter(function(x){return x.q.sec==='D';});
   var dWrong=dItems.filter(function(x){return ANSWERS[x.i]&&!ANSWERS[x.i].correct;});
   if(dWrong.length){
-    html+='<div style="font-size:12px;font-weight:700;color:#8e44ad;margin-bottom:8px">D · Vocab 答错:</div>';
+    hasWrong=true;
+    html+='<div style="font-size:12px;font-weight:700;color:#8e44ad;margin-bottom:8px">D · Listen 答错:</div>';
     dWrong.forEach(function(x){
-      var w=D_WORDS[x.q.idx];
-      var ya=ANSWERS[x.i].choice!=null?w.opts[ANSWERS[x.i].choice]:'(no answer)';
-      html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c">'
-        +'<div style="font-size:13px;font-weight:700;margin-bottom:4px">'+w.word+'</div>'
-        +'<div style="font-size:12px;color:#e74c3c">❌ 你选: '+ya+'</div>'
-        +'<div style="font-size:12px;color:#27ae60">✅ 正确: '+w.opts[w.correct]+'</div>'
-        +'</div>';
-    });
-  }
-
-  // E wrong
-  var eItems=QUEST_SEQ.map(function(q,i){return{q:q,i:i};}).filter(function(x){return x.q.sec==='E';});
-  var eWrong=eItems.filter(function(x){return ANSWERS[x.i]&&!ANSWERS[x.i].correct;});
-  if(eWrong.length){
-    html+='<div style="font-size:12px;font-weight:700;color:#e74c3c;margin:12px 0 8px">E · Comprehension 答错:</div>';
-    eWrong.forEach(function(x){
       var q=QUEST_SEQ[x.i];
-      var passage=E_PASSAGES[q.passageIdx];
+      var passage=D_PASSAGES[q.passageIdx];
       var qdata=passage.qs[q.qIdx];
       var ya=ANSWERS[x.i].choice!=null?qdata.opts[ANSWERS[x.i].choice]:'(no answer)';
       html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c">'
@@ -838,9 +839,45 @@ function showWrongItems(){
     });
   }
 
-  // A low
+  // E · Vocab wrong
+  var eItems=QUEST_SEQ.map(function(q,i){return{q:q,i:i};}).filter(function(x){return x.q.sec==='E';});
+  var eWrong=eItems.filter(function(x){return ANSWERS[x.i]&&!ANSWERS[x.i].correct;});
+  if(eWrong.length){
+    hasWrong=true;
+    html+='<div style="font-size:12px;font-weight:700;color:#e74c3c;margin:12px 0 8px">E · Vocab 答错:</div>';
+    eWrong.forEach(function(x){
+      var w=E_WORDS[x.q.idx];
+      var ya=ANSWERS[x.i].choice!=null?w.opts[ANSWERS[x.i].choice]:'(no answer)';
+      html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c">'
+        +'<div style="font-size:13px;font-weight:700;margin-bottom:4px">'+w.word+'</div>'
+        +'<div style="font-size:12px;color:#e74c3c">❌ 你选: '+ya+'</div>'
+        +'<div style="font-size:12px;color:#27ae60">✅ 正确: '+w.opts[w.correct]+'</div>'
+        +'</div>';
+    });
+  }
+
+  // F · Grammar wrong
+  var fItems=QUEST_SEQ.map(function(q,i){return{q:q,i:i};}).filter(function(x){return x.q.sec==='F';});
+  var fWrong=fItems.filter(function(x){return ANSWERS[x.i]&&!ANSWERS[x.i].correct;});
+  if(fWrong.length){
+    hasWrong=true;
+    html+='<div style="font-size:12px;font-weight:700;color:#f39c12;margin:12px 0 8px">F · Grammar 答错:</div>';
+    fWrong.forEach(function(x){
+      var g=F_GRAMMAR[x.q.idx];
+      var ya=ANSWERS[x.i].choice!=null?g.opts[ANSWERS[x.i].choice]:'(no answer)';
+      html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c">'
+        +'<div style="font-size:12px;font-weight:600;margin-bottom:4px">'+g.q+'</div>'
+        +'<div style="font-size:12px;color:#e74c3c">❌ 你选: '+ya+'</div>'
+        +'<div style="font-size:12px;color:#27ae60">✅ 正确: '+g.opts[g.correct]+'</div>'
+        +'<div style="font-size:11px;color:#555;margin-top:4px">💡 '+g.explain+'</div>'
+        +'</div>';
+    });
+  }
+
+  // A · Read low scores
   var aLow=Object.keys(aSTR).filter(function(k){return aSTR[k].pct<80;});
   if(aLow.length){
+    hasWrong=true;
     html+='<div style="font-size:12px;font-weight:700;color:#2e6fba;margin:12px 0 8px">A · Read 低分句:</div>';
     aLow.forEach(function(k){
       var r=aSTR[k];
@@ -852,7 +889,7 @@ function showWrongItems(){
     });
   }
 
-  if(!dWrong.length&&!eWrong.length&&!aLow.length){
+  if(!hasWrong){
     html+='<div style="text-align:center;color:#27ae60;font-size:14px;font-weight:600;padding:20px">🎉 Great job! No major errors.</div>';
   }
   html+='</div>';
@@ -864,7 +901,7 @@ function drawRadar(id,arr){
   var canvas=document.getElementById(id);if(!canvas)return;
   var ctx=canvas.getContext('2d');
   var W=canvas.width,H=canvas.height,cx=W/2,cy=H/2,R=Math.min(W,H)*0.36;
-  var labels=['Pronunciation','Fluency','Listening','Vocabulary','Comprehension','Speaking'];
+  var labels=['Pronunciation','Fluency','Spoken Lang','Active Listen','Vocabulary','Grammar'];
   var N=6;
   ctx.clearRect(0,0,W,H);
   for(var layer=1;layer<=3;layer++){
