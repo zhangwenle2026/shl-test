@@ -146,7 +146,13 @@ var A_SENTENCES = [
   "The new policy will take effect from the first of next month.",
   "I would like to follow up on the email I sent last week.",
   "Can you clarify what you mean by the third point?",
-  "We appreciate your patience and understanding in this matter."
+  "We appreciate your patience and understanding in this matter.",
+  "The quarterly report indicates a steady growth in market share.",
+  "All team members should attend the orientation session on Monday morning.",
+  "We are planning to launch the new product line in the second quarter.",
+  "The finance department will review the expense claims before month end.",
+  "Customers who experience issues should contact our support team directly.",
+  "The warehouse has been relocated to a larger facility near the airport."
 ];
 var B_SENTENCES = [
   "The marketing team has submitted the annual budget proposal for review.",
@@ -156,7 +162,11 @@ var B_SENTENCES = [
   "Could you arrange a follow-up meeting with the regional sales managers?",
   "The board has approved the new investment strategy for the coming year.",
   "All employees are required to complete the compliance training by Friday.",
-  "The customer service department reported a significant increase in complaints."
+  "The customer service department reported a significant increase in complaints.",
+  "Our logistics partners have confirmed that the shipment will arrive by Wednesday afternoon.",
+  "The training program was designed to help new employees understand company procedures.",
+  "We strongly recommend that all departments submit their proposals before the deadline.",
+  "Management has decided to implement a flexible working arrangement starting next quarter."
 ];
 // C_SCENARIOS removed — Q&A section deleted
 var E_WORDS_BANK = [
@@ -189,15 +199,29 @@ var E_WORDS_BANK = [
   {word:"MITIGATE", opts:["reduce severity","increase risk","ignore problem","create issue"], correct:0},
   {word:"STAKEHOLDER", opts:["interested party","random person","competitor","supplier only"], correct:0},
   {word:"TRANSPARENT", opts:["open and clear","hidden","complicated","vague"], correct:0},
-  {word:"DEADLINE", opts:["due date","start date","optional date","estimated date"], correct:0}
+  {word:"DEADLINE", opts:["due date","start date","optional date","estimated date"], correct:0},
+  // Antonym questions (type:'antonym')
+  {word:"EXPAND",type:"antonym", opts:["shrink","grow","maintain","develop"], correct:0},
+  {word:"ACCEPT",type:"antonym", opts:["reject","receive","allow","welcome"], correct:0},
+  {word:"INCREASE",type:"antonym", opts:["decrease","grow","multiply","raise"], correct:0},
+  {word:"TEMPORARY",type:"antonym", opts:["permanent","short","brief","instant"], correct:0},
+  {word:"IMPORT",type:"antonym", opts:["export","bring in","receive","purchase"], correct:0},
+  {word:"VOLUNTARY",type:"antonym", opts:["compulsory","optional","willing","free"], correct:0},
+  {word:"STRENGTHEN",type:"antonym", opts:["weaken","support","improve","build"], correct:0},
+  {word:"ADVANCE",type:"antonym", opts:["retreat","progress","promote","develop"], correct:0},
+  {word:"COMPLICATED",type:"antonym", opts:["simple","complex","difficult","intricate"], correct:0},
+  {word:"GENEROUS",type:"antonym", opts:["stingy","kind","giving","charitable"], correct:0},
+  {word:"MAJORITY",type:"antonym", opts:["minority","most","bulk","larger part"], correct:0},
+  {word:"FLEXIBLE",type:"antonym", opts:["rigid","adaptable","versatile","open"], correct:0},
+  {word:"PROFIT",type:"antonym", opts:["loss","gain","revenue","income"], correct:0},
+  {word:"HIRE",type:"antonym", opts:["dismiss","recruit","employ","onboard"], correct:0},
+  {word:"APPROVE",type:"antonym", opts:["reject","accept","confirm","endorse"], correct:0}
 ];
 var D_PASSAGES_BANK = [
-  {title:"Work Meeting",text:"Good morning everyone. I'd like to start today's meeting by reviewing last week's performance. Our delivery success rate was 94%, which is up 3% from the previous week. However, we had some complaints about customer service response time. Going forward, we need to ensure all customer inquiries are answered within two hours. Additionally, the new pricing structure will be implemented starting next Monday. Please make sure your teams are informed.",qs:[{q:"What was the delivery success rate last week?",opts:["91%","94%","97%","90%"],correct:1},{q:"What was the main complaint from customers?",opts:["Delivery speed","Product quality","Response time","Price"],correct:2},{q:"When will the new pricing structure start?",opts:["This Friday","Next Monday","Next Wednesday","Immediately"],correct:1}]},
-  {title:"Client Call",text:"Hello, this is David from the operations team. I am calling regarding the order you placed on March 15th. Unfortunately, two of the items you ordered are currently out of stock. We expect them to be available within five to seven business days. We can either send the available items now and ship the rest later, or wait and send everything together. Please let us know your preference by end of day so we can proceed.",qs:[{q:"Why is David calling?",opts:["To confirm delivery","To report a delay","To cancel the order","To request payment"],correct:1},{q:"How long before the out-of-stock items are available?",opts:["2–3 days","3–5 days","5–7 days","10 days"],correct:2},{q:"What does David ask the customer to do?",opts:["Call back tomorrow","Visit the store","Reply by end of day","Place a new order"],correct:2}]},
-  {title:"HR Announcement",text:"This is a message from the HR department. We are pleased to announce that the annual performance review cycle will begin on April 1st. All employees are required to complete their self-assessment forms by April 10th. Managers should schedule one-on-one meetings with their team members before April 20th. The final ratings will be submitted to HR by April 30th. Please contact your HR business partner if you have any questions about the process.",qs:[{q:"When does the performance review cycle begin?",opts:["March 1st","April 1st","April 10th","April 20th"],correct:1},{q:"By when must employees complete self-assessment forms?",opts:["April 1st","April 5th","April 10th","April 30th"],correct:2},{q:"Who should employees contact for questions?",opts:["Their manager","The CEO","HR business partner","Team leader"],correct:2}]},
-  {title:"Hybrid Work Policy",text:"Attention all staff. Starting next week, the office will be operating under a new hybrid work policy. Employees may work from home up to three days per week, provided they attend all scheduled team meetings in person. Remote work requests must be submitted to your line manager by Friday each week. Equipment requests for home offices should be submitted to IT support. The policy will be reviewed after three months.",qs:[{q:"How many days per week can employees work from home?",opts:["One day","Two days","Three days","Five days"],correct:2},{q:"When must remote work requests be submitted?",opts:["Monday","Wednesday","Thursday","Friday"],correct:3},{q:"Who handles equipment requests for home offices?",opts:["HR department","Line manager","IT support","Finance team"],correct:2}]},
-  {title:"Client Presentation",text:"Good afternoon. This is a reminder about the upcoming client presentation scheduled for Thursday at 2 PM in Conference Room B. The sales team is asked to prepare a brief summary of Q1 results. Marketing should have the slide deck ready by Wednesday noon. All participants are expected to arrive 10 minutes early for setup. If you are unable to attend, please notify your team lead immediately and arrange for a colleague to cover.",qs:[{q:"When is the client presentation scheduled?",opts:["Wednesday at 2 PM","Thursday at 2 PM","Friday at 2 PM","Thursday at 10 AM"],correct:1},{q:"By when should the slide deck be ready?",opts:["Tuesday noon","Wednesday noon","Thursday morning","Wednesday evening"],correct:1},{q:"What should you do if you cannot attend?",opts:["Send an email to HR","Skip the meeting","Notify your team lead","Call the client directly"],correct:2}]},
-  {title:"Purchase Order",text:"This voicemail is for the purchasing department. We received your request for office supplies dated last Tuesday. However, we noticed that the total order value exceeds the monthly budget by approximately fifteen percent. Before we can process this order, we need written approval from your department head. Once we receive that approval, delivery can be arranged within three working days. Please call us back at extension 2204 to confirm.",qs:[{q:"What is the problem with the order?",opts:["Wrong items ordered","Order placed too late","Exceeds monthly budget","Missing delivery address"],correct:2},{q:"What is required before the order can be processed?",opts:["Payment in advance","Written approval from department head","A revised order form","A new supplier contract"],correct:1},{q:"How long will delivery take after approval?",opts:["One working day","Two working days","Three working days","One week"],correct:2}]}
+  {title:"Office Relocation Discussion",text:"Woman: Have you heard? The company is planning to move to a new office next month. Man: Yes, I read the email. It says the new building is closer to the train station, which would make my commute shorter. But I'm a bit worried about the open-plan layout. Woman: Me too. I find it hard to concentrate when there's a lot of noise. I wonder if they'll have quiet rooms. Man: The email mentioned some meeting pods and focus rooms, but I'm not sure how many. If there aren't enough, people might end up booking them all day. Woman: That's a good point. I think we should bring this up at the next team meeting. Maybe management hasn't considered how many people actually need quiet space. Man: Agreed. Also, I noticed the new office doesn't have a cafeteria — just a small kitchen. Woman: Really? That could be a problem for people who don't bring lunch. There are probably restaurants nearby though. Man: I hope so. Overall I think the move could be positive, but there are definitely some things they need to sort out first.",qs:[{q:"What does the man like about the new office?",opts:["It has a cafeteria","It's closer to the train station","It has an open-plan layout","It's in a quieter neighborhood"],correct:1},{q:"Why is the woman concerned?",opts:["The new office is too far away","She doesn't like her new manager","She finds it hard to concentrate in noisy environments","She doesn't want to change her desk"],correct:2},{q:"What can you infer about the meeting pods?",opts:["There are more than enough for everyone","They might not be sufficient for all staff","They are only for managers","They haven't been built yet"],correct:1},{q:"What will the man probably do next?",opts:["Start looking for a new job","Book a meeting pod immediately","Raise concerns at the team meeting","Send an email to HR"],correct:2},{q:"What is the overall tone of the conversation?",opts:["Angry and frustrated","Cautiously positive with some concerns","Completely negative","Excited without reservation"],correct:1}]},
+  {title:"Project Deadline Negotiation",text:"Manager: I need to talk to you about the Henderson project. The client wants to move the deadline forward by two weeks. Developer: Two weeks? That's going to be very tight. We're already behind on the testing phase because of the bugs we found last week. Manager: I understand. But the client is under pressure from their board to show progress. Is there any way we can deliver a basic version first and add the remaining features later? Developer: We could do a phased delivery. The core functionality is about eighty percent done. If we skip some of the nice-to-have features, we could probably have something ready. Manager: What about quality? I don't want us to deliver something buggy. Developer: If we focus on the core features only, I'm fairly confident we can maintain quality. But we'd need an extra developer for the next two weeks. Manager: I'll see what I can do. Let me talk to the resource team. In the meantime, can you prepare a revised timeline showing what we can deliver and when? Developer: Sure, I'll have that ready by tomorrow morning.",qs:[{q:"Why does the client want to move the deadline forward?",opts:["They want to save money","They are under pressure from their board","The project is too simple","They found a cheaper provider"],correct:1},{q:"What is the developer's main concern?",opts:["He wants a pay raise","He doesn't like the client","They are behind on testing due to bugs","He wants to quit the project"],correct:2},{q:"What solution does the manager propose?",opts:["Cancel the project","Hire a completely new team","Deliver a basic version first and add features later","Ask the client to wait another month"],correct:2},{q:"What does the developer need to meet the new deadline?",opts:["A bigger office","An extra developer for two weeks","Permission to skip all testing","A meeting with the client"],correct:1},{q:"What will the developer do by tomorrow morning?",opts:["Finish the entire project","Prepare a revised timeline","Meet with the client","Request a transfer"],correct:1}]},
+  {title:"Customer Complaint Resolution",text:"Customer: I'm calling because I received the wrong item in my order. I ordered a blue laptop bag, but I received a black one instead. Agent: I'm very sorry about that, sir. Let me pull up your order. Can you give me your order number? Customer: It's MT-7829. Agent: Thank you. I can see the order here. You're right — it shows a blue laptop bag, but it looks like the warehouse sent the wrong colour. I apologize for the inconvenience. I can arrange for a replacement to be sent out today, and we'll include a prepaid return label for the incorrect item. Customer: How long will the replacement take? Agent: It should arrive within three to five business days. As a gesture of goodwill, I'd also like to offer you a fifteen percent discount on your next order. Customer: That sounds fair. But I need the blue bag for a trip next Thursday. Will it definitely arrive by then? Agent: If I upgrade the shipping to express, it should arrive by Tuesday at the latest. There's no extra charge for that. Customer: Alright, that works. Please go ahead with the express shipping. Agent: Done. You'll receive a confirmation email shortly with the tracking number.",qs:[{q:"What is the customer's problem?",opts:["The item was damaged","The wrong colour was sent","The order never arrived","The price was wrong"],correct:1},{q:"What does the agent offer as compensation?",opts:["A full refund","A free laptop bag","A fifteen percent discount on the next order","Free lifetime shipping"],correct:2},{q:"Why is the customer concerned about delivery time?",opts:["He's moving to a new city","He wants to return the item quickly","He has a trip next Thursday","He's leaving the country permanently"],correct:2},{q:"What can you infer about the agent's approach?",opts:["She is unhelpful and dismissive","She tries to resolve the issue quickly and fairly","She blames the customer","She doesn't know the company's policies"],correct:1},{q:"When will the replacement most likely arrive?",opts:["Today","Within 24 hours","By Tuesday at the latest","Next Thursday"],correct:2}]},
+  {title:"Training Program Feedback",text:"Trainer: Thank you all for completing the three-day leadership training program. Before you go, I'd like to get some quick feedback. What did you find most useful? Participant 1: I thought the communication workshop on day two was excellent. The role-playing exercises really helped me understand how to handle difficult conversations. Participant 2: I agree. But I felt like the time management session on day one was a bit too basic. Most of us already use those techniques. Trainer: That's helpful feedback. We'll consider making that session optional or offering an advanced version. What about the team-building activity on day three? Participant 1: Honestly, I didn't see the connection to leadership skills. It was fun, but I'm not sure what I learned from it. Participant 2: I actually found it useful. Working with people from different departments helped me see things from a different perspective. Trainer: Interesting — it shows people have different learning styles. We'll keep the activity but add a reflection session afterward so the learning points are clearer.",qs:[{q:"What did Participant 1 find most useful?",opts:["The time management session","The team-building activity","The communication workshop on day two","The opening keynote"],correct:2},{q:"Why does Participant 2 criticize the time management session?",opts:["It was too long","It was too basic for experienced staff","The trainer was unprepared","It was scheduled too early"],correct:1},{q:"What change will the trainer probably make to the time management session?",opts:["Remove it completely","Keep it exactly the same","Make it optional or offer an advanced version","Move it to day three"],correct:2},{q:"What does Participant 1 think about the team-building activity?",opts:["It was the best part of the training","It was fun but the learning connection was unclear","It was boring and useless","It should be made longer"],correct:1},{q:"What does the trainer plan to add to the team-building activity?",opts:["More games","A written exam","A reflection session","A presentation by each team"],correct:2}]}
 ];
 var C_TOPICS = [
   "Describe a challenging situation at work and how you handled it.",
@@ -292,9 +316,14 @@ function checkInvite(){
   E_SHUFFLED=[];
   F_SHUFFLED=[];
   var mainSeed=getDailySeed(userName);
-  E_WORDS=seededShuffle(E_WORDS_BANK,mainSeed).slice(0,5);
+  // Mix: 3 synonyms + 2 antonyms (or as many as available)
+  var synBank=E_WORDS_BANK.filter(function(w){return w.type!=='antonym';});
+  var antBank=E_WORDS_BANK.filter(function(w){return w.type==='antonym';});
+  var synPick=seededShuffle(synBank,mainSeed).slice(0,3);
+  var antPick=seededShuffle(antBank,(mainSeed*31+7)>>>0).slice(0,2);
+  E_WORDS=seededShuffle(synPick.concat(antPick),(mainSeed*13+3)>>>0);
   var seed2=(mainSeed*1664525+1013904223)>>>0;
-  D_PASSAGES=seededShuffle(D_PASSAGES_BANK,seed2).slice(0,2);
+  D_PASSAGES=seededShuffle(D_PASSAGES_BANK,seed2).slice(0,1);
   F_GRAMMAR=seededShuffle(F_GRAMMAR_BANK,(seed2*31+17)>>>0).slice(0,5);
   buildQuestSeq();
   renderQuestion();
@@ -316,7 +345,7 @@ function buildQuestSeq(){
   // C: 1 topic free talk (Talk)
   var cTopic=seededShuffle([0,1,2],(seed*3+7)>>>0)[0];
   QUEST_SEQ.push({sec:'C',type:'speak',idx:cTopic});
-  // D: 2 passages x 3 questions = 6 MCQ (Listen)
+  // D: 1 long dialogue x 5 inference questions (Listen)
   D_PASSAGES.forEach(function(p,pi){
     p.qs.forEach(function(q,qi){QUEST_SEQ.push({sec:'D',type:'listen',passageIdx:pi,qIdx:qi});});
   });
@@ -578,10 +607,10 @@ function renderListenQ(q){
   var ans=ANSWERS[curQ];
   var keys=['A','B','C','D'];
   var barId='ab-d-'+q.passageIdx+'-'+q.qIdx;
-  var html='<div style="font-size:12px;color:#6b7c93;font-weight:700;margin-bottom:8px">Passage '+(q.passageIdx+1)+' · Q'+(q.qIdx+1)+'</div>'
+  var html='<div style="font-size:12px;color:#6b7c93;font-weight:700;margin-bottom:8px">🎧 Dialogue 对话 · Q'+(q.qIdx+1)+' / '+passage.qs.length+'</div>'
     +'<div class="audio-bar" id="'+barId+'" onclick="playBarTts(this,D_PASSAGES['+q.passageIdx+'].text)">'
       +'<div class="play-icon">▶</div><div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>'
-      +'<div class="bar-label">🔊 Play Passage / 播放短文</div>'
+      +'<div class="bar-label">🔊 Play Dialogue / 播放对话</div>'
     +'</div>'
     +'<div style="font-size:15px;font-weight:600;margin:12px 0 10px;line-height:1.5">'+qdata.q+'</div>'
     +'<div class="mcq-options">';
@@ -613,8 +642,9 @@ function renderVocabQ(q){
   }
   var keys=['A','B','C','D'];
   var ans=ANSWERS[curQ];
-  var html='<div style="font-size:28px;font-weight:800;color:#e74c3c;text-align:center;margin:16px 0;letter-spacing:2px">'+w.word+'</div>'
-    +'<div style="font-size:13px;color:#888;text-align:center;margin-bottom:16px">Choose the best synonym / 选择最佳近义词</div>'
+  var isAnt=w.type==='antonym';
+  var html='<div style="font-size:28px;font-weight:800;color:'+(isAnt?'#8e44ad':'#e74c3c')+';text-align:center;margin:16px 0;letter-spacing:2px">'+w.word+'</div>'
+    +'<div style="font-size:13px;color:#888;text-align:center;margin-bottom:16px">'+(isAnt?'Choose the best <strong>antonym</strong> / 选择最佳<strong>反义词</strong>':'Choose the best synonym / 选择最佳近义词')+'</div>'
     +'<div class="mcq-options">';
   E_SHUFFLED[q.idx].forEach(function(origIdx,pos){
     var cls='mcq-opt';
@@ -847,9 +877,10 @@ function showWrongItems(){
     html+='<div style="font-size:12px;font-weight:700;color:#e74c3c;margin:12px 0 8px">E · Vocab 答错:</div>';
     eWrong.forEach(function(x){
       var w=E_WORDS[x.q.idx];
+      var isAnt=w.type==='antonym';
       var ya=ANSWERS[x.i].choice!=null?w.opts[ANSWERS[x.i].choice]:'(no answer)';
       html+='<div style="background:#fdf0ef;border-radius:10px;padding:10px 14px;margin-bottom:6px;border-left:3px solid #e74c3c">'
-        +'<div style="font-size:13px;font-weight:700;margin-bottom:4px">'+w.word+'</div>'
+        +'<div style="font-size:13px;font-weight:700;margin-bottom:4px">'+w.word+(isAnt?' <span style="color:#8e44ad;font-size:11px">(antonym 反义词)</span>':'')+'</div>'
         +'<div style="font-size:12px;color:#e74c3c">❌ 你选: '+ya+'</div>'
         +'<div style="font-size:12px;color:#27ae60">✅ 正确: '+w.opts[w.correct]+'</div>'
         +'</div>';
